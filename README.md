@@ -180,12 +180,12 @@ The chapter and encounters are completed in tests through the real reducer and v
 
 ## Roadmap
 
-Next Night Watch chapter; the intermediate and boss encounters for the nine field-study creatures; Rune Gates (networking) and Shattered Web (web security, with the Shapeshifter and Vampire); locked-region quests; other orders' starter quests; backup/export of saves; dedicated renderers for the remaining challenge types; a screen-reader and contrast audit. Further out: isolated, authorized live labs (never arbitrary code on an app server), accounts and cloud saves, classroom mode, translations, and a React Native app reusing `content/` and `engine/`.
+Next Night Watch chapter; the intermediate and boss encounters for the nine field-study creatures; Rune Gates (networking) and Shattered Web (web security, with the Shapeshifter and Vampire); locked-region quests; other orders' starter quests; backup/export of saves; dedicated renderers for the remaining challenge types; a screen-reader and contrast audit. Further out: isolated, authorized live labs (never arbitrary code on an app server), accounts and cloud saves, classroom mode, translations, and a React Native app reusing content/ and engine/.
 
 ## Contributing
 
-Add content as data first, add a test, keep scenarios fictional, and keep fantasy metaphor separate from the technical definition. Run `npm test` and `npm run build` before opening a PR. Do not add functional malware, real targets, or code that executes player input.
+Add content as data first, add a test, keep scenarios fictional, and keep fantasy metaphor separate from the technical definition. Run npm test and npm run build before opening a PR. Do not add functional malware, real targets, or code that executes player input.
 
 ## License
 
-Code: MIT (add a `LICENSE` file before publishing). Art: see *Asset licensing* above.
+Code: MIT (see the LICENSE file). Art: original work by the project author; see Assets and credits above.
