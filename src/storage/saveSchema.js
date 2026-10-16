@@ -6,7 +6,7 @@
  *
  * Nothing here touches secrets or credentials. Saves live in localStorage and are NOT authentication.
  */
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 export const SKILL_IDS = ['networking', 'webapp', 'logs_ir', 'coding', 'vuln', 'forensics', 'malware'];
 export const PATH_IDS = ['blue', 'red', 'purple', 'echoes'];
 
@@ -14,6 +14,7 @@ const MAX_STR = 80;
 const MAX_LIST = 500;
 
 export const defaultSettings = () => ({
+  language: 'tr',
   textSpeed: 'normal', // 'slow' | 'normal' | 'fast' | 'instant'
   textSize: 'normal', // 'normal' | 'large' | 'xlarge'
   reducedMotion: 'system', // 'system' | 'on' | 'off'
@@ -75,6 +76,12 @@ const migrations = {
     fresh.progress.completedQuests = strList(old.completed);
     return fresh;
   },
+  // v1 predates language preferences. Keep its English presentation on upgrade.
+  1: (old) => ({
+    ...old,
+    version: 2,
+    settings: { ...(isObj(old.settings) ? old.settings : {}), language: 'en' },
+  }),
 };
 
 export function migrateSave(raw) {
@@ -196,6 +203,7 @@ function sanitizeSettings(s) {
   const d = defaultSettings();
   if (!isObj(s)) return d;
   return {
+    language: oneOf(s.language, ['tr', 'en'], d.language),
     textSpeed: oneOf(s.textSpeed, ['slow', 'normal', 'fast', 'instant'], d.textSpeed),
     textSize: oneOf(s.textSize, ['normal', 'large', 'xlarge'], d.textSize),
     reducedMotion: oneOf(s.reducedMotion, ['system', 'on', 'off'], d.reducedMotion),

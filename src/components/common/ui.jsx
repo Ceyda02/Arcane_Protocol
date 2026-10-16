@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { asset } from './assets.js';
 import { useGame } from '../../state/GameContext.jsx';
 import { useSound } from '../../hooks/useSound.js';
+import { t } from '../../i18n/index.js';
 
 export function Button({ children, variant = 'primary', onClick, disabled, type = 'button', sound = true, className = '', ...rest }) {
   const play = useSound();
@@ -32,12 +33,12 @@ export function ProgressBar({ value, max = 100, label, tone = 'gold' }) {
 }
 
 /** Status chip: never relies on colour alone. Always has a text label and a glyph. */
-export function StatusChip({ status }) {
+export function StatusChip({ status, language = 'en' }) {
   const map = {
-    locked: { glyph: '🔒', text: 'Locked' },
-    available: { glyph: '◆', text: 'Available' },
-    completed: { glyph: '✔', text: 'Completed' },
-    coming_soon: { glyph: '⏳', text: 'In development' },
+    locked: { glyph: '🔒', text: t(language, 'status.locked') },
+    available: { glyph: '◆', text: t(language, 'status.available') },
+    completed: { glyph: '✔', text: t(language, 'status.completed') },
+    coming_soon: { glyph: '⏳', text: t(language, 'status.coming_soon') },
   };
   const m = map[status] ?? map.locked;
   return <span className={`chip chip-${status}`}><span aria-hidden="true">{m.glyph}</span> {m.text}</span>;

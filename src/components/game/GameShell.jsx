@@ -6,38 +6,40 @@ import { PATHS } from '../../content/paths.js';
 import PlayerPortrait from '../character/PlayerPortrait.jsx';
 import { ProgressBar } from '../common/ui.jsx';
 import Toasts from './Toasts.jsx';
+import { t } from '../../i18n/index.js';
 
 const NAV = [
-  { to: '/map', label: 'World', icon: Map },
-  { to: '/grimoire', label: 'Grimoire', icon: BookOpen },
-  { to: '/bestiary', label: 'Bestiary', icon: Skull },
-  { to: '/profile', label: 'Profile', icon: User },
-  { to: '/settings', label: 'Settings', icon: Settings },
+  { to: '/map', key: 'nav.world', icon: Map },
+  { to: '/grimoire', key: 'nav.grimoire', icon: BookOpen },
+  { to: '/bestiary', key: 'nav.bestiary', icon: Skull },
+  { to: '/profile', key: 'nav.profile', icon: User },
+  { to: '/settings', key: 'nav.settings', icon: Settings },
 ];
 
 export default function GameShell() {
   const { game, saveStatus } = useGame();
   const { pathname } = useLocation();
   const lp = levelProgress(game.progress.xp);
+  const language = game.settings.language;
   const order = game.pathId ? PATHS[game.pathId] : null;
   return (
     <div className="shell" data-order={order?.colorKey}>
-      <a href="#main" className="skip-link">Skip to content</a>
+      <a href="#main" className="skip-link">{t(language, 'nav.skip')}</a>
       <header className="hud">
-        <NavLink to="/profile" className="hud-player" aria-label="Open your profile">
+        <NavLink to="/profile" className="hud-player" aria-label={t(language, 'nav.openProfile')}>
           <PlayerPortrait size="sm" />
           <span className="hud-name">{game.player.address ? `${game.player.address} ` : ''}{game.player.name}</span>
         </NavLink>
         <div className="hud-level">
-          <span>Level {lp.level}</span>
+          <span>{language === 'tr' ? `Seviye ${lp.level}` : `Level ${lp.level}`}</span>
           <ProgressBar value={lp.into} max={lp.needed} label={`Experience toward level ${lp.level + 1}`} />
           <span className="hud-xp">{game.progress.xp} XP</span>
         </div>
         {order && <span className="hud-order" title={order.title}>{order.name}</span>}
-        <nav className="hud-nav" aria-label="Main">
-          {NAV.map(({ to, label, icon: Icon }) => (
+        <nav className="hud-nav" aria-label={t(language, 'nav.main')}>
+          {NAV.map(({ to, key, icon: Icon }) => (
             <NavLink key={to} to={to} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              <Icon size={18} aria-hidden="true" /><span>{label}</span>
+              <Icon size={18} aria-hidden="true" /><span>{t(language, key)}</span>
             </NavLink>
           ))}
         </nav>

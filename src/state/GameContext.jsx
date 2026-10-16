@@ -20,9 +20,10 @@ export function GameProvider({ children, storage }) {
   // Apply accessibility settings to the document.
   useEffect(() => {
     const root = document.documentElement;
+    root.lang = store.game.settings.language;
     root.dataset.text = store.game.settings.textSize;
     root.dataset.motion = store.game.settings.reducedMotion;
-  }, [store.game.settings.textSize, store.game.settings.reducedMotion]);
+  }, [store.game.settings.language, store.game.settings.textSize, store.game.settings.reducedMotion]);
 
   const value = useMemo(
     () => ({

@@ -5,6 +5,7 @@ import { asset } from '../components/common/assets.js';
 import { Button, ConfirmDialog } from '../components/common/ui.jsx';
 import { nextQuest } from '../engine/questEngine.js';
 import { questPath } from '../app/paths.js';
+import { t } from '../i18n/index.js';
 
 export function continuePath(game) {
   if (!game.assessment.completed && !game.pathId) return '/assessment';
@@ -17,6 +18,7 @@ export default function TitlePage() {
   const nav = useNavigate();
   const [confirm, setConfirm] = useState(false);
   const hasGame = Boolean(game.player);
+  const language = game.settings.language;
 
   const startNew = () => { dispatch({ type: 'NEW_GAME', keepSettings: true }); nav('/create'); };
 
@@ -25,36 +27,43 @@ export default function TitlePage() {
       <div className="title-sky" aria-hidden="true" />
       <div className="title-inner">
         <h1 className="title-logo">The Arcane Protocol</h1>
-        <p className="title-tag">Every mystery leaves a trace. Every secret has a weakness.</p>
-        <nav className="title-menu" aria-label="Main menu">
+        <p className="title-tag">{t(language, 'app.tagline')}</p>
+        <nav className="title-menu" aria-label={t(language, 'menu.main')}>
+          <label className="language-picker">
+            <span>{t(language, 'language.label')}</span>
+            <select aria-label={t(language, 'language.label')} value={language} onChange={(e) => dispatch({ type: 'UPDATE_SETTINGS', settings: { language: e.target.value } })}>
+              <option value="tr">{t(language, 'language.turkish')}</option>
+              <option value="en">{t(language, 'language.english')}</option>
+            </select>
+          </label>
           {hasGame ? (
             <>
-              <Button onClick={() => nav(continuePath(game))} autoFocus>Continue Adventure</Button>
+              <Button onClick={() => nav(continuePath(game))} autoFocus>{t(language, 'menu.continue')}</Button>
               <div className="title-quick">
-                <Button variant="ghost" onClick={() => nav('/map')}>Explore the World</Button>
-                <Button variant="ghost" onClick={() => nav('/grimoire')}>Open Grimoire</Button>
-                <Button variant="ghost" onClick={() => nav('/profile')}>Review Skills</Button>
-                <Button variant="ghost" onClick={() => nav('/bestiary')}>View Bestiary</Button>
+                <Button variant="ghost" onClick={() => nav('/map')}>{t(language, 'menu.explore')}</Button>
+                <Button variant="ghost" onClick={() => nav('/grimoire')}>{t(language, 'menu.grimoire')}</Button>
+                <Button variant="ghost" onClick={() => nav('/profile')}>{t(language, 'menu.skills')}</Button>
+                <Button variant="ghost" onClick={() => nav('/bestiary')}>{t(language, 'menu.bestiary')}</Button>
               </div>
-              <Button variant="ghost" onClick={() => setConfirm(true)}>New Game</Button>
+              <Button variant="ghost" onClick={() => setConfirm(true)}>{t(language, 'menu.new')}</Button>
             </>
           ) : (
-            <Button onClick={startNew} autoFocus>New Game</Button>
+            <Button onClick={startNew} autoFocus>{t(language, 'menu.new')}</Button>
           )}
         </nav>
         {saveStatus.error && <p className="banner banner-warn" role="alert">{saveStatus.error}</p>}
-        <p className="title-note">Progress is saved only in this browser. No account, no tracking.</p>
+        <p className="title-note">{t(language, 'menu.saveNote')}</p>
       </div>
       <ConfirmDialog
         open={confirm}
-        title="Start a new game?"
+        title={t(language, 'menu.newTitle')}
         danger
-        confirmLabel="Erase and start over"
-        cancelLabel="Keep my adventure"
+        confirmLabel={t(language, 'menu.erase')}
+        cancelLabel={t(language, 'menu.keep')}
         onCancel={() => setConfirm(false)}
         onConfirm={() => { setConfirm(false); startNew(); }}
       >
-        <p>Your current character and all progress in this browser will be erased. This cannot be undone.</p>
+        <p>{t(language, 'menu.eraseWarning')}</p>
       </ConfirmDialog>
     </div>
   );

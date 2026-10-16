@@ -1,0 +1,47 @@
+@import '@fontsource/pixelify-sans/400.css';
+@import '@fontsource/pixelify-sans/700.css';
+@import '@fontsource/crimson-pro/400.css';
+@import '@fontsource/crimson-pro/600.css';
+@import '@fontsource/crimson-pro/400-italic.css';
+
+:root {
+  --ink: #14122a;
+  --ink-2: #1d1a3a;
+  --ink-3: #2a2550;
+  --violet: #4b3a7a;
+  --violet-soft: #6c5aa0;
+  --parchment: #ead9ac;
+  --parchment-2: #dcc791;
+  --parchment-dark: #b79a5e;
+  --leather: #3b2a1c;
+  --leather-2: #5a4130;
+  --gold: #d2a037;
+  --gold-bright: #f2c75c;
+  --burgundy: #7a2335;
+  --crimson: #b3364a;
+  --forest: #2f5d3a;
+  --forest-bright: #5b9a62;
+  --silver: #aab4c8;
+  --lantern: #ffb64d;
+  --ink-text: #2a1d12;
+  --good: #3c7d46;
+  --bad: #a3303f;
+  --warn: #b97a16;
+
+  --font-display: 'Pixelify Sans', 'Courier New', monospace;
+  --font-body: 'Crimson Pro', 'Georgia', 'Times New Roman', serif;
+
+  --px: 4px;
+  --text-scale: 1;
+  --radius: 0;
+  --shadow-step: 0 4px 0 rgba(0, 0, 0, 0.45);
+}
+
+:root[data-text='large'] { --text-scale: 1.15; }
+:root[data-text='xlarge'] { --text-scale: 1.3; }
+
+/* Order accent colours */
+[data-order='blue'] { --accent: #5b8def; --accent-deep: #1d3b73; }
+[data-order='red'] { --accent: #d1495b; --accent-deep: #6f1d2b; }
+[data-order='purple'] { --accent: #a37be0; --accent-deep: #3f2a73; }
+[data-order='echoes'] { --accent: #d2a037; --accent-deep: #6b4f12; }

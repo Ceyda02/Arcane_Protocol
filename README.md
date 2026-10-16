@@ -2,6 +2,42 @@
 
 > *Every mystery leaves a trace. Every secret has a weakness.*
 
+## Türkçe
+
+**The Arcane Protocol**, siber güvenlik kavramlarını öğreten piksel sanatlı bir fantastik RPG'dir. Uygulama tarayıcıda çalışır; hesap, arka uç sunucusu veya gerçek hedeflere ağ erişimi gerektirmez. Yeni oyunlarda Türkçe varsayılan dildir; dil tercihi ana menüden ve ayarlardan değiştirilebilir.
+
+### Hızlı başlangıç
+
+Node.js **22.22 veya üzerini** kurduktan sonra proje klasöründe:
+
+```bash
+npm install
+npm run dev
+```
+
+Terminalde gösterilen yerel adresi tarayıcıda açın (varsayılan: `http://localhost:5173`). Testler için `npm test`, üretim derlemesi için `npm run build` komutlarını kullanın. İlerleme yalnızca aynı tarayıcının yerel depolamasına kaydedilir.
+
+### Mevcut Türkçe desteği ve kapsam
+
+Türkçe dil seçimi, ana menü, gezinme çubuğu, ayarlar, dünya haritası ve Büyü Kitabı arayüzünü kapsar. Derslerin, diyalogların, sınavların ve yaratık kayıtlarının çoğu henüz İngilizcedir; çeviri çalışması tamamlanmış değildir. Haritada görünen yeni bölgeler gelecek içerik için işaretlenmiştir ve henüz oynanabilir görevleri yoktur.
+
+Harita, proje için kullanıcı tarafından sağlanan `public/hexaria-world-map.png` görselini kullanır; görseldeki bölge adları İngilizcedir, bölge seçimi ve ilerleme işaretleri ise Türkçe arayüz katmanında çalışır. Haritanın dışındaki varlıkların lisans bilgileri ayrıca belgelenmelidir.
+
+Saha Günlüğü, tamamlanan görevleri, başarıyla geçilmiş sınamalardan çıkarılan bulguları ve tekrar kuyruğunu gösterir. Bağımsız sürükle-bırak kanıt panosu ve görev ilerlemesinden öğrenen beceri ağacı henüz uygulanmadı.
+
+### Güvenlik sınırları
+
+Tüm senaryolar kurgusaldır. Oyuncu girdisi kod olarak çalıştırılmaz; gerçek sistem taraması, zararlı yazılım veya gerçek hedeflere bağlantı yoktur. Oyun puanları mesleki sertifika veya gerçek dünyadaki yetkinliğin garantisi değildir.
+
+### Yol haritası
+
+- Tüm oyun metinlerinin doğal Türkçe ve İngilizce çevirileri.
+- Dünya bölgeleri için yeni oynanabilir bölümler.
+- Kanıt panosu ve görev ilerlemesine bağlı beceri gelişim ekranı.
+- Daha fazla erişilebilirlik ve mobil/tablet ekran testi.
+
+---
+
 A pixel-art medieval fantasy RPG that teaches real cybersecurity. You investigate a haunted border village, learn to read logs and timelines, and then face the **Malware Bestiary**: fantasy creatures that each stand for a real kind of malware, with accurate definitions, indicators, and defenses.
 
 Everything runs in the browser, offline, with no account, no backend, no analytics, and no paid service.
@@ -16,7 +52,10 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 |---|---|
 | Title, new/continue game, character creation, settings | Complete |
 | Trial of Three Runes (14 questions, deterministic scoring, retake, choose another path) | Complete |
-| World map with data-driven unlocks (7 regions) | Complete. Only the **Crownlands** has playable content |
+| World map with data-driven unlocks (9 visible regions) | Existing regions plus two future-region markers. Only the **Crownlands** has playable content |
+| Turkish / English selector | Turkish default for new saves; menu, navigation, settings and map-region labels/descriptions translated. Other game content remains English |
+| Field Journal | Tracks completed quests, passed-challenge findings, and the review queue |
+| Image-backed world map | Uses the supplied Hexaria map with interactive region selection and progress states |
 | Chapter 1: *The Bells of the Silent Watch* (5 challenges, dialogue, lessons) | Complete and playable |
 | Cyber Grimoire (search, filter, bookmarks, review later) | Complete |
 | Bestiary: Realm Beasts | 1 of 6 unlockable (the Shapeshifter). The rest are visible but sealed until future chapters |
@@ -27,6 +66,8 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | Ambient audio | Not built. Optional synthesized UI sounds only |
 
 ![World map](docs/screenshots/03-world-map.png)
+
+The in-game map uses the supplied `public/hexaria-world-map.png` illustration with interactive region controls layered on top. Region labels baked into the illustration are English; the selected-region panel follows the chosen language. The Field Journal summarizes completed quests and findings from passed challenges; it is not a free-form investigation board.
 
 ## Game concept
 
@@ -65,7 +106,7 @@ Locked entries appear as silhouettes with a teaser. They open when you meet the 
 
 ## Quick start
 
-Requires Node 20+.
+Requires Node.js 22.22+ for the current test toolchain (Vite itself requires Node.js 20.19+).
 
 ```bash
 npm install
@@ -180,12 +221,12 @@ The chapter and encounters are completed in tests through the real reducer and v
 
 ## Roadmap
 
-Next Night Watch chapter; the intermediate and boss encounters for the nine field-study creatures; Rune Gates (networking) and Shattered Web (web security, with the Shapeshifter and Vampire); locked-region quests; other orders' starter quests; backup/export of saves; dedicated renderers for the remaining challenge types; a screen-reader and contrast audit. Further out: isolated, authorized live labs (never arbitrary code on an app server), accounts and cloud saves, classroom mode, translations, and a React Native app reusing content/ and engine/.
+Next Night Watch chapter; the intermediate and boss encounters for the nine field-study creatures; Rune Gates (networking) and Shattered Web (web security, with the Shapeshifter and Vampire); locked-region quests; other orders' starter quests; backup/export of saves; dedicated renderers for the remaining challenge types; a screen-reader and contrast audit. Further out: isolated, authorized live labs (never arbitrary code on an app server), accounts and cloud saves, classroom mode, translations, and a React Native app reusing `content/` and `engine/`.
 
 ## Contributing
 
-Add content as data first, add a test, keep scenarios fictional, and keep fantasy metaphor separate from the technical definition. Run npm test and npm run build before opening a PR. Do not add functional malware, real targets, or code that executes player input.
+Add content as data first, add a test, keep scenarios fictional, and keep fantasy metaphor separate from the technical definition. Run `npm test` and `npm run build` before opening a PR. Do not add functional malware, real targets, or code that executes player input.
 
 ## License
 
-Code: MIT (see the LICENSE file). Art: original work by the project author; see Assets and credits above.
+Code: MIT (add a `LICENSE` file before publishing). Art: see *Asset licensing* above.

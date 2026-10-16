@@ -19,7 +19,17 @@ function smoothNoise(x, y, scale) {
   return a + (b - a) * s(fx) + (c - a) * s(fy) + (a - b - c + d) * s(fx) * s(fy);
 }
 
-const TINT = { crimson_depths: '#6e2a3a', veil_of_twilight: '#5a4a8a', memory_crypt: '#8a7440', nightwatch_citadel: '#3e5a8c', shattered_web: '#4f6b4a', rune_gates: '#5d6a78', crownlands: '#3f7a4c' };
+const TINT = {
+  crimson_depths: '#6e2a3a',
+  veil_of_twilight: '#5a4a8a',
+  memory_crypt: '#8a7440',
+  nightwatch_citadel: '#3e5a8c',
+  shattered_web: '#4f6b4a',
+  rune_gates: '#5d6a78',
+  crownlands: '#3f7a4c',
+  blighted_reach: '#68483e',
+  forgotten_observatory: '#615c79',
+};
 
 export function buildTerrain(regions) {
   const cells = {};
