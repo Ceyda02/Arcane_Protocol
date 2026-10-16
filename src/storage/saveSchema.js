@@ -6,7 +6,7 @@
  *
  * Nothing here touches secrets or credentials. Saves live in localStorage and are NOT authentication.
  */
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 export const SKILL_IDS = ['networking', 'webapp', 'logs_ir', 'coding', 'vuln', 'forensics', 'malware'];
 export const PATH_IDS = ['blue', 'red', 'purple', 'echoes'];
 
@@ -36,6 +36,7 @@ export function createInitialState() {
       completedQuests: [],
       questState: {},
       challengeRecords: {},
+      investigationRecords: {},
       grimoire: [],
       bestiary: {},
       achievements: [],
@@ -82,6 +83,7 @@ const migrations = {
     version: 2,
     settings: { ...(isObj(old.settings) ? old.settings : {}), language: 'en' },
   }),
+  2: (old) => ({ ...old, version: 3 }),
 };
 
 export function migrateSave(raw) {
@@ -178,6 +180,16 @@ function sanitizeProgress(p) {
     }
   }
 
+  const investigationRecords = {};
+  if (isObj(p.investigationRecords) && isObj(p.investigationRecords.watchtower)) {
+    const record = p.investigationRecords.watchtower;
+    investigationRecords.watchtower = {
+      passed: Boolean(record.passed),
+      bestScore: num(record.bestScore, 0, 0, 1),
+      attempts: Math.floor(num(record.attempts, 0, 0, 10000)),
+    };
+  }
+
   const bestiary = {};
   if (isObj(p.bestiary)) {
     for (const [cid, st] of Object.entries(p.bestiary).slice(0, 100)) {
@@ -191,6 +203,7 @@ function sanitizeProgress(p) {
     completedQuests: strList(p.completedQuests),
     questState,
     challengeRecords,
+    investigationRecords,
     grimoire: strList(p.grimoire),
     bestiary,
     achievements: strList(p.achievements),

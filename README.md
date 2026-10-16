@@ -23,7 +23,7 @@ Türkçe dil seçimi, ana menü, gezinme çubuğu, ayarlar, dünya haritası ve 
 
 Harita, proje için kullanıcı tarafından sağlanan `public/hexaria-world-map.png` görselini kullanır; görseldeki bölge adları İngilizcedir, bölge seçimi ve ilerleme işaretleri ise Türkçe arayüz katmanında çalışır. Haritanın dışındaki varlıkların lisans bilgileri ayrıca belgelenmelidir.
 
-Saha Günlüğü, tamamlanan görevleri, başarıyla geçilmiş sınamalardan çıkarılan bulguları ve tekrar kuyruğunu gösterir. Bağımsız sürükle-bırak kanıt panosu ve görev ilerlemesinden öğrenen beceri ağacı henüz uygulanmadı.
+Saha Günlüğü, tamamlanan görevleri, başarıyla geçilmiş sınamalardan çıkarılan bulguları ve tekrar kuyruğunu gösterir. Kanıt panosu, bölüm sınamalarında doğrulanmış kayıtları zaman çizelgesine bağlatır; oyuncunun bir ipucundan sorumlu kişi hakkında kanıtsız hüküm vermesini ödüllendirmez. Beceri ağacı, tekrar edilebilir XP yerine başarıyla geçilen farklı sınamalara göre ilerlemeyi ve sıradaki çalışma önerisini gösterir.
 
 ### Güvenlik sınırları
 
@@ -33,7 +33,6 @@ Tüm senaryolar kurgusaldır. Oyuncu girdisi kod olarak çalıştırılmaz; ger�
 
 - Tüm oyun metinlerinin doğal Türkçe ve İngilizce çevirileri.
 - Dünya bölgeleri için yeni oynanabilir bölümler.
-- Kanıt panosu ve görev ilerlemesine bağlı beceri gelişim ekranı.
 - Daha fazla erişilebilirlik ve mobil/tablet ekran testi.
 
 ---
@@ -55,6 +54,8 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | World map with data-driven unlocks (9 visible regions) | Existing regions plus two future-region markers. Only the **Crownlands** has playable content |
 | Turkish / English selector | Turkish default for new saves; menu, navigation, settings and map-region labels/descriptions translated. Other game content remains English |
 | Field Journal | Tracks completed quests, passed-challenge findings, and the review queue |
+| Investigation board | Reconstructs the Watchtower timeline and rewards evidence-based conclusions |
+| Skill tree | Shows demonstrated progress from distinct passed challenges and suggests practice |
 | Image-backed world map | Uses the supplied Hexaria map with interactive region selection and progress states |
 | Chapter 1: *The Bells of the Silent Watch* (5 challenges, dialogue, lessons) | Complete and playable |
 | Cyber Grimoire (search, filter, bookmarks, review later) | Complete |
@@ -67,7 +68,7 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 
 ![World map](docs/screenshots/03-world-map.png)
 
-The in-game map uses the supplied `public/hexaria-world-map.png` illustration with interactive region controls layered on top. Region labels baked into the illustration are English; the selected-region panel follows the chosen language. The Field Journal summarizes completed quests and findings from passed challenges; it is not a free-form investigation board.
+The in-game map uses the supplied `public/hexaria-world-map.png` illustration with interactive region controls layered on top. Region labels baked into the illustration are English; the selected-region panel follows the chosen language. The Field Journal summarizes completed quests and passed-challenge findings. The evidence board opens after its three chapter prerequisites and teaches timeline correlation, careful attribution, and corroboration. The skill tree measures distinct passed challenges rather than repeatable XP.
 
 ## Game concept
 
@@ -195,7 +196,7 @@ Keyboard-operable everywhere (sorting uses move buttons, matching uses native se
 
 ## Testing
 
-`npm test` runs the suite: assessment scoring and path selection, every challenge validator (and that every challenge is solvable), the spread simulation, XP and hint rules, achievements, quest dependencies and map unlocks, malware content integrity, save/restore/corrupt/migrate/quota/unavailable storage, and React Testing Library flows (new game, reset confirmation, keyboard dialogue and sorting, playing the Worm boss in the UI, persistence across remount).
+`npm test` runs the suite: assessment scoring and path selection, every challenge validator (and that every challenge is solvable), the spread simulation, XP and hint rules, achievements, quest dependencies and map unlocks, evidence-board prerequisites/scoring/one-time rewards, skill-tree recommendations, malware content integrity, save migration and recovery, and React Testing Library flows (new game, reset confirmation, keyboard dialogue and sorting, encounter play, persistence, and the new progression screens).
 
 The chapter and encounters are completed in tests through the real reducer and validators using answers derived from the data, with no fabricated state.
 
@@ -203,7 +204,7 @@ The chapter and encounters are completed in tests through the real reducer and v
 
 - **Pixel art** (creatures, characters, village scene) was supplied by the project owner and converted/cropped for the game. **Confirm its provenance and license before publishing the repository.** The code does not depend on any specific image; replace files in `src/assets/` (keys are filenames).
 - **Mimic and Memory Eater** have no art and use a labeled placeholder glyph.
-- **Map terrain** is generated procedurally in code.
+- **Map illustration** was supplied by the project owner. Confirm its provenance and license before redistribution.
 - **Sound** is synthesized at runtime. No audio files, no third-party audio.
 - **Fonts**: Pixelify Sans and Crimson Pro via `@fontsource` (SIL Open Font License), bundled locally.
 - **Icons**: Lucide (ISC).

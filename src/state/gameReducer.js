@@ -3,6 +3,8 @@ import { CHALLENGES, QUESTS, MALWARE_CREATURES } from '../content/index.js';
 import { applyChallengeResult, addXp, newAchievements, updateStreak, levelFromXp, ACHIEVEMENTS } from '../engine/progressionEngine.js';
 import { meetsCompletion, questRewards } from '../engine/questEngine.js';
 import { questStatus } from '../engine/unlockEngine.js';
+import { INVESTIGATION_BOARDS } from '../content/investigationBoards.js';
+import { evaluateInvestigation } from '../engine/investigationEngine.js';
 
 /**
  * Store shape: { game, events, eventKey }
@@ -95,6 +97,30 @@ function reduceGame(game, action, events) {
         }
       }
       return finalize({ ...game, progress, streak }, events, levelBefore);
+    }
+
+    case 'SUBMIT_INVESTIGATION': {
+      const board = INVESTIGATION_BOARDS[action.boardId];
+      if (!board) return game;
+      const result = evaluateInvestigation(action.boardId, action.answer, game.progress.challengeRecords);
+      if (!result.unlocked) return game;
+
+      const previous = game.progress.investigationRecords[board.id];
+      const award = result.passed && !previous?.passed ? board.xp : 0;
+      const record = {
+        passed: Boolean(previous?.passed || result.passed),
+        bestScore: Math.max(previous?.bestScore ?? 0, result.score),
+        attempts: (previous?.attempts ?? 0) + 1,
+      };
+      let progress = {
+        ...game.progress,
+        investigationRecords: { ...game.progress.investigationRecords, [board.id]: record },
+      };
+      if (award) {
+        progress = addXp(progress, award, board.skill);
+        events.push({ type: 'xp', amount: award, skill: board.skill, label: 'Investigation complete' });
+      }
+      return finalize({ ...game, progress }, events, levelBefore);
     }
 
     case 'COMPLETE_QUEST': {

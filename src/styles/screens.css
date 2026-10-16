@@ -158,6 +158,35 @@
 .ach-grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: .6rem; }
 .ach { display: grid; gap: .2rem; padding: .6rem; border: 3px dashed #b79a5e; } .ach.is-earned { border-style: solid; border-color: #6b4f12; background: #fff0c8; }
 .settings .panel { max-width: 640px; }
+.journal-board-link { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.journal-board-link h2 { margin-top: 0; }
+.skill-tree-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 1rem; }
+.skill-node { min-width: 0; display: grid; align-content: start; gap: .6rem; }
+.skill-node-heading { display: flex; align-items: center; gap: .75rem; }
+.skill-node-heading h2 { margin: 0 0 .25rem; }
+.skill-rune { display: grid; place-items: center; flex: 0 0 48px; height: 48px; border: 3px solid var(--gold); color: var(--gold-bright); font: 700 1.6rem var(--font-display); }
+.skill-tier-chip { display: inline-block; padding: .2rem .45rem; border: 1px solid currentColor; font-size: .82rem; }
+.tier-unexplored { color: #5e4a2d; }
+.tier-demonstrated { color: #345349; }
+.tier-practiced { color: #56376b; }
+.skill-node-challenges { list-style: none; padding: 0; margin: 0; display: grid; gap: .45rem; }
+.skill-node-challenges li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .3rem .7rem; align-items: start; padding-top: .4rem; border-top: 1px solid rgba(74,51,32,.25); }
+.skill-node-challenges li > :first-child { overflow-wrap: anywhere; }
+.skill-node-challenges li > a { grid-column: 1 / -1; justify-self: start; }
+.skill-tree-disclaimer { margin-top: 1rem; }
+.investigation-page form { display: grid; gap: .8rem; }
+.board-fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.board-fieldset legend { margin-bottom: .45rem; color: var(--gold-bright); font: 700 1.2rem var(--font-display); }
+.board-options { display: grid; gap: .45rem; }
+.board-option { display: flex; align-items: flex-start; gap: .6rem; min-height: 44px; padding: .55rem; border: 2px solid rgba(183,154,94,.55); background: rgba(255,255,255,.12); cursor: pointer; }
+.board-option input { flex: 0 0 auto; width: 1.1rem; height: 1.1rem; margin-top: .15rem; accent-color: #624b89; }
+.board-option span { min-width: 0; overflow-wrap: anywhere; }
+.evidence-cards { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: .7rem; }
+.evidence-card { min-width: 0; padding: .75rem; border: 3px solid #72593d; background: #fff0c8; color: var(--ink-text); }
+.evidence-card h3 { margin-top: 0; color: #49321f; }
+.evidence-card p { margin-bottom: 0; overflow-wrap: anywhere; }
+.board-result { border-left: 5px solid #8b3a34; }
+.board-result.is-passed { border-left-color: #386852; }
 
 /* Grid children must be allowed to shrink, or wide <pre>/tables inflate the column and cause sideways scrolling. */
 .encounter-grid > *, .bestiary-grid > *, .grimoire-grid > *, .create-grid > *, .spread-layout > *, .perm-list > *, .two-col > * { min-width: 0; }
@@ -175,4 +204,7 @@
   .beast-list { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
   .region-progress { align-items: stretch; flex-direction: column; }
   .region-progress .bar { width: 100%; }
+  .journal-board-link { align-items: stretch; }
+  .journal-board-link .btn { justify-content: center; }
+  .skill-node-challenges li { grid-template-columns: minmax(0, 1fr); }
 }

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, ScrollText } from 'lucide-react';
+import { BookOpen, ScrollText, Waypoints } from 'lucide-react';
 import { Button, Panel, StatusChip } from '../components/common/ui.jsx';
 import { CHALLENGES, QUESTS } from '../content/index.js';
 import { questStatus } from '../engine/unlockEngine.js';
@@ -38,11 +38,27 @@ export default function JournalPage() {
     .map(([id, record]) => ({ challenge: CHALLENGES[id], id, record }))
     .filter((item) => item.challenge);
   const reviewCount = game.progress.reviewQueue.length;
+  const investigation = game.progress.investigationRecords.watchtower;
 
   return (
     <div className="journal-page">
       <h1><ScrollText size={28} aria-hidden="true" /> {t(language, 'journal.title')}</h1>
       <p className="lead">{t(language, 'journal.subtitle')}</p>
+
+      <Panel className="journal-board-link">
+        <div>
+          <h2>{t(language, 'investigation.title')}</h2>
+          <p className="muted">{t(language, investigation?.passed ? 'investigation.caseComplete' : investigation ? 'investigation.caseInProgress' : 'investigation.journalSummary')}</p>
+          {investigation && (
+            <p className="muted">
+              {t(language, 'investigation.bestScore')}: {Math.round(investigation.bestScore * 100)}% · {t(language, 'investigation.attempts')}: {investigation.attempts}
+            </p>
+          )}
+        </div>
+        <Link className="btn btn-primary" to="/investigation-board">
+          <Waypoints size={18} aria-hidden="true" /> {t(language, 'investigation.open')}
+        </Link>
+      </Panel>
 
       <Panel>
         <h2>{t(language, 'journal.active')}</h2>

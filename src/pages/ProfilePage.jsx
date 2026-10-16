@@ -10,6 +10,7 @@ import { REALM_CREATURES } from '../content/bestiary.js';
 import { GRIMOIRE_PAGES } from '../content/lessons/grimoire.js';
 import { Button, Panel, ProgressBar } from '../components/common/ui.jsx';
 import PlayerPortrait from '../components/character/PlayerPortrait.jsx';
+import { t } from '../i18n/index.js';
 
 export default function ProfilePage() {
   const { game, dispatch } = useGame();
@@ -45,6 +46,7 @@ export default function ProfilePage() {
 
       <Panel>
         <h2>Skill progression</h2>
+        <p><Link className="btn btn-ghost" to="/skill-tree">{t(game.settings.language, 'skillTree.open')}</Link></p>
         <div className="skill-bars">
           {SKILL_LIST.map((s) => (
             <div key={s.id} className="skill-row">

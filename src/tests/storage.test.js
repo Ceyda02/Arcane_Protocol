@@ -76,6 +76,28 @@ describe('invalid, outdated, and unavailable storage', () => {
     expect(r.state.progress.xp).toBe(120);
     expect(r.state.progress.completedQuests).toEqual(['bells-of-the-silent-watch']);
   });
+  it('migrates v2 saves without losing progress and adds an empty investigation record map', () => {
+    const r = sanitizeState({ version: 2, progress: { xp: 75, completedQuests: ['bells-of-the-silent-watch'] } });
+    expect(r.ok).toBe(true);
+    expect(r.state.version).toBe(SAVE_VERSION);
+    expect(r.state.progress.xp).toBe(75);
+    expect(r.state.progress.completedQuests).toEqual(['bells-of-the-silent-watch']);
+    expect(r.state.progress.investigationRecords).toEqual({});
+  });
+  it('sanitizes investigation records to bounded, known fields', () => {
+    const r = sanitizeState({
+      version: SAVE_VERSION,
+      progress: {
+        investigationRecords: {
+          watchtower: { passed: true, bestScore: 5, attempts: -3, extra: 'ignored' },
+          forgedBoard: { passed: true, bestScore: 1, attempts: 1 },
+        },
+      },
+    });
+    expect(r.state.progress.investigationRecords).toEqual({
+      watchtower: { passed: true, bestScore: 1, attempts: 0 },
+    });
+  });
   it('treats a save without a version as v0', () => {
     expect(migrateSave({ name: 'NoVersion', xp: 5 }).ok).toBe(true);
   });
