@@ -10,10 +10,10 @@ import { asset } from '../components/common/assets.js';
 import RealWorldPanel from '../components/bestiary/RealWorldPanel.jsx';
 import { Button, Panel } from '../components/common/ui.jsx';
 import { questPath, studyPath } from '../app/paths.js';
+import { t } from '../i18n/index.js';
+import { localizeBestiaryCreature } from '../i18n/bestiary.js';
 
-const STATE_TEXT = { seen: 'Encountered', investigated: 'Investigated', defeated: 'Defeated' };
-
-function Creature({ c, status, selected, onPick, kind }) {
+function Creature({ c, status, selected, onPick, kind, language }) {
   const src = asset(c.art);
   const unlocked = Boolean(status);
   return (
@@ -22,8 +22,8 @@ function Creature({ c, status, selected, onPick, kind }) {
         <span className={`beast-art ${src ? '' : 'beast-ph'}`}>
           {src ? <img src={src} alt="" className={unlocked ? '' : 'silhouette'} /> : <span aria-hidden="true">{unlocked ? 'ᚱ' : '?'}</span>}
         </span>
-        <span className="beast-name">{unlocked ? c.name : 'Unknown creature'}</span>
-        <span className="muted beast-sub">{unlocked ? (kind === 'malware' ? `${STATE_TEXT[status]} · ${c.malwareType}` : STATE_TEXT[status]) : `🔒 ${c.tease}`}</span>
+        <span className="beast-name">{unlocked ? c.name : t(language, 'bestiary.unknownCreature')}</span>
+        <span className="muted beast-sub">{unlocked ? `${t(language, `bestiary.status.${status}`)}${kind === 'malware' ? ` · ${c.malwareType}` : ''}` : `🔒 ${c.tease}`}</span>
       </button>
     </li>
   );
@@ -35,8 +35,10 @@ export default function BestiaryPage() {
   const [tab, setTab] = useState('malware');
   const [selId, setSelId] = useState(null);
   const best = game.progress.bestiary;
+  const language = game.settings.language;
   const list = tab === 'malware' ? MALWARE_CREATURES : REALM_CREATURES;
-  const sel = list.find((c) => c.id === selId) ?? null;
+  const localizedList = list.map((creature) => localizeBestiaryCreature(creature, language));
+  const sel = localizedList.find((c) => c.id === selId) ?? null;
   const total = MALWARE_CREATURES.length;
   const found = MALWARE_CREATURES.filter((c) => best[c.id]).length;
 
@@ -46,22 +48,22 @@ export default function BestiaryPage() {
   };
 
   const detail = () => {
-    if (!sel) return <Panel><p className="muted">Choose a creature to read about it. Locked creatures appear as silhouettes until you meet them.</p></Panel>;
+    if (!sel) return <Panel><p className="muted">{t(language, 'bestiary.chooseCreature')}</p></Panel>;
     const status = best[sel.id];
     if (tab === 'realm') {
       return (
         <Panel className="beast-detail">
-          <h2>{status ? sel.name : 'Unknown creature'}</h2>
+          <h2>{status ? sel.name : t(language, 'bestiary.unknownCreature')}</h2>
           {status ? (
             <>
               <p className="lore">{sel.lore}</p>
-              <p><strong>Metaphor:</strong> {sel.metaphor}</p>
-              <p><strong>Concepts:</strong> {sel.concepts.join(', ')}.</p>
-              <p><strong>Clue:</strong> {sel.clue}</p>
+              <p><strong>{t(language, 'bestiary.detail.metaphor')}:</strong> {sel.metaphor}</p>
+              <p><strong>{t(language, 'bestiary.detail.concepts')}:</strong> {sel.concepts.join(', ')}.</p>
+              <p><strong>{t(language, 'bestiary.detail.clue')}:</strong> {sel.clue}</p>
               <p className="muted">{sel.lesson}</p>
-              {sel.grimoire && <p>Grimoire page: {GRIMOIRE_BY_ID[sel.grimoire]?.title}</p>}
+              {sel.grimoire && <p>{t(language, 'bestiary.detail.grimoire')}: {GRIMOIRE_BY_ID[sel.grimoire]?.title}</p>}
             </>
-          ) : <p>{sel.tease} {sel.unlockedBy ? 'Finish “The Bells of the Silent Watch” to meet it.' : 'It appears in a future chapter.'}</p>}
+          ) : <p>{sel.tease} {sel.unlockedBy ? t(language, 'bestiary.detail.meetCreature') : t(language, 'bestiary.detail.futureCreature')}</p>}
         </Panel>
       );
     }
@@ -71,13 +73,13 @@ export default function BestiaryPage() {
     return (
       <div className="beast-detail-wrap">
         <Panel className="beast-detail">
-          <h2>{status ? `${sel.name}: ${sel.title}` : 'Unknown creature'}</h2>
-          <p className="muted">{sel.category} · {sel.availability === 'playable' ? 'Full encounter (beginner, intermediate, boss)' : 'Field study (beginner). More planned.'}</p>
-          {status ? <><p className="lore">{sel.lore}</p><p><strong>Scenario:</strong> {sel.scenario}</p><p className="muted">Reward: up to {sel.rewards.xp} XP and a Grimoire page.</p></> : <p>{sel.tease}</p>}
-          {needs.length > 0 && <p className="notice">To meet this creature: {needs.join('; ')}.</p>}
+          <h2>{status ? `${sel.name}: ${sel.title}` : t(language, 'bestiary.unknownCreature')}</h2>
+          <p className="muted">{t(language, `bestiary.category.${sel.category}`)} · {t(language, sel.availability === 'playable' ? 'bestiary.detail.fullEncounter' : 'bestiary.detail.fieldStudy')}</p>
+          {status ? <><p className="lore">{sel.lore}</p><p><strong>{t(language, 'bestiary.detail.scenario')}:</strong> {sel.scenario}</p><p className="muted">{t(language, 'bestiary.detail.reward')} {sel.rewards.xp} {t(language, 'bestiary.detail.xpAndPage')}</p></> : <p>{sel.tease}</p>}
+          {needs.length > 0 && <p className="notice">{t(language, 'bestiary.detail.meetRequirement')} {needs.join('; ')}.</p>}
           <div className="create-actions">
-            {needs.length === 0 && quest && (qs === 'available' || qs === 'completed') && <Button onClick={() => nav(questPath(quest))}>{qs === 'completed' ? 'Review the encounter' : status ? 'Continue the encounter' : 'Begin the encounter'}</Button>}
-            {needs.length === 0 && !quest && <Button onClick={() => { dispatch({ type: 'DISCOVER_CREATURE', id: sel.id, status: 'seen' }); nav(studyPath(sel.id)); }}>{status ? 'Continue the field study' : 'Begin the field study'}</Button>}
+            {needs.length === 0 && quest && (qs === 'available' || qs === 'completed') && <Button onClick={() => nav(questPath(quest))}>{t(language, qs === 'completed' ? 'bestiary.detail.reviewEncounter' : status ? 'bestiary.detail.continueEncounter' : 'bestiary.detail.beginEncounter')}</Button>}
+            {needs.length === 0 && !quest && <Button onClick={() => { dispatch({ type: 'DISCOVER_CREATURE', id: sel.id, status: 'seen' }); nav(studyPath(sel.id)); }}>{t(language, status ? 'bestiary.detail.continueStudy' : 'bestiary.detail.beginStudy')}</Button>}
           </div>
         </Panel>
         {status && <RealWorldPanel creature={sel} defaultOpen={false} />}
@@ -87,12 +89,12 @@ export default function BestiaryPage() {
 
   return (
     <div className="bestiary">
-      <h1>The Bestiary</h1>
-      <div className="tabs" role="tablist" aria-label="Bestiary sections">
-        <button role="tab" type="button" aria-selected={tab === 'malware'} className={tab === 'malware' ? 'is-active' : ''} onClick={() => { setTab('malware'); setSelId(null); }}>Malware Bestiary ({found}/{total})</button>
-        <button role="tab" type="button" aria-selected={tab === 'realm'} className={tab === 'realm' ? 'is-active' : ''} onClick={() => { setTab('realm'); setSelId(null); }}>Realm Beasts</button>
+      <h1>{t(language, 'bestiary.title')}</h1>
+      <div className="tabs" role="tablist" aria-label={t(language, 'bestiary.tabs')}>
+        <button role="tab" type="button" aria-selected={tab === 'malware'} className={tab === 'malware' ? 'is-active' : ''} onClick={() => { setTab('malware'); setSelId(null); }}>{t(language, 'bestiary.malwareTab')} ({found}/{total})</button>
+        <button role="tab" type="button" aria-selected={tab === 'realm'} className={tab === 'realm' ? 'is-active' : ''} onClick={() => { setTab('realm'); setSelId(null); }}>{t(language, 'bestiary.realmTab')}</button>
       </div>
-      <p className="muted">{tab === 'malware' ? 'Each creature is a fantasy face for a real kind of malware. The lore is metaphor; the Real-World Knowledge is accurate.' : 'Original creatures of Hexaria.'}</p>
+      <p className="muted">{t(language, tab === 'malware' ? 'bestiary.malwareIntro' : 'bestiary.realmIntro')}</p>
       <div className="bestiary-grid">
         <div>
           {tab === 'malware'
@@ -100,12 +102,15 @@ export default function BestiaryPage() {
               const items = MALWARE_CREATURES.filter((c) => c.category === cat.id);
               return (
                 <section key={cat.id} className="beast-group" aria-labelledby={`g-${cat.id}`}>
-                  <h2 id={`g-${cat.id}`}>{cat.id}</h2><p className="muted">{cat.blurb}</p>
-                  <ul className="beast-list">{items.map((c) => <Creature key={c.id} c={c} kind="malware" status={best[c.id]} selected={selId === c.id} onPick={() => setSelId(c.id)} />)}</ul>
+                  <h2 id={`g-${cat.id}`}>{t(language, `bestiary.category.${cat.id}`)}</h2><p className="muted">{t(language, `bestiary.blurb.${cat.id}`)}</p>
+                  <ul className="beast-list">{items.map((creature) => {
+                    const localized = localizeBestiaryCreature(creature, language);
+                    return <Creature key={creature.id} c={localized} kind="malware" language={language} status={best[creature.id]} selected={selId === creature.id} onPick={() => setSelId(creature.id)} />;
+                  })}</ul>
                 </section>
               );
             })
-            : <ul className="beast-list">{REALM_CREATURES.map((c) => <Creature key={c.id} c={c} kind="realm" status={best[c.id]} selected={selId === c.id} onPick={() => setSelId(c.id)} />)}</ul>}
+            : <ul className="beast-list">{localizedList.map((c) => <Creature key={c.id} c={c} kind="realm" language={language} status={best[c.id]} selected={selId === c.id} onPick={() => setSelId(c.id)} />)}</ul>}
         </div>
         <div className="bestiary-detail" aria-live="polite">{detail()}</div>
       </div>

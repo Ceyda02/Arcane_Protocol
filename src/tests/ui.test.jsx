@@ -266,6 +266,26 @@ describe('chapter 1 in the UI', () => {
 });
 
 describe('Malware Bestiary in the UI', () => {
+  it('shows the Bestiary interface and Hexaria creature details in Turkish', async () => {
+    const user = userEvent.setup();
+    const initial = createInitialState();
+    seed(baseGame({
+      settings: { ...initial.settings, language: 'tr', textSpeed: 'instant', reducedMotion: 'on' },
+      progress: { ...initial.progress, bestiary: { shapeshifter: 'seen' } },
+    }));
+    renderApp('/bestiary');
+
+    expect(await screen.findByRole('heading', { name: 'Yaratık Kitabı' })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Zararlı Yazılım Yaratıkları (0/12)' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Bulaşma' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Bilinmeyen yaratık.*Kalenin birbirine bağlı koridorları/ })).toBeInTheDocument();
+
+    await user.click(screen.getByRole('tab', { name: 'Diyar Yaratıkları' }));
+    await user.click(screen.getByRole('button', { name: /Şekil Değiştiren/ }));
+    expect(screen.getByText('Güvendiğin kişilerin yüzlerini takar. İzlemen gereken yüz değil, o yüzün yaptıklarıdır.')).toBeInTheDocument();
+    expect(screen.getByText('Mecaz:')).toBeInTheDocument();
+  });
+
   it('locked creatures are anonymous silhouettes; encounters are gated behind Chapter 1', async () => {
     const user = userEvent.setup();
     seed(baseGame());
@@ -280,7 +300,8 @@ describe('Malware Bestiary in the UI', () => {
 
   it('after Chapter 1 the Worm encounter opens from the Bestiary and shows Real-World Knowledge', async () => {
     const user = userEvent.setup();
-    seed(completeChapter1(newStore()).game);
+    const game = completeChapter1(newStore()).game;
+    seed({ ...game, settings: { ...game.settings, language: 'en' } });
     renderApp('/bestiary');
     await user.click(screen.getAllByRole('button', { name: /unknown creature/i })[0]);
     await user.click(screen.getByRole('button', { name: /begin the encounter/i }));

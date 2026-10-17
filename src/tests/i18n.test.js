@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { t } from '../i18n/index.js';
+import { localizeBestiaryCreature } from '../i18n/bestiary.js';
 import { localizeChapter1 } from '../i18n/chapter1.js';
 import { CHAPTER1_LESSONS, CHAPTER1_SCENES } from '../content/quests/chapter1.js';
 import { CHAPTER1_CHALLENGES } from '../content/challenges/chapter1.js';
 import { createInitialState, migrateSave, sanitizeState } from '../storage/saveSchema.js';
+import { REALM_CREATURES } from '../content/bestiary.js';
+import { MALWARE_CREATURES } from '../content/malware/creatures.js';
 
 describe('language preference', () => {
   it('defaults new games to Turkish', () => {
@@ -45,6 +48,25 @@ describe('language preference', () => {
     for (const language of ['en', 'tr']) {
       for (const key of keys) expect(t(language, key)).not.toBe(key);
     }
+  });
+
+  it('localizes the Bestiary interface and creature metadata in both languages', () => {
+    const keys = [
+      'bestiary.title', 'bestiary.tabs', 'bestiary.malwareTab', 'bestiary.realmTab',
+      'bestiary.chooseCreature', 'bestiary.category.Infection', 'bestiary.blurb.Infection',
+      'bestiary.detail.meetCreature', 'realWorld.title', 'realWorld.whatItIs',
+      'realWorld.perspectives', 'realWorld.order.blue',
+    ];
+    for (const language of ['en', 'tr']) {
+      for (const key of keys) expect(t(language, key)).not.toBe(key);
+    }
+
+    const shapeshifter = REALM_CREATURES.find((creature) => creature.id === 'shapeshifter');
+    const worm = MALWARE_CREATURES.find((creature) => creature.id === 'worm');
+    expect(localizeBestiaryCreature(shapeshifter, 'tr').name).toBe('Şekil Değiştiren');
+    expect(localizeBestiaryCreature(shapeshifter, 'tr').concepts).toContain('Bağlam');
+    expect(localizeBestiaryCreature(worm, 'tr').name).toBe('Solucan');
+    expect(localizeBestiaryCreature(worm, 'en')).toBe(worm);
   });
 
   it('localizes Chapter 1 dialogue, lessons, and every challenge without changing answer data', () => {

@@ -19,7 +19,7 @@ Terminalde gösterilen yerel adresi tarayıcıda açın (varsayılan: `http://lo
 
 ### Mevcut Türkçe desteği ve kapsam
 
-Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası ve Büyü Kitabı arayüzünün yanı sıra ilk bölümün diyaloglarını, derslerini ve sınamalarını kapsar. Diğer oyun bölümlerinin ve yaratık kayıtlarının çoğu henüz İngilizcedir; çeviri çalışması tamamlanmamıştır. Haritada görünen yeni bölgeler gelecek içerik için işaretlenmiştir ve henüz oynanabilir görevleri yoktur.
+Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası ve Büyü Kitabı arayüzünün yanı sıra ilk bölümün diyaloglarını, derslerini ve sınamalarını kapsar. Yaratık Kitabı arayüzü, yaratık adları ve kilitli ipuçları ile Hexaria yaratıklarının açıklamaları da Türkçedir. Zararlı yazılım kayıtlarının teknik açıklamaları ve diğer oyun bölümlerinin anlatı içerikleri ise çoğunlukla İngilizcedir; çeviri çalışması tamamlanmamıştır. Haritada görünen yeni bölgeler gelecek içerik için işaretlenmiştir ve henüz oynanabilir görevleri yoktur.
 
 Harita, proje için kullanıcı tarafından sağlanan `public/hexaria-world-map.png` görselini kullanır; görseldeki bölge adları İngilizcedir, bölge seçimi ve ilerleme işaretleri ise Türkçe arayüz katmanında çalışır. Haritanın dışındaki varlıkların lisans bilgileri ayrıca belgelenmelidir.
 
@@ -52,7 +52,7 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | Title, new/continue game, character creation, settings | Complete |
 | Trial of Three Runes (14 questions, deterministic scoring, retake, choose another path) | Complete |
 | World map with data-driven unlocks (9 visible regions) | Existing regions plus two future-region markers. Only the **Crownlands** has playable content |
-| Turkish / English selector | Turkish default for new saves; menu, navigation, settings, map-region labels/descriptions, and Chapter 1 dialogue, lessons, and challenges translated. Most other narrative and creature content remains English |
+| Turkish / English selector | Turkish default for new saves; menu, navigation, settings, map-region labels/descriptions, Bestiary interface and Realm Beast entries, and Chapter 1 dialogue, lessons, and challenges translated. Malware technical descriptions and most other narrative content remain English |
 | Field Journal | Tracks completed quests, passed-challenge findings, and the review queue |
 | Investigation board | Reconstructs the Watchtower timeline and rewards evidence-based conclusions |
 | Skill tree | Equal-size, collapsible skill cards show demonstrated progress from distinct passed challenges and reveal related practice when opened |
