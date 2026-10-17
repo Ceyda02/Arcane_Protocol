@@ -7,6 +7,8 @@ import { useReducedMotion } from '../../hooks/useReducedMotion.js';
 import { useSound } from '../../hooks/useSound.js';
 import { Button, Portrait } from '../common/ui.jsx';
 import PlayerPortrait from '../character/PlayerPortrait.jsx';
+import { localizeChapter1 } from '../../i18n/chapter1.js';
+import { t } from '../../i18n/index.js';
 
 export const fillTemplate = (text, player) =>
   text.replaceAll('{name}', player?.name ?? 'traveller').replaceAll('{address}', player?.address ? `${player.address} ${player.name}` : player?.name ?? 'traveller');
@@ -32,7 +34,7 @@ export default function DialogueRunner({ nodes, flags: initialFlags = {}, onSetF
   const [showLog, setShowLog] = useState(false);
   const nextRef = useRef(null);
 
-  const node = items[cursor];
+  const node = localizeChapter1(items[cursor], game.settings.language);
   const isChoice = node?.type === 'choice';
   const speaker = node && !isChoice ? CHARACTERS[node.speaker] ?? CHARACTERS.narrator : null;
   const text = node && !isChoice ? fillTemplate(node.text, player) : '';
@@ -98,15 +100,15 @@ export default function DialogueRunner({ nodes, flags: initialFlags = {}, onSetF
             <p className="dialogue-name">{speaker.id === 'you' ? player.name : speaker.name}{speaker.title ? <span className="dialogue-title"> · {speaker.title}</span> : null}</p>
             <p className="dialogue-text" aria-live="polite">{shown}</p>
             <div className="dialogue-actions">
-              <Button variant="primary" onClick={next} ref={nextRef}>{done ? 'Next' : 'Skip animation'}</Button>
-              <button type="button" className="link-btn" onClick={() => setShowLog((s) => !s)} aria-expanded={showLog}><ScrollText size={14} aria-hidden="true" /> Transcript</button>
+              <Button variant="primary" onClick={next} ref={nextRef}>{done ? t(game.settings.language, 'chapter.next') : t(game.settings.language, 'chapter.skipAnimation')}</Button>
+              <button type="button" className="link-btn" onClick={() => setShowLog((s) => !s)} aria-expanded={showLog}><ScrollText size={14} aria-hidden="true" /> {t(game.settings.language, 'chapter.transcript')}</button>
             </div>
           </div>
         </div>
       )}
       {showLog && (
-        <ol className="transcript" aria-label="Dialogue transcript">
-          {history.length === 0 && <li className="muted">Nothing said yet.</li>}
+        <ol className="transcript" aria-label={t(game.settings.language, 'chapter.transcriptLabel')}>
+          {history.length === 0 && <li className="muted">{t(game.settings.language, 'chapter.nothingSaid')}</li>}
           {history.map((h, i) => <li key={i}><strong>{h.who}:</strong> {h.text}</li>)}
         </ol>
       )}

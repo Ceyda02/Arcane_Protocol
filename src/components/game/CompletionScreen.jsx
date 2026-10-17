@@ -7,10 +7,14 @@ import { REALM_CREATURES } from '../../content/bestiary.js';
 import { questRewards } from '../../engine/questEngine.js';
 import { Button, Panel } from '../common/ui.jsx';
 import PlayerPortrait from '../character/PlayerPortrait.jsx';
+import { localizeChapter1 } from '../../i18n/chapter1.js';
+import { t } from '../../i18n/index.js';
 
 /** Chapter / encounter completion: shows what was actually earned (read from game state, not invented). */
 export default function CompletionScreen({ quest, summary }) {
   const { game } = useGame();
+  const language = game.settings.language;
+  const localizedQuest = localizeChapter1(quest, language);
   const nav = useNavigate();
   const rewards = questRewards(quest);
   const creature = quest.creatureId ? CREATURES_BY_ID[quest.creatureId] : null;
@@ -22,25 +26,25 @@ export default function CompletionScreen({ quest, summary }) {
   return (
     <Panel className="completion" aria-labelledby="done-title">
       <PlayerPortrait size="lg" />
-      <h2 id="done-title">{quest.kind === 'encounter' ? 'Threat understood' : 'Chapter complete'}: {quest.title}</h2>
-      <p className="xp-note">+{earnedXp} XP earned in total</p>
+      <h2 id="done-title">{t(language, quest.kind === 'encounter' ? 'completion.threatUnderstood' : 'completion.chapterComplete')}: {localizedQuest.title}</h2>
+      <p className="xp-note">+{earnedXp} {t(language, 'completion.xpEarned')}</p>
       {summary && (
         <div className="summary-grid">
-          <div><h3>What we know</h3><ul>{summary.known.map((x) => <li key={x}>{x}</li>)}</ul></div>
-          <div><h3>What remains uncertain</h3><ul>{summary.uncertain.map((x) => <li key={x}>{x}</li>)}</ul></div>
-          <div><h3>Evidence needed to confirm</h3><ul>{summary.needed.map((x) => <li key={x}>{x}</li>)}</ul></div>
+          <div><h3>{t(language, 'chapter.whatKnown')}</h3><ul>{summary.known.map((x) => <li key={x}>{x}</li>)}</ul></div>
+          <div><h3>{t(language, 'chapter.whatUncertain')}</h3><ul>{summary.uncertain.map((x) => <li key={x}>{x}</li>)}</ul></div>
+          <div><h3>{t(language, 'chapter.whatNeeded')}</h3><ul>{summary.needed.map((x) => <li key={x}>{x}</li>)}</ul></div>
         </div>
       )}
-      <h3>Unlocked</h3>
+      <h3>{t(language, 'completion.unlocked')}</h3>
       <ul>
-        {pages.map((id) => <li key={id}>Grimoire page: {GRIMOIRE_BY_ID[id]?.title}</li>)}
-        {beasts.map((n) => <li key={n}>Bestiary entry: {n}</li>)}
-        {nextQuests.length > 0 && <li>New quests: {nextQuests.map((q) => q.title).join(', ')}</li>}
+        {pages.map((id) => <li key={id}>{t(language, 'completion.grimoirePage')}: {localizeChapter1(GRIMOIRE_BY_ID[id]?.title, language)}</li>)}
+        {beasts.map((n) => <li key={n}>{t(language, 'completion.bestiaryEntry')}: {n}</li>)}
+        {nextQuests.length > 0 && <li>{t(language, 'completion.newQuests')}: {nextQuests.map((q) => localizeChapter1(q.title, language)).join(', ')}</li>}
       </ul>
       <div className="create-actions">
-        <Button onClick={() => nav('/map')}>Return to the map</Button>
-        <Button variant="ghost" onClick={() => nav('/grimoire')}>Open the Grimoire</Button>
-        <Button variant="ghost" onClick={() => nav('/bestiary')}>View the Bestiary</Button>
+        <Button onClick={() => nav('/map')}>{t(language, 'completion.returnToMap')}</Button>
+        <Button variant="ghost" onClick={() => nav('/grimoire')}>{t(language, 'completion.openGrimoire')}</Button>
+        <Button variant="ghost" onClick={() => nav('/bestiary')}>{t(language, 'completion.viewBestiary')}</Button>
       </div>
     </Panel>
   );

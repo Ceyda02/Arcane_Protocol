@@ -168,6 +168,35 @@ describe('localization and world map', () => {
 });
 
 describe('chapter 1 in the UI', () => {
+  it('renders and completes the first challenge in Turkish', async () => {
+    const user = userEvent.setup();
+    seed(baseGame({
+      settings: { ...createInitialState().settings, language: 'tr', textSpeed: 'instant', reducedMotion: 'on' },
+      progress: { ...createInitialState().progress, questState: { 'bells-of-the-silent-watch': { stage: 2, flags: {} } } },
+    }));
+    renderApp('/quest/bells-of-the-silent-watch');
+
+    expect(await screen.findByRole('heading', { name: 'İşaretleri Adlandır' })).toBeInTheDocument();
+    expect(screen.getByText(/Adım 3/)).toBeInTheDocument();
+    expect(screen.getByText(/Amaç:/)).toBeInTheDocument();
+    const selects = screen.getAllByRole('combobox');
+    for (const [select, value] of selects.map((element, index) => [element, ['event', 'alert', 'false_positive', 'incident'][index]])) {
+      await user.selectOptions(select, value);
+    }
+    await user.click(screen.getByRole('button', { name: 'Yanıtımı kontrol et' }));
+    expect(await screen.findByText(/Aferin/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Öyküye devam et' }));
+    expect(await screen.findByText('Kayıt Defterini Okumak')).toBeInTheDocument();
+  });
+
+  it('shows Chapter 1 completion details in Turkish', async () => {
+    seed(completeChapter1(newStore()).game);
+    renderApp('/quest/bells-of-the-silent-watch');
+    expect(await screen.findByRole('heading', { name: /Bölüm tamamlandı: Sessiz Nöbetin Çanları/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Bildiklerimiz' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Haritaya dön' })).toBeInTheDocument();
+  });
+
   it('Continue Adventure resumes Chapter 1; dialogue advances with the keyboard; a choice changes who teaches', async () => {
     const user = userEvent.setup();
     seed(baseGame());
@@ -264,7 +293,7 @@ describe('Malware Bestiary in the UI', () => {
   it('plays the Worm boss in the UI: wrong patient zero is explained, then isolating patient zero wins', async () => {
     const user = userEvent.setup();
     let game = completeChapter1(newStore()).game;
-    game = { ...game, settings: { ...game.settings, reducedMotion: 'on' }, progress: { ...game.progress, challengeRecords: { ...game.progress.challengeRecords, 'worm-beginner': { passed: true, bestScore: 1, attempts: 1, hintsUsed: 0, xpAwarded: 15 }, 'worm-intermediate': { passed: true, bestScore: 1, attempts: 1, hintsUsed: 0, xpAwarded: 20 } } } };
+    game = { ...game, settings: { ...game.settings, language: 'en', reducedMotion: 'on' }, progress: { ...game.progress, challengeRecords: { ...game.progress.challengeRecords, 'worm-beginner': { passed: true, bestScore: 1, attempts: 1, hintsUsed: 0, xpAwarded: 15 }, 'worm-intermediate': { passed: true, bestScore: 1, attempts: 1, hintsUsed: 0, xpAwarded: 20 } } } };
     seed(game);
     renderApp('/encounter/encounter-worm');
     expect(await screen.findByText(/stop the spreading blight/i)).toBeInTheDocument();
