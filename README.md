@@ -23,7 +23,7 @@ Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası ve 
 
 Harita, proje için kullanıcı tarafından sağlanan `public/hexaria-world-map.png` görselini kullanır; görseldeki bölge adları İngilizcedir, bölge seçimi ve ilerleme işaretleri ise Türkçe arayüz katmanında çalışır. Haritanın dışındaki varlıkların lisans bilgileri ayrıca belgelenmelidir.
 
-Saha Günlüğü, tamamlanan görevleri, başarıyla geçilmiş sınamalardan çıkarılan bulguları ve tekrar kuyruğunu gösterir. Kanıt panosu, bölüm sınamalarında doğrulanmış kayıtları zaman çizelgesine bağlatır; oyuncunun bir ipucundan sorumlu kişi hakkında kanıtsız hüküm vermesini ödüllendirmez. Beceri ağacı, tekrar edilebilir XP yerine başarıyla geçilen farklı sınamalara göre ilerlemeyi ve sıradaki çalışma önerisini gösterir.
+Saha Günlüğü, tamamlanan görevleri, başarıyla geçilmiş sınamalardan çıkarılan bulguları ve tekrar kuyruğunu gösterir. Kanıt panosu, bölüm sınamalarında doğrulanmış kayıtları zaman çizelgesine bağlatır; oyuncunun bir ipucundan sorumlu kişi hakkında kanıtsız hüküm vermesini ödüllendirmez. Beceri ağacı, tekrar edilebilir XP yerine başarıyla geçilen farklı sınamalara göre ilerlemeyi ve sıradaki çalışma önerisini gösterir; her beceri kartını açarak ilgili sınamaları inceleyebilirsin.
 
 ### Güvenlik sınırları
 
@@ -55,7 +55,7 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | Turkish / English selector | Turkish default for new saves; menu, navigation, settings, map-region labels/descriptions, and Chapter 1 dialogue, lessons, and challenges translated. Most other narrative and creature content remains English |
 | Field Journal | Tracks completed quests, passed-challenge findings, and the review queue |
 | Investigation board | Reconstructs the Watchtower timeline and rewards evidence-based conclusions |
-| Skill tree | Shows demonstrated progress from distinct passed challenges and suggests practice |
+| Skill tree | Equal-size, collapsible skill cards show demonstrated progress from distinct passed challenges and reveal related practice when opened |
 | Image-backed world map | Uses the supplied Hexaria map with interactive region selection and progress states |
 | Chapter 1: *The Bells of the Silent Watch* (5 challenges, dialogue, lessons) | Complete and playable |
 | Cyber Grimoire (search, filter, bookmarks, review later) | Complete |

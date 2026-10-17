@@ -40,11 +40,23 @@ describe('investigation board and demonstrated skills', () => {
   });
 
   it('derives skill progress from distinct passed challenges and offers a next step', async () => {
+    const user = userEvent.setup();
     seed(english(completeChapter1(newStore()).game));
     renderApp('/skill-tree');
     expect(await screen.findByRole('heading', { name: 'Skill tree' })).toBeInTheDocument();
     expect(screen.getAllByText(/demonstrated this concept in multiple passed challenges/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByRole('link', { name: 'Open chapter' }).length).toBeGreaterThan(0);
+    const malwareSkill = screen.getByRole('button', { name: /Malware analysis/i });
+    expect(malwareSkill).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getAllByRole('link', { name: 'Open chapter' })).toHaveLength(1);
+    await user.click(malwareSkill);
+    expect(malwareSkill).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getAllByRole('link', { name: 'Open chapter' }).length).toBeGreaterThan(1);
+    expect(screen.getByRole('region', { name: /Malware analysis/i })).toBeVisible();
+    const forensicsSkill = screen.getByRole('button', { name: /Digital forensics/i });
+    await user.click(forensicsSkill);
+    expect(forensicsSkill).toHaveAttribute('aria-expanded', 'true');
+    expect(malwareSkill).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.queryByRole('region', { name: /Malware analysis/i })).not.toBeInTheDocument();
     expect(screen.getByText(/not a certification/i)).toBeInTheDocument();
   });
 });

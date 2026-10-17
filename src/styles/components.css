@@ -26,6 +26,7 @@
 .panel-parchment { background: var(--parchment); color: var(--ink-text); background-image: radial-gradient(rgba(120,80,30,.07) 1px, transparent 1px); background-size: 5px 5px; --edge: #4a3320; }
 .panel-parchment h1, .panel-parchment h2, .panel-parchment h3, .panel-parchment h4 { color: #5a2a16; text-shadow: none; }
 .panel-parchment a { color: #7a2335; }
+.panel-parchment a.btn { color: var(--btn-fg); text-decoration: none; }
 .panel-leather { background: var(--leather); color: #f3e3c3; --edge: #1a110a; }
 .panel::before, .panel::after { content: ''; position: absolute; width: 8px; height: 8px; background: var(--gold); top: 0; left: 0; }
 .panel::after { left: auto; right: 0; }

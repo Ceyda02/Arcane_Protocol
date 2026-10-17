@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Compass, Network } from 'lucide-react';
+import { ChevronDown, Compass, Network } from 'lucide-react';
 import { Panel, ProgressBar } from '../components/common/ui.jsx';
 import { CHALLENGES, MALWARE_CREATURES } from '../content/index.js';
 import { QUEST_LIST } from '../content/quests/index.js';
@@ -20,6 +21,7 @@ export default function SkillTreePage() {
   const { game } = useGame();
   const language = game.settings.language;
   const progress = game.progress;
+  const [expandedSkill, setExpandedSkill] = useState(null);
   const skills = SKILL_LIST.map((skill) => {
     const challenges = Object.values(CHALLENGES).filter((challenge) => challenge.skill === skill.id);
     const passedCount = challenges.filter((challenge) => progress.challengeRecords[challenge.id]?.passed).length;
@@ -46,7 +48,7 @@ export default function SkillTreePage() {
           </>
         ) : nextChallenge ? (
           <>
-            <p>{t(language, 'skillTree.nextRecommendation')}: {t(language, `skill.${nextChallenge.skill.id}`)} — {nextChallenge.challenge.title}</p>
+            <p>{t(language, 'skillTree.nextRecommendation')} {t(language, `skill.${nextChallenge.skill.id}`)} — {nextChallenge.challenge.title}</p>
             <Link className="btn btn-primary" to={routeForChallenge(nextChallenge.challenge, game)}>{t(language, 'skillTree.openChapter')}</Link>
           </>
         ) : (
@@ -59,37 +61,54 @@ export default function SkillTreePage() {
       <div className="skill-tree-grid">
         {skills.map(({ skill, challenges, passedCount, tier }) => (
           <Panel key={skill.id} className={`skill-node tier-${tier}`}>
-            <div className="skill-node-heading">
+            <button
+              type="button"
+              className="skill-node-toggle"
+              id={`skill-toggle-${skill.id}`}
+              aria-expanded={expandedSkill === skill.id}
+              aria-controls={`skill-challenges-${skill.id}`}
+              onClick={() => setExpandedSkill((current) => current === skill.id ? null : skill.id)}
+            >
               <span className="skill-rune" aria-hidden="true">{skill.rune}</span>
-              <div>
-                <h2>{t(language, `skill.${skill.id}`)}</h2>
+              <span className="skill-node-title">
+                <span className="skill-node-name">{t(language, `skill.${skill.id}`)}</span>
                 <span className={`skill-tier-chip tier-${tier}`}>{t(language, `skillTree.stage.${tier}`)}</span>
-              </div>
+              </span>
+              <ChevronDown className={expandedSkill === skill.id ? 'is-expanded' : ''} size={20} aria-hidden="true" />
+            </button>
+            <div
+              id={`skill-challenges-${skill.id}`}
+              className="skill-node-content"
+              role="region"
+              aria-labelledby={`skill-toggle-${skill.id}`}
+              tabIndex={0}
+              hidden={expandedSkill !== skill.id}
+            >
+              <p>{t(language, `skillTree.tier.${tier}`)}</p>
+              <ProgressBar
+                value={passedCount}
+                max={Math.max(1, challenges.length)}
+                label={`${t(language, `skill.${skill.id}`)}: ${passedCount} ${t(language, 'skillTree.passedOf')} ${challenges.length}`}
+              />
+              <p className="muted">{passedCount} / {challenges.length} {t(language, 'skillTree.passedOf')}</p>
+              {challenges.length === 0 ? (
+                <p className="muted">{t(language, 'skillTree.noChallenges')}</p>
+              ) : (
+                <ul className="skill-node-challenges">
+                  {challenges.map((challenge) => {
+                    const record = progress.challengeRecords[challenge.id];
+                    const href = routeForChallenge(challenge, game);
+                    return (
+                      <li key={challenge.id}>
+                        <span>{record?.passed ? '✓' : record?.attempts ? '↻' : '○'} {challenge.title}</span>
+                        <span className="muted">{record?.passed ? t(language, 'skillTree.passed') : record?.attempts ? t(language, 'skillTree.review') : t(language, 'skillTree.notStarted')}</span>
+                        {!record?.passed && href && <Link className="skill-challenge-link" to={href}>{t(language, 'skillTree.openChapter')}</Link>}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </div>
-            <p>{t(language, `skillTree.tier.${tier}`)}</p>
-            <ProgressBar
-              value={passedCount}
-              max={Math.max(1, challenges.length)}
-              label={`${t(language, `skill.${skill.id}`)}: ${passedCount} ${t(language, 'skillTree.passedOf')} ${challenges.length}`}
-            />
-            <p className="muted">{passedCount} / {challenges.length} {t(language, 'skillTree.passedOf')}</p>
-            {challenges.length === 0 ? (
-              <p className="muted">{t(language, 'skillTree.noChallenges')}</p>
-            ) : (
-              <ul className="skill-node-challenges">
-                {challenges.map((challenge) => {
-                  const record = progress.challengeRecords[challenge.id];
-                  const href = routeForChallenge(challenge, game);
-                  return (
-                    <li key={challenge.id}>
-                      <span>{record?.passed ? '✓' : record?.attempts ? '↻' : '○'} {challenge.title}</span>
-                      <span className="muted">{record?.passed ? t(language, 'skillTree.passed') : record?.attempts ? t(language, 'skillTree.review') : t(language, 'skillTree.notStarted')}</span>
-                      {!record?.passed && href && <Link to={href}>{t(language, 'skillTree.openChapter')}</Link>}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
           </Panel>
         ))}
       </div>

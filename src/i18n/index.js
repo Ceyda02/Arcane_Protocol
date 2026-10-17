@@ -131,7 +131,7 @@ const STRINGS = {
     'skillTree.recommended': 'Recommended next step',
     'skillTree.reviewRecommendation': 'A concept needs another look before you move on.',
     'skillTree.openReview': 'Open review challenges',
-    'skillTree.nextRecommendation': 'Try a challenge in',
+    'skillTree.nextRecommendation': 'Try a challenge in:',
     'skillTree.noRecommendation': 'No unpassed playable challenges are available right now.',
     'skillTree.evidenceSoFar': 'Most demonstrated so far',
     'skillTree.stage.unexplored': 'Unexplored',
