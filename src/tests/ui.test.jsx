@@ -150,6 +150,10 @@ describe('localization and world map', () => {
     expect(screen.getByRole('button', { name: /Çürümüş Topraklar, kilitli/i })).toBeInTheDocument();
     expect(screen.getByRole('img', { name: /Hexaria’nın dağ krallıklarını/i })).toHaveAttribute('src', '/hexaria-world-map.png');
     expect(screen.getByRole('navigation', { name: /Ana gezinme/i })).toBeInTheDocument();
+    const encounterTitle = screen.getByText('Yayılan Çürüme');
+    const encounterBadge = screen.getAllByText('Yaratık karşılaşması').find((badge) => badge.parentElement === encounterTitle.parentElement);
+    expect(encounterTitle.parentElement).toHaveClass('quest-title-line');
+    expect(encounterBadge).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /Parçalanmış Ağ, kilitli/i }));
     expect(screen.getByRole('heading', { name: 'Parçalanmış Ağ' })).toBeInTheDocument();
     expect(screen.getByText(/yozlaşmış bir ormanın/i)).toBeInTheDocument();

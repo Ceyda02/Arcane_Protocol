@@ -171,8 +171,11 @@ export default function WorldMapPage() {
               const localizedNeeds = localizeRequirements(needs, language);
               return (
                 <div key={qid} className="quest-row">
-                  <div>
-                    <strong>{translationKey ? t(language, `${translationKey}.title`) : q.title}</strong>{q.kind === 'encounter' && <span className="chip chip-diff"> {t(language, 'quest.bestiary')}</span>}
+                  <div className="quest-info">
+                    <div className="quest-title-line">
+                      <strong>{translationKey ? t(language, `${translationKey}.title`) : q.title}</strong>
+                      {q.kind === 'encounter' && <span className="chip chip-diff">{t(language, 'quest.bestiary')}</span>}
+                    </div>
                     <p className="muted">{translationKey ? t(language, `${translationKey}.summary`) : q.summary}</p>
                     {localizedNeeds.length > 0 && <p className="muted">{localizedNeeds.join('; ')}</p>}
                   </div>

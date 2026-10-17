@@ -76,6 +76,10 @@
 .region-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: baseline; }
 .region-progress { display: flex; gap: .8rem; align-items: center; }
 .quest-row { display: flex; justify-content: space-between; gap: 1rem; padding: .7rem 0; border-top: 2px dashed #b79a5e; flex-wrap: wrap; }
+.quest-info { flex: 1 1 320px; min-width: 0; }
+.quest-title-line { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; }
+.quest-title-line strong { overflow-wrap: anywhere; }
+.quest-title-line .chip { margin: 0; }
 .quest-row p { margin: 0; } .quest-side { display: grid; justify-items: end; align-content: start; gap: .2rem; }
 @media (max-width: 720px) {
   .map-wrap { aspect-ratio: 1024 / 572; margin-inline: 0; }
