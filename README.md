@@ -15,7 +15,15 @@ npm install
 npm run dev
 ```
 
-Terminalde gösterilen yerel adresi tarayıcıda açın (varsayılan: `http://localhost:5173`). Testler için `npm test`, üretim derlemesi için `npm run build` komutlarını kullanın. İlerleme yalnızca aynı tarayıcının yerel depolamasına kaydedilir.
+Terminalde gösterilen yerel adresi tarayıcıda açın (varsayılan: `http://localhost:5173`). Testler için `npm test`, üretim derlemesi için `npm run build` komutlarını kullanın. İlerleme yalnızca aynı tarayıcının yerel depolamasına kaydedilir. Oyun HTTPS üzerinden yayımlandığında Edge veya Chrome'daki **Yükle / Install** düğmesiyle Windows'a uygulama gibi eklenebilir. İlk açılıştan sonra oyun dosyaları çevrimdışı kullanım için önbelleğe alınır; kayıtlar yine o tarayıcı profilinde kalır.
+
+### GitHub Pages ile yayımlama
+
+`main` dalına gönderilen her değişiklik test edilip otomatik yayımlanır. İlk yayımlamadan önce GitHub deposunda **Settings → Pages → Build and deployment → Source → GitHub Actions** seçilmelidir. Dağıtım tamamlandığında oyun `https://ceyda02.github.io/Arcane_Protocol/` adresinde açılır. Windows'ta bu adresi Edge/Chrome ile açın ve tarayıcı menüsündeki **Install this site as an app / Bu siteyi uygulama olarak yükle** seçeneğini kullanın.
+
+### Steam sürümü
+
+Bu depo henüz Steam'e yüklenmeye hazır bir Windows kurulum paketi üretmiyor. Steam sürümü için ayrıca masaüstü paketleme ve temiz bir Windows test turu, Steamworks partner hesabı ve Steam Direct başvurusu/ücreti gerekir. Mevcut oyun da tamamlanmış ticari sürüm değil, oynanabilir bir dikey dilimdir; kapsam tablosundaki gelecek içerik ve yerelleştirme işleri tamamlanmadan “tam oyun” olarak sunulmamalıdır.
 
 ### Mevcut Türkçe desteği ve kapsam
 
@@ -42,7 +50,13 @@ Tüm senaryolar kurgusaldır. Oyuncu girdisi kod olarak çalıştırılmaz; ger�
 
 A pixel-art medieval fantasy RPG that teaches real cybersecurity. You investigate a haunted border village, learn to read logs and timelines, and then face the **Malware Bestiary**: fantasy creatures that each stand for a real kind of malware, with accurate definitions, indicators, and defenses.
 
-Everything runs in the browser, offline, with no account, no backend, no analytics, and no paid service.
+The game runs in the browser with no account, backend, analytics, or paid runtime service. After the first visit over HTTPS, its installable web-app build caches the game files for offline play. Saves stay in that browser profile on that device.
+
+### Install on Windows
+
+After GitHub Pages has been enabled and its first deployment succeeds, open `https://ceyda02.github.io/Arcane_Protocol/` in Microsoft Edge or Chrome. Choose **Install this site as an app** from the browser menu. The game can then be launched from the Windows Start menu and played offline after its first load. Do not clear the browser's site data if you want to keep that local save.
+
+This repository does not yet produce a Windows `.exe` or Steam depot. A Steam release would need a tested desktop package, Steamworks onboarding and Steam Direct submission; the current project is still a vertical slice, not a complete commercial release.
 
 ![Title screen](docs/screenshots/01-title.png)
 

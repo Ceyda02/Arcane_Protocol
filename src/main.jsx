@@ -8,6 +8,14 @@ import './styles/screens.css';
 import { GameProvider } from './state/GameContext.jsx';
 import App from './app/App.jsx';
 
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch((error) => {
+      console.error('Offline game installation could not be enabled.', error);
+    });
+  });
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <GameProvider>

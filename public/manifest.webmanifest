@@ -1,0 +1,21 @@
+{
+  "id": "./",
+  "name": "The Arcane Protocol",
+  "short_name": "Arcane Protocol",
+  "description": "A pixel-art fantasy adventure that teaches cybersecurity.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#14122a",
+  "theme_color": "#14122a",
+  "icons": [
+    {
+      "src": "./icons/arcane-protocol.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
