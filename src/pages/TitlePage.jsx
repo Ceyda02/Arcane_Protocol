@@ -20,7 +20,7 @@ export default function TitlePage() {
   const hasGame = Boolean(game.player);
   const language = game.settings.language;
 
-  const startNew = () => { dispatch({ type: 'NEW_GAME', keepSettings: true }); nav('/create'); };
+  const startNew = () => { dispatch({ type: 'NEW_GAME', keepSettings: true }); nav('/intro'); };
 
   return (
     <div className="title-screen" style={{ '--scene': `url(${asset('village')})` }}>

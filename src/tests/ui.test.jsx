@@ -18,7 +18,9 @@ describe('new player flow', () => {
     const user = userEvent.setup();
     renderApp('/');
     await user.click(screen.getByRole('button', { name: /new game|yeni oyun/i }));
-    expect(screen.getByRole('heading', { name: /create your character/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /the royal portrait|kraliyet tablosu/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /skip intro|girişi geç/i }));
+    expect(screen.getByRole('heading', { name: /create your character|karakterini oluştur/i })).toBeInTheDocument();
 
     // Name is required
     await user.click(screen.getByRole('button', { name: /begin the adventure/i }));
@@ -76,6 +78,27 @@ describe('new player flow', () => {
     expect(screen.getByRole('radio', { name: /Site adını, bilgisayarınızın bağlanabileceği bir IP adresine dönüştürür/ })).toBeInTheDocument();
     expect(screen.getByRole('radio', { name: 'Henüz emin değilim' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sonraki' })).toBeDisabled();
+  });
+
+  it('advances the Turkish intro, saves completion, and does not replay after refresh', async () => {
+    const user = userEvent.setup();
+    const fresh = createInitialState();
+    fresh.settings.language = 'tr';
+    seed(fresh);
+    const first = renderApp('/intro');
+    expect(screen.getByRole('heading', { name: 'Kraliyet tablosu' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Devam et' }));
+    expect(screen.getByRole('heading', { name: 'Saray canlanıyor' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Devam et' }));
+    expect(screen.getByRole('heading', { name: 'Sınırdaki gölgeler' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Devam et' }));
+    expect(screen.getByRole('heading', { name: 'Soruşturma çağrısı' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Karakterini oluştur' }));
+    expect(await screen.findByRole('heading', { name: /create your character|karakterini oluştur/i })).toBeInTheDocument();
+    await waitFor(() => expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).introCompleted).toBe(true));
+    first.unmount();
+    renderApp('/intro');
+    expect(await screen.findByRole('heading', { name: /create your character/i })).toBeInTheDocument();
   });
 });
 
@@ -161,7 +184,7 @@ describe('localization and world map', () => {
     expect(screen.getByRole('heading', { name: 'Krallık Toprakları' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Unutulmuş Gözlemevi, kilitli/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Çürümüş Topraklar, kilitli/i })).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: /Hexaria’nın dağ krallıklarını/i })).toHaveAttribute('src', '/hexaria-world-map.png');
+    expect(screen.getByRole('img', { name: /Hexaria’nın dağ krallıklarını/i })).toHaveAttribute('src', '/hexaria-world-map.jpg');
     expect(screen.getByRole('navigation', { name: /Ana gezinme/i })).toBeInTheDocument();
     const encounterTitle = screen.getByText('Yayılan Çürüme');
     const encounterBadge = screen.getAllByText('Yaratık karşılaşması').find((badge) => badge.parentElement === encounterTitle.parentElement);

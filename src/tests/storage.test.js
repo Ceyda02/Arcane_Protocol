@@ -76,6 +76,14 @@ describe('invalid, outdated, and unavailable storage', () => {
     expect(r.state.progress.xp).toBe(120);
     expect(r.state.progress.completedQuests).toEqual(['bells-of-the-silent-watch']);
   });
+  it('marks existing version-five saves as having already seen the intro', () => {
+    const player = { name: 'Mira', address: '', archetypeId: 'investigator', portraitId: 'mage', color: 'violet', equipmentId: 'lantern' };
+    const migrated = sanitizeState({ version: 5, player, progress: { xp: 80 } });
+    expect(migrated.ok).toBe(true);
+    expect(migrated.state.introCompleted).toBe(true);
+    expect(migrated.state.settings.musicVolume).toBe(0.25);
+    expect(createInitialState().introCompleted).toBe(false);
+  });
   it('migrates v2 saves without losing progress and adds an empty investigation record map', () => {
     const r = sanitizeState({ version: 2, progress: { xp: 75, completedQuests: ['bells-of-the-silent-watch'] } });
     expect(r.ok).toBe(true);

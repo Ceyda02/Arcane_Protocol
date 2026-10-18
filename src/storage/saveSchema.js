@@ -6,7 +6,7 @@
  *
  * Nothing here touches secrets or credentials. Saves live in localStorage and are NOT authentication.
  */
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 export const SKILL_IDS = ['networking', 'webapp', 'logs_ir', 'coding', 'vuln', 'forensics', 'malware'];
 export const PATH_IDS = ['blue', 'red', 'purple', 'echoes'];
 
@@ -20,6 +20,7 @@ export const defaultSettings = () => ({
   reducedMotion: 'system', // 'system' | 'on' | 'off'
   muted: true,
   volume: 0.5,
+  musicVolume: 0.25,
 });
 
 export function createInitialState() {
@@ -27,6 +28,7 @@ export function createInitialState() {
     version: SAVE_VERSION,
     createdAt: Date.now(),
     updatedAt: Date.now(),
+    introCompleted: false,
     player: null,
     assessment: { completed: false, answers: {}, result: null },
     pathId: null,
@@ -88,6 +90,11 @@ const migrations = {
   2: (old) => ({ ...old, version: 3 }),
   3: (old) => ({ ...old, version: 4 }),
   4: (old) => ({ ...old, version: 5 }),
+  5: (old) => ({
+    ...old,
+    version: 6,
+    introCompleted: typeof old.introCompleted === 'boolean' ? old.introCompleted : Boolean(old.player),
+  }),
 };
 
 export function migrateSave(raw) {
@@ -256,6 +263,7 @@ function sanitizeSettings(s) {
     reducedMotion: oneOf(s.reducedMotion, ['system', 'on', 'off'], d.reducedMotion),
     muted: typeof s.muted === 'boolean' ? s.muted : d.muted,
     volume: num(s.volume, d.volume, 0, 1),
+    musicVolume: num(s.musicVolume, d.musicVolume, 0, 1),
   };
 }
 
@@ -267,6 +275,7 @@ export function sanitizeState(raw) {
     version: SAVE_VERSION,
     createdAt: num(d.createdAt, Date.now(), 0, 4e12),
     updatedAt: num(d.updatedAt, Date.now(), 0, 4e12),
+    introCompleted: typeof d.introCompleted === 'boolean' ? d.introCompleted : Boolean(d.player),
     player: sanitizePlayer(d.player),
     assessment: sanitizeAssessment(d.assessment),
     pathId: oneOf(d.pathId, PATH_IDS, null),

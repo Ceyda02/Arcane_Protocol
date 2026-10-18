@@ -47,7 +47,7 @@ export function StatusChip({ status, language = 'en' }) {
 export function Portrait({ portraitKey, name, size = 'md', accent, placeholder }) {
   const src = asset(portraitKey);
   return (
-    <div className={`portrait portrait-${size}`} style={accent ? { '--accent-portrait': accent } : undefined}>
+    <div className={`portrait portrait-${size} portrait-art-${portraitKey}`} style={accent ? { '--accent-portrait': accent } : undefined}>
       {src ? <img src={src} alt={name ? `Portrait of ${name}` : ''} /> : <span className="portrait-ph" aria-label={placeholder ? 'Placeholder art' : undefined}>{placeholder || '?'}</span>}
     </div>
   );

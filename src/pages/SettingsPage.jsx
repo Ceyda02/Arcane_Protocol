@@ -43,7 +43,10 @@ export default function SettingsPage() {
         <h2>{t(language, 'settings.sound')}</h2>
         <p className="muted">{t(language, 'settings.soundNote')}</p>
         <label className="check"><input type="checkbox" checked={s.muted} onChange={(e) => set({ muted: e.target.checked })} /> <span>{t(language, 'settings.mute')}</span></label>
-        <label className="field"><span>{t(language, 'settings.volume')}: {Math.round(s.volume * 100)}%</span>
+        <label className="field"><span>{t(language, 'settings.musicVolume')}: {Math.round(s.musicVolume * 100)}%</span>
+          <input type="range" min="0" max="1" step="0.05" value={s.musicVolume} disabled={s.muted} onChange={(e) => set({ musicVolume: Number(e.target.value) })} />
+        </label>
+        <label className="field"><span>{t(language, 'settings.effectsVolume')}: {Math.round(s.volume * 100)}%</span>
           <input type="range" min="0" max="1" step="0.05" value={s.volume} disabled={s.muted} onChange={(e) => set({ volume: Number(e.target.value) })} />
         </label>
         <Button variant="ghost" disabled={s.muted} onClick={() => playSound('correct', s)}>{t(language, 'settings.testSound')}</Button>

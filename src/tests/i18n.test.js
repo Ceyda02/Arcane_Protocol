@@ -40,6 +40,19 @@ describe('language preference', () => {
     expect(t('tr', 'unknown.translation.key')).toBe('unknown.translation.key');
   });
 
+  it('provides distinct Turkish and English copy for the intro and audio settings', () => {
+    const keys = [
+      'intro.portrait.title', 'intro.portrait.body', 'intro.awakening.title', 'intro.threat.title',
+      'intro.summons.title', 'intro.summons.body', 'intro.skip', 'intro.next', 'intro.createHero',
+      'settings.musicVolume', 'settings.effectsVolume',
+    ];
+    for (const key of keys) {
+      expect(t('tr', key), key).not.toBe(key);
+      expect(t('en', key), key).not.toBe(key);
+      expect(t('tr', key), key).not.toBe(t('en', key));
+    }
+  });
+
   it('localizes every introductory assessment question and option without changing scoring', () => {
     for (const question of ASSESSMENT_QUESTIONS) {
       const localized = localizeAssessmentQuestion(question, 'tr');

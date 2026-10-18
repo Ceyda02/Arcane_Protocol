@@ -71,7 +71,7 @@ export default function WorldMapPage() {
     <div className="map-page">
       <h1 className="sr-only">{t(language, 'map.title')}</h1>
       <div className="map-wrap">
-        <img className="map-photo" src="/hexaria-world-map.png" alt={t(language, 'map.imageAlt')} />
+        <img className="map-photo" src={`${import.meta.env.BASE_URL}hexaria-world-map.jpg`} alt={t(language, 'map.imageAlt')} />
         {false && <svg className="map-features" viewBox="0 0 64 40" preserveAspectRatio="none" shapeRendering="crispEdges" aria-hidden="true">
           <g className="map-rivers" fill="none" strokeLinecap="square">
             <path d="M7 18 L15 20 L20 18 L26 21 L31 20 L37 24 L43 23 L48 27 L56 28" stroke="#183959" strokeWidth="2.2" />

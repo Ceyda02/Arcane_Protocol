@@ -3,8 +3,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useGame } from '../state/GameContext.jsx';
 import { t } from '../i18n/index.js';
 import GameShell from '../components/game/GameShell.jsx';
+import AudioController from '../components/common/AudioController.jsx';
 import TitlePage from '../pages/TitlePage.jsx';
 import CharacterCreationPage from '../pages/CharacterCreationPage.jsx';
+import IntroPage from '../pages/IntroPage.jsx';
 import AssessmentPage from '../pages/AssessmentPage.jsx';
 import ResultsPage from '../pages/ResultsPage.jsx';
 import WorldMapPage from '../pages/WorldMapPage.jsx';
@@ -36,26 +38,30 @@ function RequirePlayer({ children }) {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<TitlePage />} />
-      <Route path="/create" element={<CharacterCreationPage />} />
-      <Route element={<RequirePlayer><GameShell /></RequirePlayer>}>
-        <Route path="/assessment" element={<AssessmentPage />} />
-        <Route path="/results" element={<ResultsPage />} />
-        <Route path="/map" element={<WorldMapPage />} />
-        <Route path="/quest/:questId" element={<QuestPage />} />
-        <Route path="/encounter/:questId" element={<EncounterPage />} />
-        <Route path="/study/:creatureId" element={<EncounterPage />} />
-        <Route path="/grimoire" element={<GrimoirePage />} />
-        <Route path="/bestiary" element={<BestiaryPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/review" element={<ReviewPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/journal" element={<LazyPage Page={JournalPage} />} />
-        <Route path="/investigation-board" element={<LazyPage Page={InvestigationBoardPage} />} />
-        <Route path="/skill-tree" element={<LazyPage Page={SkillTreePage} />} />
-      </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <AudioController />
+      <Routes>
+        <Route path="/" element={<TitlePage />} />
+        <Route path="/intro" element={<IntroPage />} />
+        <Route path="/create" element={<CharacterCreationPage />} />
+        <Route element={<RequirePlayer><GameShell /></RequirePlayer>}>
+          <Route path="/assessment" element={<AssessmentPage />} />
+          <Route path="/results" element={<ResultsPage />} />
+          <Route path="/map" element={<WorldMapPage />} />
+          <Route path="/quest/:questId" element={<QuestPage />} />
+          <Route path="/encounter/:questId" element={<EncounterPage />} />
+          <Route path="/study/:creatureId" element={<EncounterPage />} />
+          <Route path="/grimoire" element={<GrimoirePage />} />
+          <Route path="/bestiary" element={<BestiaryPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/review" element={<ReviewPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/journal" element={<LazyPage Page={JournalPage} />} />
+          <Route path="/investigation-board" element={<LazyPage Page={InvestigationBoardPage} />} />
+          <Route path="/skill-tree" element={<LazyPage Page={SkillTreePage} />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }

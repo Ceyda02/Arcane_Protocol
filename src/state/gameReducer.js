@@ -74,6 +74,9 @@ function reduceGame(game, action, events) {
     case 'CREATE_PLAYER':
       return { ...game, player: action.player };
 
+    case 'COMPLETE_INTRO':
+      return game.introCompleted ? game : { ...game, introCompleted: true };
+
     case 'SUBMIT_ASSESSMENT':
       return { ...game, assessment: { completed: true, answers: action.answers, result: action.result }, pathId: game.pathId ?? action.result.recommendedPath };
 

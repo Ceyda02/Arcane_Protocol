@@ -24,7 +24,7 @@ export default function ProfilePage() {
     <div className="profile">
       <Panel className="profile-card" tone="leather">
         <PlayerPortrait size="xl" />
-        <div>
+        <div className="profile-identity">
           <h1>{player.address ? `${player.address} ` : ''}{player.name}</h1>
           <p className="muted">{ARCHETYPES.find((a) => a.id === player.archetypeId)?.name} · {EQUIPMENT.find((e) => e.id === player.equipmentId)?.name}</p>
           <p>Level {lp.level} · {progress.xp} XP</p>

@@ -70,7 +70,7 @@ export default function GrimoirePage() {
           ))}
         </ul>
         {page ? (
-          <Panel className="page-detail" aria-live="polite">
+          <Panel key={page.id} className="page-detail" aria-live="polite">
             <div className="grimoire-glow" aria-hidden="true" />
             <p className="muted">{t(language, `grimoire.category.${page.category}`)} · {t(language, 'grimoire.learnedIn')}: {page.source}</p>
             <h2>{page.title}</h2>
