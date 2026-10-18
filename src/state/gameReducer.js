@@ -35,6 +35,27 @@ function unlockPages(progress, ids, events) {
   return grimoire === progress.grimoire ? progress : { ...progress, grimoire };
 }
 
+function investigationDraft(board, answer = {}) {
+  const evidenceIds = board.evidence.map((item) => item.id);
+  const validList = (values, allowed) => Array.isArray(values)
+    ? [...new Set(values.filter((id) => typeof id === 'string' && allowed.includes(id)))]
+    : [];
+  const evidenceStatuses = {};
+  if (answer.evidenceStatuses && typeof answer.evidenceStatuses === 'object' && !Array.isArray(answer.evidenceStatuses)) {
+    for (const [id, status] of Object.entries(answer.evidenceStatuses)) {
+      if (evidenceIds.includes(id) && ['relevant', 'irrelevant', 'unresolved'].includes(status)) evidenceStatuses[id] = status;
+    }
+  }
+  return {
+    connections: validList(answer.connections, board.connectionIds),
+    timelineOrder: validList(answer.timelineOrder, board.timeline.map((event) => event.id)),
+    evidenceStatuses,
+    boardEvidence: validList(answer.boardEvidence, evidenceIds),
+    conclusionId: board.conclusionIds.includes(answer.conclusionId) ? answer.conclusionId : '',
+    nextEvidenceId: board.nextEvidenceIds.includes(answer.nextEvidenceId) ? answer.nextEvidenceId : '',
+  };
+}
+
 function finalize(game, events, levelBefore) {
   let g = game;
   const earned = newAchievements(g);
@@ -102,25 +123,41 @@ function reduceGame(game, action, events) {
     case 'SUBMIT_INVESTIGATION': {
       const board = INVESTIGATION_BOARDS[action.boardId];
       if (!board) return game;
-      const result = evaluateInvestigation(action.boardId, action.answer, game.progress.challengeRecords);
+      const answer = investigationDraft(board, action.answer);
+      const result = evaluateInvestigation(action.boardId, answer, game.progress.challengeRecords);
       if (!result.unlocked) return game;
 
       const previous = game.progress.investigationRecords[board.id];
-      const award = result.passed && !previous?.passed ? board.xp : 0;
+      const earnedXp = Math.floor(result.score * board.xp);
+      const award = Math.max(0, earnedXp - (previous?.rewardedXp ?? 0));
       const record = {
         passed: Boolean(previous?.passed || result.passed),
         bestScore: Math.max(previous?.bestScore ?? 0, result.score),
         attempts: (previous?.attempts ?? 0) + 1,
+        rewardedXp: Math.max(previous?.rewardedXp ?? 0, earnedXp),
       };
       let progress = {
         ...game.progress,
         investigationRecords: { ...game.progress.investigationRecords, [board.id]: record },
+        investigationDrafts: { ...game.progress.investigationDrafts, [board.id]: answer },
       };
       if (award) {
         progress = addXp(progress, award, board.skill);
-        events.push({ type: 'xp', amount: award, skill: board.skill, label: 'Investigation complete' });
+        events.push({ type: 'xp', amount: award, skill: board.skill, label: result.passed ? 'Investigation complete' : 'Investigation progress' });
+      }
+      if (result.passed) {
+        progress = unlockPages(progress, board.grimoire ?? [], events);
+        for (const id of board.bestiary ?? []) progress = { ...progress, bestiary: bestiaryUp(progress.bestiary, id, 'investigated', events) };
       }
       return finalize({ ...game, progress }, events, levelBefore);
+    }
+
+    case 'SAVE_INVESTIGATION_DRAFT': {
+      const board = INVESTIGATION_BOARDS[action.boardId];
+      if (!board || !evaluateInvestigation(action.boardId, {}, game.progress.challengeRecords).unlocked) return game;
+      const draft = investigationDraft(board, action.answer);
+      if (JSON.stringify(game.progress.investigationDrafts[board.id]) === JSON.stringify(draft)) return game;
+      return { ...game, progress: { ...game.progress, investigationDrafts: { ...game.progress.investigationDrafts, [board.id]: draft } } };
     }
 
     case 'COMPLETE_QUEST': {

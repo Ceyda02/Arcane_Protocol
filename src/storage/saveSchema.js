@@ -6,7 +6,7 @@
  *
  * Nothing here touches secrets or credentials. Saves live in localStorage and are NOT authentication.
  */
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 export const SKILL_IDS = ['networking', 'webapp', 'logs_ir', 'coding', 'vuln', 'forensics', 'malware'];
 export const PATH_IDS = ['blue', 'red', 'purple', 'echoes'];
 
@@ -37,6 +37,7 @@ export function createInitialState() {
       questState: {},
       challengeRecords: {},
       investigationRecords: {},
+      investigationDrafts: {},
       grimoire: [],
       bestiary: {},
       achievements: [],
@@ -84,6 +85,7 @@ const migrations = {
     settings: { ...(isObj(old.settings) ? old.settings : {}), language: 'en' },
   }),
   2: (old) => ({ ...old, version: 3 }),
+  3: (old) => ({ ...old, version: 4 }),
 };
 
 export function migrateSave(raw) {
@@ -187,6 +189,26 @@ function sanitizeProgress(p) {
       passed: Boolean(record.passed),
       bestScore: num(record.bestScore, 0, 0, 1),
       attempts: Math.floor(num(record.attempts, 0, 0, 10000)),
+      rewardedXp: num(record.rewardedXp, record.passed ? 35 : 0, 0, 35),
+    };
+  }
+
+  const investigationDrafts = {};
+  if (isObj(p.investigationDrafts) && isObj(p.investigationDrafts.watchtower)) {
+    const draft = p.investigationDrafts.watchtower;
+    const evidenceStatuses = {};
+    if (isObj(draft.evidenceStatuses)) {
+      for (const [id, status] of Object.entries(draft.evidenceStatuses).slice(0, 40)) {
+        if (['relevant', 'irrelevant', 'unresolved'].includes(status)) evidenceStatuses[str(id, '', 60)] = status;
+      }
+    }
+    investigationDrafts.watchtower = {
+      connections: strList(draft.connections).slice(0, 40),
+      timelineOrder: strList(draft.timelineOrder).slice(0, 40),
+      evidenceStatuses,
+      boardEvidence: strList(draft.boardEvidence).slice(0, 40),
+      conclusionId: str(draft.conclusionId, '', 60),
+      nextEvidenceId: str(draft.nextEvidenceId, '', 60),
     };
   }
 
@@ -204,6 +226,7 @@ function sanitizeProgress(p) {
     questState,
     challengeRecords,
     investigationRecords,
+    investigationDrafts,
     grimoire: strList(p.grimoire),
     bestiary,
     achievements: strList(p.achievements),

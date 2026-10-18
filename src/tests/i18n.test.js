@@ -23,7 +23,7 @@ describe('language preference', () => {
     const oldSave = { ...createInitialState(), version: 1, progress: { ...createInitialState().progress, xp: 140 } };
     const result = migrateSave(oldSave);
     expect(result.ok).toBe(true);
-    expect(result.data.version).toBe(3);
+    expect(result.data.version).toBe(4);
     expect(result.data.settings.language).toBe('en');
     expect(result.data.progress.xp).toBe(140);
   });
@@ -41,12 +41,18 @@ describe('language preference', () => {
       'skillTree.tier.practiced', 'skillTree.measurementNote', 'skillTree.disclaimer',
       'investigation.title', 'investigation.sealed', 'investigation.evidenceTitle', 'investigation.connectionsTitle',
       'investigation.conclusionTitle', 'investigation.nextEvidenceTitle', 'investigation.submit',
+      'investigation.caseTitle', 'investigation.case.watchtower.title', 'investigation.case.watchtower.intro',
+      'investigation.case.watchtower.objective.timeline', 'investigation.classifyEvidence', 'investigation.status.unresolved',
+      'investigation.boardEvidence', 'investigation.timelineTitle', 'investigation.learning.technical',
       'investigation.connection.login-to-export', 'investigation.connection.export-to-gate',
       'investigation.conclusion.supported-correlation', 'investigation.nextEvidence.corroborating-records',
       'investigation.feedback.connectionsTry', 'investigation.feedback.conclusionTry', 'investigation.feedback.evidenceTry',
     ];
     for (const language of ['en', 'tr']) {
       for (const key of keys) expect(t(language, key)).not.toBe(key);
+    }
+    for (const key of ['investigation.caseTitle', 'investigation.case.watchtower.intro', 'investigation.status.unresolved', 'investigation.timelineTitle']) {
+      expect(t('tr', key)).not.toBe(t('en', key));
     }
   });
 
@@ -60,7 +66,6 @@ describe('language preference', () => {
     for (const language of ['en', 'tr']) {
       for (const key of keys) expect(t(language, key)).not.toBe(key);
     }
-
     const shapeshifter = REALM_CREATURES.find((creature) => creature.id === 'shapeshifter');
     const worm = MALWARE_CREATURES.find((creature) => creature.id === 'worm');
     expect(localizeBestiaryCreature(shapeshifter, 'tr').name).toBe('Şekil Değiştiren');

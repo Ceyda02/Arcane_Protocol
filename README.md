@@ -23,7 +23,7 @@ Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası ve 
 
 Harita, proje için kullanıcı tarafından sağlanan `public/hexaria-world-map.png` görselini kullanır; görseldeki bölge adları İngilizcedir, bölge seçimi ve ilerleme işaretleri ise Türkçe arayüz katmanında çalışır. Haritanın dışındaki varlıkların lisans bilgileri ayrıca belgelenmelidir.
 
-Saha Günlüğü, tamamlanan görevleri, başarıyla geçilmiş sınamalardan çıkarılan bulguları ve tekrar kuyruğunu gösterir. Kanıt panosu, bölüm sınamalarında doğrulanmış kayıtları zaman çizelgesine bağlatır; oyuncunun bir ipucundan sorumlu kişi hakkında kanıtsız hüküm vermesini ödüllendirmez. Beceri ağacı, tekrar edilebilir XP yerine başarıyla geçilen farklı sınamalara göre ilerlemeyi ve sıradaki çalışma önerisini gösterir; her beceri kartını açarak ilgili sınamaları inceleyebilirsin.
+Saha Günlüğü, tamamlanan görevleri, başarıyla geçilmiş sınamalardan çıkarılan bulguları ve tekrar kuyruğunu gösterir. Nöbet Kulesi soruşturması, kanıtları ilgili/ilgisiz/çözümlenmemiş olarak sınıflandırmayı, seçilen kanıtları panoya eklemeyi, olayları klavyeyle sıralamayı ve kanıtların desteklediği ölçülü bir sonuç çıkarmayı içerir. Soruşturma taslağı bu cihazda kaydedilir; puan ve XP kanıt incelemesinin doğruluğuna göre verilir. Beceri ağacı, tekrar edilebilir XP yerine başarıyla geçilen farklı sınamalara göre ilerlemeyi ve sıradaki çalışma önerisini gösterir; her beceri kartını açarak ilgili sınamaları inceleyebilirsin.
 
 ### Güvenlik sınırları
 
@@ -33,6 +33,9 @@ Tüm senaryolar kurgusaldır. Oyuncu girdisi kod olarak çalıştırılmaz; ger�
 
 - Tüm oyun metinlerinin doğal Türkçe ve İngilizce çevirileri.
 - Dünya bölgeleri için yeni oynanabilir bölümler.
+- Beş tam öğrenme dalı içeren Arcane Disciplines sistemi.
+- Aktif görevler, ipuçları, karakterler ve yolculuk kayıtlarıyla Chronicle of Echoes günlüğü.
+- Nöbet Kulesi vakasının ötesinde yeni soruşturma vakaları.
 - Daha fazla erişilebilirlik ve mobil/tablet ekran testi.
 
 ---
@@ -54,7 +57,7 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | World map with data-driven unlocks (9 visible regions) | Existing regions plus two future-region markers. Only the **Crownlands** has playable content |
 | Turkish / English selector | Turkish default for new saves; menu, navigation, settings, map-region labels/descriptions, Bestiary interface and Realm Beast entries, and Chapter 1 dialogue, lessons, and challenges translated. Malware technical descriptions and most other narrative content remain English |
 | Field Journal | Tracks completed quests, passed-challenge findings, and the review queue |
-| Investigation board | Reconstructs the Watchtower timeline and rewards evidence-based conclusions |
+| Investigator’s Table | Classify and pin case evidence, order a keyboard-accessible timeline, correlate records, and choose a cautious conclusion. Drafts save locally; deterministic scoring grants partial XP |
 | Skill tree | Equal-size, collapsible skill cards show demonstrated progress from distinct passed challenges and reveal related practice when opened |
 | Image-backed world map | Uses the supplied Hexaria map with interactive region selection and progress states |
 | Chapter 1: *The Bells of the Silent Watch* (5 challenges, dialogue, lessons) | Complete and playable |
@@ -68,7 +71,7 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 
 ![World map](docs/screenshots/03-world-map.png)
 
-The in-game map uses the supplied `public/hexaria-world-map.png` illustration with interactive region controls layered on top. Region labels baked into the illustration are English; the selected-region panel follows the chosen language. The Field Journal summarizes completed quests and passed-challenge findings. The evidence board opens after its three chapter prerequisites and teaches timeline correlation, careful attribution, and corroboration. The skill tree measures distinct passed challenges rather than repeatable XP.
+The in-game map uses the supplied `public/hexaria-world-map.png` illustration with interactive region controls layered on top. Region labels baked into the illustration are English; the selected-region panel follows the chosen language. The Field Journal summarizes completed quests and passed-challenge findings. The Investigator’s Table opens after its three chapter prerequisites and teaches evidence classification, timeline reconstruction, event correlation, careful attribution, and corroboration. Draft answers save locally and its score is validated deterministically. The current skill tree measures distinct passed challenges rather than repeatable XP; the five full discipline branches remain planned. The full Chronicle of Echoes journal and additional investigation cases are also future work.
 
 ## Game concept
 

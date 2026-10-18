@@ -95,7 +95,39 @@ describe('invalid, outdated, and unavailable storage', () => {
       },
     });
     expect(r.state.progress.investigationRecords).toEqual({
-      watchtower: { passed: true, bestScore: 1, attempts: 0 },
+      watchtower: { passed: true, bestScore: 1, attempts: 0, rewardedXp: 35 },
+    });
+  });
+  it('migrates v3 saves and restores bounded investigation drafts', () => {
+    const r = sanitizeState({
+      version: 3,
+      progress: {
+        xp: 40,
+        investigationRecords: { watchtower: { passed: true, bestScore: 1, attempts: 2 } },
+        investigationDrafts: {
+          watchtower: {
+            connections: ['login-to-export', 'forged'],
+            timelineOrder: ['gate-opening'],
+            evidenceStatuses: { 'owner-statement': 'unresolved', forged: 'invalid' },
+            boardEvidence: ['owner-statement'],
+            conclusionId: 'supported-correlation',
+            nextEvidenceId: 'corroborating-records',
+            secrets: 'ignored',
+          },
+        },
+      },
+    });
+    expect(r.ok).toBe(true);
+    expect(r.state.version).toBe(SAVE_VERSION);
+    expect(r.state.progress.xp).toBe(40);
+    expect(r.state.progress.investigationRecords.watchtower.rewardedXp).toBe(35);
+    expect(r.state.progress.investigationDrafts.watchtower).toEqual({
+      connections: ['login-to-export', 'forged'],
+      timelineOrder: ['gate-opening'],
+      evidenceStatuses: { 'owner-statement': 'unresolved' },
+      boardEvidence: ['owner-statement'],
+      conclusionId: 'supported-correlation',
+      nextEvidenceId: 'corroborating-records',
     });
   });
   it('treats a save without a version as v0', () => {
