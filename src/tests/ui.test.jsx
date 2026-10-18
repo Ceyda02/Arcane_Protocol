@@ -159,15 +159,46 @@ describe('localization and world map', () => {
     expect(screen.getByText(/yozlaşmış bir ormanın/i)).toBeInTheDocument();
   });
 
-  it('shows only passed challenge findings in the persistent journal', () => {
+  it('shows passed findings, story tabs, and read state in the Chronicle', async () => {
+    const user = userEvent.setup();
     const game = completeChapter1(newStore()).game;
     game.settings.language = 'tr';
     seed(game);
     renderApp('/journal');
-    expect(screen.getByRole('heading', { name: /Saha Günlüğü/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Tamamlanan görevler/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /Yankıların Kroniği/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Etkin Görevler' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Sessiz Nöbetin Çanları' })).toBeInTheDocument();
+    await user.click(screen.getByRole('tab', { name: 'İpuçlarının İzinde' }));
     expect(screen.getByText(/Kanıtların doğruladığı bilgileri/i)).toBeInTheDocument();
-    expect(screen.getByText(/Gözlemleri varsayımlardan ayır/i)).toBeInTheDocument();
+    expect(screen.getAllByText('Doğrulanmış gözlem').length).toBeGreaterThan(0);
+    const readButton = screen.getAllByRole('button', { name: 'Okundu olarak işaretle' })[0];
+    await user.click(readButton);
+    await waitFor(() => {
+      expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).progress.chronicle.readEntryIds.length).toBe(1);
+    });
+  });
+
+  it('pins a quest objective, shows the compact game tracker, and can hide it', async () => {
+    const user = userEvent.setup();
+    const initial = createInitialState();
+    seed(baseGame({
+      progress: {
+        ...initial.progress,
+        questState: { 'bells-of-the-silent-watch': { stage: 1, flags: {} } },
+      },
+    }));
+    renderApp('/journal');
+
+    const questCard = (await screen.findByRole('heading', { name: 'The Bells of the Silent Watch' })).closest('li');
+    await user.click(within(questCard).getAllByRole('button', { name: 'Pin objective' })[0]);
+    expect(await screen.findByRole('complementary', { name: 'Pinned objective' })).toHaveTextContent('Name the Signs');
+    const tracker = screen.getByRole('complementary', { name: 'Pinned objective' });
+    await user.click(within(tracker).getByRole('button', { name: 'Hide tracker' }));
+    expect(screen.getAllByRole('button', { name: 'Show tracker' }).length).toBeGreaterThan(0);
+
+    const saved = JSON.parse(window.localStorage.getItem(SAVE_KEY));
+    expect(saved.progress.chronicle.pinnedObjectiveId).toBe('bells-of-the-silent-watch:c1-events');
+    expect(saved.progress.chronicle.trackerHidden).toBe(true);
   });
 });
 

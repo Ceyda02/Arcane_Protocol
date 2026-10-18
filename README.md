@@ -23,7 +23,7 @@ Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası ve 
 
 Harita, proje için kullanıcı tarafından sağlanan `public/hexaria-world-map.png` görselini kullanır; görseldeki bölge adları İngilizcedir, bölge seçimi ve ilerleme işaretleri ise Türkçe arayüz katmanında çalışır. Haritanın dışındaki varlıkların lisans bilgileri ayrıca belgelenmelidir.
 
-Saha Günlüğü, tamamlanan görevleri, başarıyla geçilmiş sınamalardan çıkarılan bulguları ve tekrar kuyruğunu gösterir. Nöbet Kulesi soruşturması, kanıtları ilgili/ilgisiz/çözümlenmemiş olarak sınıflandırmayı, seçilen kanıtları panoya eklemeyi, olayları klavyeyle sıralamayı ve kanıtların desteklediği ölçülü bir sonuç çıkarmayı içerir. Soruşturma taslağı bu cihazda kaydedilir; puan ve XP kanıt incelemesinin doğruluğuna göre verilir. Arcane Disciplines, değerlendirme sonucunu yalnızca başlangıç önerisi olarak sunan beş Türkçe/İngilizce dala ayrılır. Ustalık, kayıtlı sınama başarılarından türetilir; henüz sınaması olmayan konular açıkça gelecek içerik olarak belirtilir ve başka dallara geçmek mevcut ilerlemeyi kilitlemez.
+Yankıların Kroniği, geçerli bölüm için altı sekme sunar: görevler, ipuçları, çözülmemiş gizemler, öğrenilen dersler, karşılaşılan kişiler ve yolculuk. Görevler sınama ilerlemesini, bölgesini ve ödüllerini gösterir; okunma işaretleri ve sabitlenen hedef yerel kayıtta saklanır. Sabit hedef oyun ekranında gizlenebilir küçük bir takipçi olarak görünür. İpuçları ve kişiler yalnızca mevcut ilerlemenin ortaya çıkardığı bilgilere göre gösterilir; soruşturma sonucu saldırı kanıtı gibi sunulmaz. Nöbet Kulesi soruşturması, kanıtları ilgili/ilgisiz/çözümlenmemiş olarak sınıflandırmayı, seçilen kanıtları panoya eklemeyi, olayları klavyeyle sıralamayı ve kanıtların desteklediği ölçülü bir sonuç çıkarmayı içerir. Soruşturma taslağı bu cihazda kaydedilir; puan ve XP kanıt incelemesinin doğruluğuna göre verilir. Arcane Disciplines, değerlendirme sonucunu yalnızca başlangıç önerisi olarak sunan beş Türkçe/İngilizce dala ayrılır. Ustalık, kayıtlı sınama başarılarından türetilir; henüz sınaması olmayan konular açıkça gelecek içerik olarak belirtilir ve başka dallara geçmek mevcut ilerlemeyi kilitlemez.
 
 ### Güvenlik sınırları
 
@@ -33,8 +33,8 @@ Tüm senaryolar kurgusaldır. Oyuncu girdisi kod olarak çalıştırılmaz; ger�
 
 - Tüm oyun metinlerinin doğal Türkçe ve İngilizce çevirileri.
 - Dünya bölgeleri için yeni oynanabilir bölümler.
-- Beş tam öğrenme dalı içeren Arcane Disciplines sistemi.
-- Aktif görevler, ipuçları, karakterler ve yolculuk kayıtlarıyla Chronicle of Echoes günlüğü.
+- Diğer bölümlere ait oynanabilir dersler, gizemler, karakter kayıtları ve keşiflerle Chronicle of Echoes günlüğünün genişletilmesi.
+- Arcane Disciplines içindeki henüz sınaması olmayan konulara oynanabilir dersler ve uygulamalar eklenmesi.
 - Nöbet Kulesi vakasının ötesinde yeni soruşturma vakaları.
 - Daha fazla erişilebilirlik ve mobil/tablet ekran testi.
 
@@ -71,7 +71,7 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 
 ![World map](docs/screenshots/03-world-map.png)
 
-The in-game map uses the supplied `public/hexaria-world-map.png` illustration with interactive region controls layered on top. Region labels baked into the illustration are English; the selected-region panel follows the chosen language. The Field Journal summarizes completed quests and passed-challenge findings. The Investigator’s Table opens after its three chapter prerequisites and teaches evidence classification, timeline reconstruction, event correlation, careful attribution, and corroboration. Draft answers save locally and its score is validated deterministically. Arcane Disciplines now presents five selectable, Turkish/English learning branches; assessment results only suggest a starting branch, and skill states derive from saved challenge records rather than XP. Current playable evidence supports selected Watcher, Veilkeeper, and Memory Keeper nodes. Several Shadow Seeker and Rune Architect objectives, along with later nodes in every branch, still need dedicated lessons and challenges before they can be mastered. The full Chronicle of Echoes journal and additional investigation cases are also future work.
+The in-game map uses the supplied `public/hexaria-world-map.png` illustration with interactive region controls layered on top. Region labels baked into the illustration are English; the selected-region panel follows the chosen language. The Chronicle of Echoes records current-chapter quests, discovered clues, unresolved questions, lessons, known characters, and milestones. Its read state and pinned objective are saved locally; entries are derived from existing gameplay progress, not mock data. Future chapters still need their own quests, discoveries, and spoiler-gated journal content. The Investigator’s Table opens after its three chapter prerequisites and teaches evidence classification, timeline reconstruction, event correlation, careful attribution, and corroboration. Draft answers save locally and its score is validated deterministically. Arcane Disciplines now presents five selectable, Turkish/English learning branches; assessment results only suggest a starting branch, and skill states derive from saved challenge records rather than XP. Current playable evidence supports selected Watcher, Veilkeeper, and Memory Keeper nodes. Several Shadow Seeker and Rune Architect objectives, along with later nodes in every branch, still need dedicated lessons and challenges before they can be mastered.
 
 ## Game concept
 

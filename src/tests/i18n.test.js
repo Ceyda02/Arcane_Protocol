@@ -4,7 +4,7 @@ import { localizeBestiaryCreature } from '../i18n/bestiary.js';
 import { localizeChapter1 } from '../i18n/chapter1.js';
 import { CHAPTER1_LESSONS, CHAPTER1_SCENES } from '../content/quests/chapter1.js';
 import { CHAPTER1_CHALLENGES } from '../content/challenges/chapter1.js';
-import { createInitialState, migrateSave, sanitizeState } from '../storage/saveSchema.js';
+import { createInitialState, migrateSave, sanitizeState, SAVE_VERSION } from '../storage/saveSchema.js';
 import { REALM_CREATURES } from '../content/bestiary.js';
 import { MALWARE_CREATURES } from '../content/malware/creatures.js';
 
@@ -23,7 +23,7 @@ describe('language preference', () => {
     const oldSave = { ...createInitialState(), version: 1, progress: { ...createInitialState().progress, xp: 140 } };
     const result = migrateSave(oldSave);
     expect(result.ok).toBe(true);
-    expect(result.data.version).toBe(4);
+    expect(result.data.version).toBe(SAVE_VERSION);
     expect(result.data.settings.language).toBe('en');
     expect(result.data.progress.xp).toBe(140);
   });
@@ -58,6 +58,20 @@ describe('language preference', () => {
     for (const key of ['investigation.caseTitle', 'investigation.case.watchtower.intro', 'investigation.status.unresolved', 'investigation.timelineTitle']) {
       expect(t('tr', key)).not.toBe(t('en', key));
     }
+  });
+
+  it('localizes the Chronicle navigation, entry states, and story-sensitive text', () => {
+    const keys = [
+      'journal.title', 'chronicle.tab.quests', 'chronicle.tab.clues', 'chronicle.tab.mysteries',
+      'chronicle.tab.lessons', 'chronicle.tab.people', 'chronicle.tab.journey', 'chronicle.search',
+      'chronicle.status.hypothesis', 'chronicle.status.disproven', 'chronicle.markRead',
+      'chronicle.pin', 'chronicle.hideTracker', 'chronicle.originalReport.body',
+      'chronicle.mystery.source.summary', 'chronicle.person.bram.facts',
+    ];
+    for (const language of ['en', 'tr']) {
+      for (const key of keys) expect(t(language, key)).not.toBe(key);
+    }
+    for (const key of keys) expect(t('tr', key)).not.toBe(t('en', key));
   });
 
   it('localizes the Bestiary interface and creature metadata in both languages', () => {

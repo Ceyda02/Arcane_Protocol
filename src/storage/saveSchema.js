@@ -6,7 +6,7 @@
  *
  * Nothing here touches secrets or credentials. Saves live in localStorage and are NOT authentication.
  */
-export const SAVE_VERSION = 4;
+export const SAVE_VERSION = 5;
 export const SKILL_IDS = ['networking', 'webapp', 'logs_ir', 'coding', 'vuln', 'forensics', 'malware'];
 export const PATH_IDS = ['blue', 'red', 'purple', 'echoes'];
 
@@ -38,6 +38,7 @@ export function createInitialState() {
       challengeRecords: {},
       investigationRecords: {},
       investigationDrafts: {},
+      chronicle: { readEntryIds: [], pinnedObjectiveId: null, trackerHidden: false },
       grimoire: [],
       bestiary: {},
       achievements: [],
@@ -86,6 +87,7 @@ const migrations = {
   }),
   2: (old) => ({ ...old, version: 3 }),
   3: (old) => ({ ...old, version: 4 }),
+  4: (old) => ({ ...old, version: 5 }),
 };
 
 export function migrateSave(raw) {
@@ -212,6 +214,14 @@ function sanitizeProgress(p) {
     };
   }
 
+  const chronicle = {
+    readEntryIds: strList(p.chronicle?.readEntryIds).slice(0, 500),
+    pinnedObjectiveId: typeof p.chronicle?.pinnedObjectiveId === 'string' && p.chronicle.pinnedObjectiveId
+      ? str(p.chronicle.pinnedObjectiveId, '', 120)
+      : null,
+    trackerHidden: Boolean(p.chronicle?.trackerHidden),
+  };
+
   const bestiary = {};
   if (isObj(p.bestiary)) {
     for (const [cid, st] of Object.entries(p.bestiary).slice(0, 100)) {
@@ -227,6 +237,7 @@ function sanitizeProgress(p) {
     challengeRecords,
     investigationRecords,
     investigationDrafts,
+    chronicle,
     grimoire: strList(p.grimoire),
     bestiary,
     achievements: strList(p.achievements),

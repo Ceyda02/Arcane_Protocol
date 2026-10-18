@@ -1,5 +1,6 @@
+import { lazy, Suspense } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Map, BookOpen, Skull, User, Settings } from 'lucide-react';
+import { Map, BookOpen, Skull, User, Settings, ScrollText } from 'lucide-react';
 import { useGame } from '../../state/GameContext.jsx';
 import { levelProgress } from '../../engine/progressionEngine.js';
 import { PATHS } from '../../content/paths.js';
@@ -8,9 +9,12 @@ import { ProgressBar } from '../common/ui.jsx';
 import Toasts from './Toasts.jsx';
 import { t } from '../../i18n/index.js';
 
+const ChronicleTracker = lazy(() => import('./ChronicleTracker.jsx'));
+
 const NAV = [
   { to: '/map', key: 'nav.world', icon: Map },
   { to: '/grimoire', key: 'nav.grimoire', icon: BookOpen },
+  { to: '/journal', key: 'nav.journal', icon: ScrollText },
   { to: '/bestiary', key: 'nav.bestiary', icon: Skull },
   { to: '/profile', key: 'nav.profile', icon: User },
   { to: '/settings', key: 'nav.settings', icon: Settings },
@@ -48,6 +52,9 @@ export default function GameShell() {
         <div className="banner banner-warn" role="alert">
           {saveStatus.error === 'quota' ? 'Browser storage is full, so progress is not being saved.' : 'Progress cannot be saved in this browser right now. You can keep playing, but it will be lost when you close the tab.'}
         </div>
+      )}
+      {game.progress.chronicle?.pinnedObjectiveId && (
+        <Suspense fallback={null}><ChronicleTracker /></Suspense>
       )}
       <main id="main" className="main" key={pathname.split('/')[1]} tabIndex={-1}>
         <Outlet />

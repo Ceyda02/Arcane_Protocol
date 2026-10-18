@@ -15,10 +15,10 @@ import BestiaryPage from '../pages/BestiaryPage.jsx';
 import ProfilePage from '../pages/ProfilePage.jsx';
 import ReviewPage from '../pages/ReviewPage.jsx';
 import SettingsPage from '../pages/SettingsPage.jsx';
-import JournalPage from '../pages/JournalPage.jsx';
 
 const InvestigationBoardPage = lazy(() => import('../pages/InvestigationBoardPage.jsx'));
 const SkillTreePage = lazy(() => import('../pages/SkillTreePage.jsx'));
+const JournalPage = lazy(() => import('../pages/JournalPage.jsx'));
 
 function LazyPage({ Page }) {
   const { game } = useGame();
@@ -51,7 +51,7 @@ export default function App() {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/review" element={<ReviewPage />} />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/journal" element={<JournalPage />} />
+        <Route path="/journal" element={<LazyPage Page={JournalPage} />} />
         <Route path="/investigation-board" element={<LazyPage Page={InvestigationBoardPage} />} />
         <Route path="/skill-tree" element={<LazyPage Page={SkillTreePage} />} />
       </Route>

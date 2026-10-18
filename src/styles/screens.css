@@ -95,9 +95,63 @@
 .journal-entry p { margin: 0 0 .3rem; }
 .journal-book-link { display: inline-flex; align-items: center; gap: .35rem; flex: none; }
 .journal-findings .journal-entry { align-items: flex-start; }
+.chronicle-page { position: relative; }
+.chronicle-title { display: flex; align-items: start; justify-content: space-between; gap: 1rem; }
+.chronicle-title h1 { font-family: var(--font-display); }
+.chronicle-new-count, .chronicle-new-badge { display: inline-flex; align-items: center; min-height: 30px; padding: .2rem .55rem; border: 2px solid #8a6415; background: #f6d36b; color: #34220a; font: 700 .85rem var(--font-display); }
+.chronicle-controls { display: grid; gap: .8rem; }
+.chronicle-search { display: flex; align-items: center; gap: .5rem; width: 100%; }
+.chronicle-search input { flex: 1; min-width: 0; min-height: 44px; }
+.chronicle-unread-filter { display: flex; align-items: center; gap: .5rem; min-height: 44px; }
+.chronicle-unread-filter input { width: 20px; height: 20px; }
+.chronicle-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: .65rem; }
+.chronicle-filters label { display: grid; gap: .25rem; }
+.chronicle-filters select { min-height: 44px; max-width: 100%; }
+.chronicle-tracker-settings { display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; padding-top: .55rem; border-top: 1px solid rgba(74,51,32,.25); }
+.chronicle-tabs { display: flex; gap: .5rem; margin: 1rem 0 0; padding: .35rem; border: 3px ridge #76522f; background: #211a2a; overflow-x: auto; overscroll-behavior-inline: contain; scrollbar-width: thin; }
+.chronicle-tabs button { flex: 1 0 auto; min-height: 46px; padding: .45rem .75rem; border: 2px solid #987946; background: #f1e0b1; color: #302317; font: 700 .95rem var(--font-display); cursor: pointer; }
+.chronicle-tabs button[aria-selected="true"] { border-color: #e6c76f; background: #f8e9c2; box-shadow: inset 0 -4px 0 #a78028; }
+.chronicle-tabs button:focus-visible, .chronicle-read-toggle:focus-visible { outline: 3px solid #f5d46e; outline-offset: 2px; }
+.chronicle-panel { min-height: 15rem; padding: clamp(.7rem, 2vw, 1.15rem); border: 6px ridge #76522f; outline: 2px solid #c29a4e; background: linear-gradient(135deg, #f2e4bd, #e7d29d); color: #2b211b; box-shadow: inset 0 0 0 2px #bd9550; }
+.chronicle-list { margin: 0; }
+.chronicle-entry { display: grid; justify-items: start; gap: .45rem; border: 3px solid #927342; background: rgba(255,249,229,.85); }
+.chronicle-entry.is-new { border-left: 6px solid #348092; }
+.chronicle-entry-heading { width: 100%; display: flex; justify-content: space-between; align-items: start; gap: .6rem; }
+.chronicle-entry-heading h3 { margin: 0; }
+.chronicle-entry-badges { display: flex; justify-content: end; align-items: start; flex-wrap: wrap; gap: .35rem; }
+.chronicle-status { display: inline-flex; align-items: center; min-height: 26px; padding: .12rem .4rem; border: 1px solid currentColor; font-size: .8rem; font-weight: 700; }
+.status-confirmed, .status-relevant, .status-learned, .status-earned { color: #245e65; }
+.status-unresolved, .status-hypothesis { color: #684986; }
+.status-irrelevant, .status-disproven { color: #6e433e; }
+.status-completed { color: #245e50; }
+.chronicle-entry-link { display: inline-flex; align-items: center; gap: .3rem; min-height: 40px; font-weight: 700; }
+.chronicle-read-toggle { min-height: 40px; }
+.chronicle-quest-entry { align-items: stretch; }
+.chronicle-quest-entry .bar { max-width: 420px; }
+.chronicle-quest-entry h4 { margin: .3rem 0 0; }
+.chronicle-progress-label { margin-bottom: -.25rem !important; }
+.chronicle-objectives { display: grid; gap: .4rem; list-style: none; padding: 0; margin: 0; }
+.chronicle-objectives li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: .4rem .7rem; padding: .45rem; border-top: 1px solid rgba(74,51,32,.23); }
+.chronicle-objectives li > span { min-width: 0; display: grid; gap: .15rem; }
+.chronicle-objectives small { color: #5a4d3e; }
+.chronicle-objectives .objective-complete { color: #315d4c; }
+.chronicle-pin-button { min-height: 40px; }
+.chronicle-entry-actions { display: flex; flex-wrap: wrap; gap: .45rem; }
+.chronicle-tracker { display: flex; align-items: center; justify-content: space-between; gap: .6rem; max-width: 1200px; margin: .65rem auto; padding: .55rem .75rem; border: 3px solid #896a36; background: #f6e8c2; color: #2c241e; }
+.chronicle-tracker > div { min-width: 0; display: grid; gap: .1rem; }
+.chronicle-tracker > div span { overflow-wrap: anywhere; }
+.chronicle-tracker .btn { flex: none; min-height: 40px; }
+.chronicle-tracker-control { display: flex; justify-content: end; max-width: 1200px; margin: .35rem auto; }
+.chronicle-facts-note { margin-top: .8rem; }
 @media (max-width: 560px) {
   .journal-entry { align-items: flex-start; flex-direction: column; }
   .journal-entry > .btn { align-self: flex-start; }
+  .chronicle-title { align-items: flex-start; flex-direction: column; }
+  .chronicle-entry-heading { flex-direction: column; }
+  .chronicle-entry-badges { justify-content: start; }
+  .chronicle-objectives li { grid-template-columns: 1fr; }
+  .chronicle-tracker { align-items: flex-start; flex-wrap: wrap; }
+  .chronicle-tracker-control .btn { min-height: 42px; }
 }
 
 /* ---------- Quest ---------- */

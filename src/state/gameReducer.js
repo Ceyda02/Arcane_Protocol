@@ -160,6 +160,39 @@ function reduceGame(game, action, events) {
       return { ...game, progress: { ...game.progress, investigationDrafts: { ...game.progress.investigationDrafts, [board.id]: draft } } };
     }
 
+    case 'MARK_CHRONICLE_ENTRY': {
+      const entryId = typeof action.entryId === 'string' ? action.entryId.slice(0, 120) : '';
+      if (!entryId) return game;
+      const current = game.progress.chronicle ?? { readEntryIds: [], pinnedObjectiveId: null, trackerHidden: false };
+      const readEntryIds = action.read
+        ? [...new Set([...current.readEntryIds, entryId])].slice(-500)
+        : current.readEntryIds.filter((id) => id !== entryId);
+      if (readEntryIds.length === current.readEntryIds.length && readEntryIds.every((id, index) => id === current.readEntryIds[index])) return game;
+      return { ...game, progress: { ...game.progress, chronicle: { ...current, readEntryIds } } };
+    }
+
+    case 'PIN_CHRONICLE_OBJECTIVE': {
+      const objectiveId = typeof action.objectiveId === 'string' ? action.objectiveId : '';
+      if (objectiveId) {
+        const separator = objectiveId.indexOf(':');
+        const questId = separator > 0 ? objectiveId.slice(0, separator) : '';
+        const challengeId = separator > 0 ? objectiveId.slice(separator + 1) : '';
+        const quest = QUESTS[questId];
+        if (!quest?.playable || !CHALLENGES[challengeId] || !quest.requiredChallenges.includes(challengeId) || game.progress.challengeRecords[challengeId]?.passed) return game;
+      }
+      const current = game.progress.chronicle ?? { readEntryIds: [], pinnedObjectiveId: null, trackerHidden: false };
+      const pinnedObjectiveId = objectiveId || null;
+      if (current.pinnedObjectiveId === pinnedObjectiveId) return game;
+      return { ...game, progress: { ...game.progress, chronicle: { ...current, pinnedObjectiveId } } };
+    }
+
+    case 'SET_CHRONICLE_TRACKER_HIDDEN': {
+      const current = game.progress.chronicle ?? { readEntryIds: [], pinnedObjectiveId: null, trackerHidden: false };
+      const trackerHidden = Boolean(action.hidden);
+      if (current.trackerHidden === trackerHidden) return game;
+      return { ...game, progress: { ...game.progress, chronicle: { ...current, trackerHidden } } };
+    }
+
     case 'COMPLETE_QUEST': {
       const quest = QUESTS[action.questId];
       if (!quest || !quest.playable || game.progress.completedQuests.includes(quest.id)) return game;
