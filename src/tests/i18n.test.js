@@ -44,13 +44,15 @@ describe('language preference', () => {
     const keys = [
       'intro.portrait.title', 'intro.portrait.body', 'intro.awakening.title', 'intro.threat.title',
       'intro.summons.title', 'intro.summons.body', 'intro.skip', 'intro.next', 'intro.createHero',
-      'settings.musicVolume', 'settings.effectsVolume',
+      'settings.musicVolume', 'settings.effectsVolume', 'audio.muteMusic', 'audio.unmuteMusic',
     ];
     for (const key of keys) {
       expect(t('tr', key), key).not.toBe(key);
       expect(t('en', key), key).not.toBe(key);
       expect(t('tr', key), key).not.toBe(t('en', key));
     }
+    expect(t('tr', 'intro.portrait.body')).toContain('Hexaria’nın mumlarla aydınlanan salonunda kraliyet ailesi toplanır.');
+    expect(t('en', 'intro.portrait.body')).toContain('In the candlelit hall of Hexaria, the royal family gathers.');
   });
 
   it('localizes every introductory assessment question and option without changing scoring', () => {

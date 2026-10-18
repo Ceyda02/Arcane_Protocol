@@ -14,11 +14,27 @@ const baseGame = (over = {}) => ({ ...createInitialState(), player: { ...DEFAULT
 const renderApp = (route = '/') => render(<GameProvider><MemoryRouter initialEntries={[route]}><App /></MemoryRouter></GameProvider>);
 
 describe('new player flow', () => {
+  it('toggles music independently and can turn on audio for saves muted by older defaults', async () => {
+    const user = userEvent.setup();
+    seed(baseGame({ settings: { ...createInitialState().settings, language: 'en', muted: false } }));
+    const first = renderApp('/');
+    await user.click(screen.getByRole('button', { name: 'Turn music off' }));
+    expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).settings.musicMuted).toBe(true);
+    await user.click(screen.getByRole('button', { name: 'Turn music on' }));
+    expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).settings.musicMuted).toBe(false);
+
+    first.unmount();
+    seed(baseGame({ settings: { ...createInitialState().settings, language: 'en', muted: true } }));
+    renderApp('/');
+    await user.click(screen.getByRole('button', { name: 'Turn music on' }));
+    expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).settings.muted).toBe(false);
+  });
+
   it('title -> character creation -> assessment -> results -> map', async () => {
     const user = userEvent.setup();
     renderApp('/');
     await user.click(screen.getByRole('button', { name: /new game|yeni oyun/i }));
-    expect(await screen.findByRole('heading', { name: /the royal portrait|kraliyet tablosu/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /a royal gathering|kraliyet buluşması/i })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /skip intro|girişi geç/i }));
     expect(screen.getByRole('heading', { name: /create your character|karakterini oluştur/i })).toBeInTheDocument();
 
@@ -86,7 +102,7 @@ describe('new player flow', () => {
     fresh.settings.language = 'tr';
     seed(fresh);
     const first = renderApp('/intro');
-    expect(screen.getByRole('heading', { name: 'Kraliyet tablosu' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Kraliyet Buluşması' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Devam et' }));
     expect(screen.getByRole('heading', { name: 'Saray canlanıyor' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Devam et' }));

@@ -5,7 +5,6 @@ import { asset } from '../components/common/assets.js';
 import { useGame } from '../state/GameContext.jsx';
 import { t } from '../i18n/index.js';
 
-const COURT_PORTRAITS = ['elder', 'princess', 'heir', 'noble'];
 const THREAT_PORTRAITS = ['shapeshifter', 'worm', 'rootkit', 'ransomware'];
 const INTRO_SCENES = ['portrait', 'awakening', 'threat', 'summons'];
 
@@ -17,6 +16,14 @@ function PortraitGallery({ portraits, label, animated = false }) {
           <img src={asset(portrait)} alt="" />
         </div>
       ))}
+    </div>
+  );
+}
+
+function CourtArtwork({ label }) {
+  return (
+    <div className="intro-court-art">
+      <img src={`${import.meta.env.BASE_URL}royal-court.png`} alt={label} />
     </div>
   );
 }
@@ -38,7 +45,7 @@ export default function IntroPage() {
 
   const art = scene === 'threat'
     ? <PortraitGallery portraits={THREAT_PORTRAITS} label={t(language, 'intro.threatArt')} />
-    : <PortraitGallery portraits={COURT_PORTRAITS} label={t(language, 'intro.courtArt')} animated={scene === 'awakening'} />;
+    : <CourtArtwork label={t(language, 'intro.courtArt')} />;
 
   return (
     <main className="intro-screen">

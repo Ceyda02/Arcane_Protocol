@@ -82,6 +82,8 @@ describe('invalid, outdated, and unavailable storage', () => {
     expect(migrated.ok).toBe(true);
     expect(migrated.state.introCompleted).toBe(true);
     expect(migrated.state.settings.musicVolume).toBe(0.25);
+    expect(migrated.state.settings.muted).toBe(false);
+    expect(migrated.state.settings.musicMuted).toBe(false);
     expect(createInitialState().introCompleted).toBe(false);
   });
   it('migrates v2 saves without losing progress and adds an empty investigation record map', () => {

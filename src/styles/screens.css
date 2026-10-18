@@ -27,11 +27,16 @@
 .intro-gallery-frame { width: clamp(72px, 15vw, 132px); height: clamp(110px, 22vw, 208px); display: grid; place-items: center; padding: 4px; border: 3px solid #b7904d; background: #261a14; box-shadow: 0 5px 0 #100b0a; }
 .intro-gallery-frame img { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
 .intro-gallery-awakening .intro-gallery-frame { animation: court-stir 1.8s ease-in-out infinite alternate; animation-delay: calc(var(--portrait-order) * -0.28s); }
+.intro-court-art { display: flex; justify-content: center; width: fit-content; max-width: 100%; margin: 1rem auto 1.25rem; overflow: hidden; border: 4px solid #b7904d; background: #1c1720; box-shadow: 0 0 0 3px #59402b, 0 0 24px rgba(255, 204, 92, .58), inset 0 0 18px rgba(255, 204, 92, .2); }
+.intro-court-art img { display: block; width: auto; max-width: 100%; max-height: min(42vh, 390px); image-rendering: pixelated; }
 .intro-scene-threat .intro-gallery { background: radial-gradient(ellipse, #3d2530, #100d17 74%); border-color: #66343b; }
 .intro-scene-threat .intro-gallery-frame { border-color: #85424a; }
 .intro-dialogue { max-width: 72ch; margin-inline: auto; }
 .intro-dialogue p { margin-bottom: .65rem; }
 .intro-actions { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .6rem; margin-top: 1rem; border-top: 2px solid rgba(210,160,55,.35); padding-top: 1rem; }
+.music-toggle { position: fixed; top: max(.75rem, env(safe-area-inset-top)); left: max(.75rem, env(safe-area-inset-left)); z-index: 60; display: grid; place-items: center; width: 46px; height: 46px; padding: .55rem; color: var(--gold-bright); background: rgba(26, 17, 10, .94); border: 2px solid var(--gold); box-shadow: 0 3px 0 #100b0a, 0 0 12px rgba(255, 204, 92, .25); cursor: pointer; }
+.music-toggle:hover { color: #fff1bc; box-shadow: 0 3px 0 #100b0a, 0 0 18px rgba(255, 204, 92, .55); }
+.music-toggle:focus-visible { outline: 3px solid #fff1bc; outline-offset: 3px; }
 @keyframes intro-scene-reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes court-stir { from { transform: translateY(3px); filter: brightness(.9); } to { transform: translateY(-3px); filter: brightness(1.08); } }
 

@@ -31,7 +31,7 @@ Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası, B�
 
 Harita, kullanıcı tarafından sağlanan JPEG görselini `public/hexaria-world-map.jpg` yolundan ve Vite'ın dağıtım tabanına göre çözümlenen göreli URL ile yükler. Dosyanın önceki `.png` uzantısı içeriğiyle uyuşmadığından düzeltildi; bu, GitHub Pages alt dizinindeki görünürlük sorununu gidermek içindir. Görseldeki bölge adları İngilizcedir; bölge seçimi ve ilerleme işaretleri seçili arayüz dilinde çalışır.
 
-Yeni oyun, Hexaria sarayını ve yaklaşan tehdidi mevcut karakter/yazılım yaratığı görselleriyle tanıtan, atlanabilir dört sahneli bir girişle başlar. Girişin tamamlanma bilgisi kayıtta tutulur; eski karakter kayıtları giriş tamamlanmış kabul edilir. Sağlanan `public/audio/Loop_The_Bards_Tale.wav` ana oyun müziği; `public/audio/ui_*.wav` dosyaları arayüz sesleri olarak kullanılır. Tarayıcı ses kısıtlamaları nedeniyle müzik ilk kullanıcı etkileşiminden sonra başlar ve tüm sesler varsayılan olarak sessizdir. Ayarlarda müzik ve efekt düzeyleri ayrıdır.
+Yeni oyun, Hexaria sarayını ve yaklaşan tehdidi tanıtan, atlanabilir dört sahneli bir girişle başlar. İlk sahnede kullanıcı tarafından sağlanan karakter görseli, karakter altındaki başlıklar kaldırılmış kırpılmış kopyası ve altın çerçeve/parıltıyla gösterilir. Giriş metinleri Türkçe ve İngilizcedir. Girişin tamamlanma bilgisi kayıtta tutulur; eski karakter kayıtları giriş tamamlanmış kabul edilir. Sağlanan `public/audio/Loop_The_Bards_Tale.wav` ana oyun müziği; `public/audio/ui_*.wav` dosyaları arayüz sesleri olarak kullanılır. Müzik varsayılan olarak açıktır; sol üstteki düğmeden kapatılıp açılabilir. Tarayıcılar otomatik oynatmayı engellerse müzik ilk kullanıcı etkileşiminde başlar. Ayarlardaki genel sessize alma ve ayrı müzik/efekt düzeyleri korunur.
 
 Yankıların Kroniği, geçerli bölüm için altı sekme sunar: görevler, ipuçları, çözülmemiş gizemler, öğrenilen dersler, karşılaşılan kişiler ve yolculuk. Görevler sınama ilerlemesini, bölgesini ve ödüllerini gösterir; okunma işaretleri ve sabitlenen hedef yerel kayıtta saklanır. Sabit hedef oyun ekranında gizlenebilir küçük bir takipçi olarak görünür. İpuçları ve kişiler yalnızca mevcut ilerlemenin ortaya çıkardığı bilgilere göre gösterilir; soruşturma sonucu saldırı kanıtı gibi sunulmaz. Nöbet Kulesi soruşturması, kanıtları ilgili/ilgisiz/çözümlenmemiş olarak sınıflandırmayı, seçilen kanıtları panoya eklemeyi, olayları klavyeyle sıralamayı ve kanıtların desteklediği ölçülü bir sonuç çıkarmayı içerir. Soruşturma taslağı bu cihazda kaydedilir; puan ve XP kanıt incelemesinin doğruluğuna göre verilir. Arcane Disciplines, değerlendirme sonucunu yalnızca başlangıç önerisi olarak sunan beş Türkçe/İngilizce dala ayrılır. Ustalık, kayıtlı sınama başarılarından türetilir; henüz sınaması olmayan konular açıkça gelecek içerik olarak belirtilir ve başka dallara geçmek mevcut ilerlemeyi kilitlemez.
 
@@ -83,7 +83,7 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | Malware encounters: **Worm, Trojan, Ransomware** (beginner + intermediate + boss) | Complete and playable |
 | Malware encounters: the other 9 creatures | **Introductory field study only** (one beginner challenge each, localized in Turkish and English). No intermediate or boss encounter |
 | Regional content beyond the Crownlands chapter | Every unlocked non-Crownlands region has an introductory study linked from the map and journal. Region-specific story quests and additional activities are not implemented |
-| Music and sound effects | User-supplied looping main OST plus five supplied UI WAV assets; optional, initially muted, with separate music/effect volumes |
+| Music and sound effects | User-supplied looping main OST plus five supplied UI WAV assets; music on by default with a top-left toggle and separate settings volumes |
 
 ![World map](docs/screenshots/03-world-map.png)
 
@@ -209,7 +209,7 @@ Topics covered so far: events vs alerts vs incidents, log reading, timelines and
 
 ## Accessibility
 
-Keyboard-operable everywhere (sorting uses move buttons, matching uses native selects, the worm graph has an equivalent table); visible focus; skip link; status always has text and a glyph, never color alone; adjustable text speed and size; reduced-motion setting (also follows the OS); sound optional and **muted by default**; no horizontal overflow from 360 px to desktop; bottom tab bar on mobile.
+Keyboard-operable everywhere (sorting uses move buttons, matching uses native selects, the worm graph has an equivalent table); visible focus; skip link; status always has text and a glyph, never color alone; adjustable text speed and size; reduced-motion setting (also follows the OS); optional sound with a persistent music toggle; no horizontal overflow from 360 px to desktop; bottom tab bar on mobile.
 
 ![Mobile](docs/screenshots/10-mobile-map.png)
 

@@ -16,8 +16,7 @@ const SOUND_ASSETS = {
 };
 
 let music = null;
-let musicUnlocked = false;
-let activeTrack = null;
+let activeTrack = 'mainTheme';
 const effects = new Map();
 const reportedFailures = new Set();
 
@@ -35,7 +34,7 @@ function playElement(element, path) {
   const playback = element.play();
   if (playback?.catch) {
     playback.catch((error) => {
-      if (error.name !== 'NotAllowedError') reportAssetFailure(path, error);
+      if (error.name !== 'NotAllowedError' && error.name !== 'AbortError') reportAssetFailure(path, error);
     });
   }
 }
@@ -68,7 +67,7 @@ export function playSound(name, settings) {
 }
 
 function syncMusic(settings) {
-  if (!musicUnlocked || !settings || settings.muted || settings.musicVolume <= 0) {
+  if (!settings || settings.muted || settings.musicMuted || settings.musicVolume <= 0) {
     music?.pause();
     return;
   }
@@ -82,7 +81,6 @@ function syncMusic(settings) {
 }
 
 export function unlockAudio(settings) {
-  musicUnlocked = true;
   syncMusic(settings);
 }
 

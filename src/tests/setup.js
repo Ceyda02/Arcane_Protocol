@@ -8,5 +8,8 @@ beforeEach(() => {
     window.matchMedia ||
     (() => ({ matches: false, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} }));
   window.scrollTo = () => {};
+  window.HTMLMediaElement.prototype.play = () => Promise.resolve();
+  window.HTMLMediaElement.prototype.pause = () => {};
+  window.HTMLMediaElement.prototype.load = () => {};
 });
 afterEach(() => cleanup());

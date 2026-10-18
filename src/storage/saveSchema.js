@@ -18,7 +18,8 @@ export const defaultSettings = () => ({
   textSpeed: 'normal', // 'slow' | 'normal' | 'fast' | 'instant'
   textSize: 'normal', // 'normal' | 'large' | 'xlarge'
   reducedMotion: 'system', // 'system' | 'on' | 'off'
-  muted: true,
+  muted: false,
+  musicMuted: false,
   volume: 0.5,
   musicVolume: 0.25,
 });
@@ -262,6 +263,7 @@ function sanitizeSettings(s) {
     textSize: oneOf(s.textSize, ['normal', 'large', 'xlarge'], d.textSize),
     reducedMotion: oneOf(s.reducedMotion, ['system', 'on', 'off'], d.reducedMotion),
     muted: typeof s.muted === 'boolean' ? s.muted : d.muted,
+    musicMuted: typeof s.musicMuted === 'boolean' ? s.musicMuted : d.musicMuted,
     volume: num(s.volume, d.volume, 0, 1),
     musicVolume: num(s.musicVolume, d.musicVolume, 0, 1),
   };
