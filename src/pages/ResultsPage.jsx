@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useGame } from '../state/GameContext.jsx';
 import { PATHS, PATH_LIST } from '../content/paths.js';
 import { SKILLS, ASSESSED_SKILLS } from '../content/skills.js';
-import { ASSESSMENT_DISCLAIMER } from '../content/assessment.js';
 import { explainRecommendation } from '../engine/assessmentEngine.js';
 import { Button, Panel, ProgressBar } from '../components/common/ui.jsx';
+import { t } from '../i18n/index.js';
 
 function PathCard({ path, selected, onChoose, tag }) {
   return (
@@ -22,6 +22,7 @@ function PathCard({ path, selected, onChoose, tag }) {
 export default function ResultsPage() {
   const { game, dispatch } = useGame();
   const nav = useNavigate();
+  const language = game.settings.language;
   const result = game.assessment.result;
   const choose = (id) => dispatch({ type: 'SET_PATH', pathId: id });
   const retake = () => { dispatch({ type: 'RETAKE_ASSESSMENT' }); nav('/assessment'); };
@@ -29,7 +30,7 @@ export default function ResultsPage() {
   return (
     <div className="results">
       <h1>{result ? 'Your starting path' : 'Choose your order'}</h1>
-      <p className="notice">{ASSESSMENT_DISCLAIMER}</p>
+      <p className="notice">{t(language, 'assessment.disclaimer')}</p>
 
       {result && (
         <>

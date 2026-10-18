@@ -19,7 +19,7 @@ Terminalde gösterilen yerel adresi tarayıcıda açın (varsayılan: `http://lo
 
 ### GitHub Pages ile yayımlama
 
-`main` dalına gönderilen her değişiklik test edilip otomatik yayımlanır. İlk yayımlamadan önce GitHub deposunda **Settings → Pages → Build and deployment → Source → GitHub Actions** seçilmelidir. Dağıtım tamamlandığında oyun `https://ceyda02.github.io/Arcane_Protocol/` adresinde açılır. Windows'ta bu adresi Edge/Chrome ile açın ve tarayıcı menüsündeki **Install this site as an app / Bu siteyi uygulama olarak yükle** seçeneğini kullanın.
+`main` dalına gönderilen her değişiklik test edilip otomatik yayımlanır. İş akışı, Pages sitesini `actions/configure-pages` ile GitHub Actions kaynağına göre yapılandırır. Depo veya kuruluş izinleri sitenin iş akışı tarafından oluşturulmasını engelliyorsa GitHub deposunda **Settings → Pages → Build and deployment → Source → GitHub Actions** seçin. Dağıtım tamamlandığında oyun `https://ceyda02.github.io/Arcane_Protocol/` adresinde açılır. Windows'ta bu adresi Edge/Chrome ile açın ve tarayıcı menüsündeki **Install this site as an app / Bu siteyi uygulama olarak yükle** seçeneğini kullanın.
 
 ### Steam sürümü
 

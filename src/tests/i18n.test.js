@@ -10,6 +10,8 @@ import { MALWARE_CREATURES } from '../content/malware/creatures.js';
 import { CHALLENGES } from '../content/index.js';
 import { FIELD_STUDY_TRANSLATION_IDS, localizeMalwareChallenge } from '../i18n/malware.js';
 import { REGIONS } from '../content/world.js';
+import { localizeAssessmentQuestion, localizeUnsureOption } from '../i18n/assessment.js';
+import { ASSESSMENT_QUESTIONS, UNSURE_OPTION } from '../content/assessment.js';
 
 describe('language preference', () => {
   it('defaults new games to Turkish', () => {
@@ -36,6 +38,22 @@ describe('language preference', () => {
     expect(t('tr', 'menu.main')).toBe('Ana menü');
     expect(t('en', 'settings.reading')).toBe('Reading');
     expect(t('tr', 'unknown.translation.key')).toBe('unknown.translation.key');
+  });
+
+  it('localizes every introductory assessment question and option without changing scoring', () => {
+    for (const question of ASSESSMENT_QUESTIONS) {
+      const localized = localizeAssessmentQuestion(question, 'tr');
+      expect(localized.prompt, question.id).not.toBe(question.prompt);
+      expect(localized.options.map((option) => option.id)).toEqual(question.options.map((option) => option.id));
+      for (const [index, option] of localized.options.entries()) {
+        expect(option.text, `${question.id}:${option.id}`).not.toBe(question.options[index].text);
+        expect(option.score).toBe(question.options[index].score);
+        expect(option.interest).toEqual(question.options[index].interest);
+      }
+    }
+    expect(localizeAssessmentQuestion(ASSESSMENT_QUESTIONS[0], 'en')).toBe(ASSESSMENT_QUESTIONS[0]);
+    expect(localizeUnsureOption(UNSURE_OPTION, 'tr').text).toBe('Henüz emin değilim');
+    expect(localizeUnsureOption(UNSURE_OPTION, 'en')).toBe(UNSURE_OPTION);
   });
 
   it('provides localized labels for the investigation board and skill tree', () => {

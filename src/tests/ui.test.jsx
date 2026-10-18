@@ -26,15 +26,15 @@ describe('new player flow', () => {
     await user.type(screen.getByLabelText(/^name$/i), 'Mira');
     await user.click(screen.getByRole('button', { name: /begin the adventure/i }));
 
-    expect(await screen.findByRole('heading', { name: /trial of three runes/i })).toBeInTheDocument();
-    expect(screen.getByText(/not a validated psychometric test/i)).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /begin the trial/i }));
+    expect(await screen.findByRole('heading', { name: /trial of three runes|üç rün sınavı/i })).toBeInTheDocument();
+    expect(screen.getByText(/not a validated psychometric test|geçerliliği kanıtlanmış bir kişilik testi/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /begin the trial|sınava başla/i }));
 
     // Answer every question with the first option, via keyboard-accessible radios
     for (let i = 0; i < 14; i += 1) {
       const radios = screen.getAllByRole('radio');
       await user.click(radios[0]);
-      const next = screen.queryByRole('button', { name: /^next$/i }) ?? screen.getByRole('button', { name: /see my path/i });
+      const next = screen.queryByRole('button', { name: /^(next|sonraki)$/i }) ?? screen.getByRole('button', { name: /see my path|yolumu gör/i });
       await user.click(next);
     }
     expect(await screen.findByRole('heading', { name: /your starting path/i })).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('new player flow', () => {
     const user = userEvent.setup();
     renderApp('/create');
     await user.click(screen.getByRole('button', { name: /start now as/i }));
-    expect(await screen.findByRole('heading', { name: /trial of three runes/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /trial of three runes|üç rün sınavı/i })).toBeInTheDocument();
   });
 
   it('the player can skip the trial and choose a path themselves', async () => {
@@ -63,6 +63,19 @@ describe('new player flow', () => {
     expect(screen.getByRole('button', { name: /enter hexaria/i })).toBeDisabled();
     await user.click(screen.getByRole('button', { name: /walk the purple order/i }));
     expect(screen.getByRole('button', { name: /enter hexaria/i })).toBeEnabled();
+  });
+
+  it('shows the opening assessment in Turkish when Turkish is selected', async () => {
+    const user = userEvent.setup();
+    seed(baseGame({ settings: { ...createInitialState().settings, language: 'tr' } }));
+    renderApp('/assessment');
+    expect(screen.getByRole('heading', { name: 'Üç Rün Sınavı' })).toBeInTheDocument();
+    expect(screen.getByText(/14 sorudan oluşan/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Sınava başla' }));
+    expect(screen.getByRole('heading', { name: /Tarayıcınıza bir web sitesi adı yazdığınızda DNS ne yapar/ })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: /Site adını, bilgisayarınızın bağlanabileceği bir IP adresine dönüştürür/ })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Henüz emin değilim' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Sonraki' })).toBeDisabled();
   });
 });
 
