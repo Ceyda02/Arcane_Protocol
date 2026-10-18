@@ -1,5 +1,6 @@
 import { QUESTS } from '../content/quests/index.js';
 import { REGIONS } from '../content/world.js';
+import { CREATURES_BY_ID } from '../content/malware/creatures.js';
 import { levelFromXp } from './progressionEngine.js';
 
 const done = (state, id) => state.progress.completedQuests.includes(id);
@@ -30,16 +31,29 @@ export function questStatus(quest, state, quests = QUESTS) {
 
 export function regionStatus(region, state, quests = QUESTS) {
   if (!isUnlocked(region.unlock, state, quests)) return 'locked';
-  const playable = region.quests.filter((id) => quests[id]?.playable);
-  if (playable.length === 0) return 'available';
-  return playable.every((id) => done(state, id)) ? 'completed' : 'available';
+  const playableQuests = region.quests.filter((id) => quests[id]?.playable);
+  const studies = region.studies || [];
+  if (playableQuests.length === 0 && studies.length === 0) return 'available';
+  const questsComplete = playableQuests.every((id) => done(state, id));
+  const studiesComplete = studies.every((id) => {
+    const challengeId = CREATURES_BY_ID[id]?.challenges.beginner;
+    return challengeId && state.progress.challengeRecords[challengeId]?.passed;
+  });
+  return questsComplete && studiesComplete ? 'completed' : 'available';
 }
 
-/** { done, total, percent, playable } */
+/** { done, total, percent, playable } for quests and regional field studies. */
 export function regionProgress(region, state, quests = QUESTS) {
-  const playable = region.quests.filter((id) => quests[id]?.playable);
-  const d = playable.filter((id) => done(state, id)).length;
-  return { done: d, total: playable.length, percent: playable.length ? Math.round((d / playable.length) * 100) : 0, playable: playable.length > 0 };
+  const playableQuests = region.quests.filter((id) => quests[id]?.playable);
+  const studies = region.studies || [];
+  const completedQuests = playableQuests.filter((id) => done(state, id)).length;
+  const completedStudies = studies.filter((id) => {
+    const challengeId = CREATURES_BY_ID[id]?.challenges.beginner;
+    return Boolean(challengeId && state.progress.challengeRecords[challengeId]?.passed);
+  }).length;
+  const total = playableQuests.length + studies.length;
+  const completed = completedQuests + completedStudies;
+  return { done: completed, total, percent: total ? Math.round((completed / total) * 100) : 0, playable: total > 0 };
 }
 
 export const getRegions = () => REGIONS;

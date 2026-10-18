@@ -1,12 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import { t } from '../i18n/index.js';
-import { localizeBestiaryCreature } from '../i18n/bestiary.js';
+import { localizeBestiaryCreature, localizeBestiaryPage } from '../i18n/bestiary.js';
 import { localizeChapter1 } from '../i18n/chapter1.js';
 import { CHAPTER1_LESSONS, CHAPTER1_SCENES } from '../content/quests/chapter1.js';
 import { CHAPTER1_CHALLENGES } from '../content/challenges/chapter1.js';
 import { createInitialState, migrateSave, sanitizeState, SAVE_VERSION } from '../storage/saveSchema.js';
 import { REALM_CREATURES } from '../content/bestiary.js';
 import { MALWARE_CREATURES } from '../content/malware/creatures.js';
+import { CHALLENGES } from '../content/index.js';
+import { FIELD_STUDY_TRANSLATION_IDS, localizeMalwareChallenge } from '../i18n/malware.js';
+import { REGIONS } from '../content/world.js';
 
 describe('language preference', () => {
   it('defaults new games to Turkish', () => {
@@ -80,6 +83,9 @@ describe('language preference', () => {
       'bestiary.chooseCreature', 'bestiary.category.Infection', 'bestiary.blurb.Infection',
       'bestiary.detail.meetCreature', 'realWorld.title', 'realWorld.whatItIs',
       'realWorld.perspectives', 'realWorld.order.blue',
+      'map.studies', 'map.studyProgress', 'map.studyComplete', 'encounter.notFound.title',
+      'encounter.locked.title', 'encounter.scene', 'encounter.beginStudy', 'encounter.complete',
+      'encounter.backToBestiary', 'encounter.introOnly',
     ];
     for (const language of ['en', 'tr']) {
       for (const key of keys) expect(t(language, key)).not.toBe(key);
@@ -90,6 +96,29 @@ describe('language preference', () => {
     expect(localizeBestiaryCreature(shapeshifter, 'tr').concepts).toContain('Bağlam');
     expect(localizeBestiaryCreature(worm, 'tr').name).toBe('Solucan');
     expect(localizeBestiaryCreature(worm, 'en')).toBe(worm);
+  });
+
+  it('localizes all regional field studies while preserving deterministic answers', () => {
+    expect(FIELD_STUDY_TRANSLATION_IDS).toHaveLength(9);
+    for (const id of FIELD_STUDY_TRANSLATION_IDS) {
+      const source = CHALLENGES[id];
+      const localized = localizeMalwareChallenge(source, 'tr');
+      expect(localized.title, id).not.toBe(source.title);
+      expect(localized.instructions, id).not.toBe(source.instructions);
+      expect(localized.data.correctId, id).toBe(source.data.correctId);
+      expect(localized.data.options.map((option) => option.id)).toEqual(source.data.options.map((option) => option.id));
+      expect(localized.data.options.every((option) => option.text.length > 0)).toBe(true);
+    }
+    expect(REGIONS.filter((region) => region.id !== 'crownlands').every((region) => region.studies?.length)).toBe(true);
+    for (const creature of MALWARE_CREATURES.filter((item) => item.availability === 'field-study')) {
+      const localized = localizeBestiaryCreature(creature, 'tr');
+      for (const field of ['lore', 'definition', 'behavior', 'scenario', 'defense', 'distinguish']) {
+        expect(localized[field], `${creature.id}.${field}`).not.toBe(creature[field]);
+      }
+      const page = localizeBestiaryPage({ ...creature, id: `beast-${creature.id}` }, 'tr');
+      expect(page.plain).toBe(localized.definition);
+      expect(page.technical).toContain(localized.behavior);
+    }
   });
 
   it('localizes Chapter 1 dialogue, lessons, and every challenge without changing answer data', () => {

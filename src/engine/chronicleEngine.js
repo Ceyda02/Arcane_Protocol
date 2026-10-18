@@ -6,11 +6,13 @@ import { REGIONS } from '../content/world.js';
 import { REALM_CREATURES } from '../content/bestiary.js';
 import { localizeBestiaryCreature } from '../i18n/bestiary.js';
 import { localizeChapter1 } from '../i18n/chapter1.js';
+import { localizeMalwareChallenge } from '../i18n/malware.js';
 import { questStatus, regionStatus } from './unlockEngine.js';
 import { ACHIEVEMENTS } from './progressionEngine.js';
 
 function localizedChallenge(challenge, language) {
-  return challenge.id.startsWith('c1-') ? localizeChapter1(challenge, language) : challenge;
+  if (challenge.id.startsWith('c1-')) return localizeChapter1(challenge, language);
+  return localizeMalwareChallenge(challenge, language);
 }
 
 function questEntry(quest, game, language) {
@@ -248,10 +250,39 @@ function journeyEntries(game, language) {
   return [...completedQuests, ...regions, ...creatures, ...achievements, ...decisions, ...investigations];
 }
 
+function fieldStudyEntries(game, language) {
+  return REGIONS
+    .filter((region) => regionStatus(region, game) !== 'locked')
+    .flatMap((region) => (region.studies || []).map((creatureId) => {
+      const creature = MALWARE_CREATURES.find((item) => item.id === creatureId);
+      const challenge = creature && CHALLENGES[creature.challenges.beginner];
+      if (!creature || !challenge) return null;
+      const localizedCreature = localizeBestiaryCreature(creature, language);
+      const localizedChallengeDefinition = localizedChallenge(challenge, language);
+      const passed = Boolean(game.progress.challengeRecords[challenge.id]?.passed);
+      return {
+        id: `study:${creature.id}`,
+        type: 'study',
+        questKind: 'encounter',
+        regionId: region.id,
+        title: `${localizedCreature.name}: ${localizedCreature.title}`,
+        description: localizedCreature.tease,
+        status: passed ? 'completed' : 'available',
+        passed: Number(passed),
+        total: 1,
+        objective: localizedChallengeDefinition.objective,
+        route: `/study/${creature.id}`,
+        objectives: [],
+      };
+    }))
+    .filter(Boolean);
+}
+
 export function getChronicleData(game, language = game.settings.language) {
   const quests = Object.values(QUESTS)
     .filter((quest) => quest.playable && questStatus(quest, game) !== 'locked')
-    .map((quest) => questEntry(quest, game, language));
+    .map((quest) => questEntry(quest, game, language))
+    .concat(fieldStudyEntries(game, language));
   return {
     quests,
     clues: [...challengeClues(game, language), ...investigationClues(game)],

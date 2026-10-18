@@ -8,6 +8,7 @@ import { Button, Panel } from '../common/ui.jsx';
 import { MultipleChoice, MultiSelect, MatchPairs, SortOrder, DecisionTree, PermissionReview, FillIn } from './ChallengeParts.jsx';
 import NetworkSpread from './NetworkSpread.jsx';
 import { localizeChapter1 } from '../../i18n/chapter1.js';
+import { localizeMalwareChallenge } from '../../i18n/malware.js';
 import { t } from '../../i18n/index.js';
 
 const RENDERERS = {
@@ -29,7 +30,10 @@ export default function ChallengeRunner({ challenge, grimoire, onContinue, onRes
   const { game, dispatch } = useGame();
   const play = useSound();
   const Renderer = RENDERERS[challenge.type];
-  const localizedChallenge = localizeChapter1(challenge, game.settings.language);
+  const localizedChallenge = localizeMalwareChallenge(
+    localizeChapter1(challenge, game.settings.language),
+    game.settings.language,
+  );
   const localizedContinueLabel = localizeChapter1(continueLabel, game.settings.language);
   const [answer, setAnswer] = useState(challenge.type === 'sort_order' ? challenge.data.items.map((i) => i.id) : undefined);
   const [hintsShown, setHintsShown] = useState(0);

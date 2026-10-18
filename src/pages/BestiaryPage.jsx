@@ -12,6 +12,7 @@ import { Button, Panel } from '../components/common/ui.jsx';
 import { questPath, studyPath } from '../app/paths.js';
 import { t } from '../i18n/index.js';
 import { localizeBestiaryCreature } from '../i18n/bestiary.js';
+import { REGIONS } from '../content/world.js';
 
 function Creature({ c, status, selected, onPick, kind, language }) {
   const src = asset(c.art);
@@ -44,7 +45,9 @@ export default function BestiaryPage() {
 
   const malwareNeeds = (c) => {
     const quest = c.questId ? QUESTS[c.questId] : null;
-    return quest ? unmetRequirements({ quests: quest.requires, anyQuests: quest.requiresAny }, game) : unmetRequirements({ quests: ['bells-of-the-silent-watch'] }, game);
+    if (quest) return unmetRequirements({ quests: quest.requires, anyQuests: quest.requiresAny }, game);
+    const region = REGIONS.find((entry) => entry.id === c.studyRegionId);
+    return region ? unmetRequirements(region.unlock, game) : [t(language, 'map.genericRequirement')];
   };
 
   const detail = () => {

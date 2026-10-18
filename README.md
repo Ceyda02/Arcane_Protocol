@@ -27,7 +27,7 @@ Bu depo henüz Steam'e yüklenmeye hazır bir Windows kurulum paketi üretmiyor.
 
 ### Mevcut Türkçe desteği ve kapsam
 
-Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası ve Büyü Kitabı arayüzünün yanı sıra ilk bölümün diyaloglarını, derslerini ve sınamalarını kapsar. Yaratık Kitabı arayüzü, yaratık adları ve kilitli ipuçları ile Hexaria yaratıklarının açıklamaları da Türkçedir. Zararlı yazılım kayıtlarının teknik açıklamaları ve diğer oyun bölümlerinin anlatı içerikleri ise çoğunlukla İngilizcedir; çeviri çalışması tamamlanmamıştır. Haritada görünen yeni bölgeler gelecek içerik için işaretlenmiştir ve henüz oynanabilir görevleri yoktur.
+Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası, Büyü Kitabı arayüzü, ilk bölümün diyalogları/dersleri/sınamaları ve başlangıç saha çalışmalarını kapsar. Yaratık Kitabı arayüzü, yaratık adları ve saha çalışması metinleri Türkçedir; teknik kaynak adları özgün biçiminde kalabilir. Bununla birlikte zararlı yazılım Bestiary kayıtlarının tüm ayrıntıları, ileri karşılaşmalar ve sonraki hikâye bölümleri bütünüyle çevrilmiş değildir. Bölgeler ilerlemeyle açılır; Crownlands dışındaki açılmış her bölgeye bir başlangıç saha çalışması bağlanmıştır. Bunlar tam hikâye bölümü veya çok aşamalı karşılaşma değildir.
 
 Harita, proje için kullanıcı tarafından sağlanan `public/hexaria-world-map.png` görselini kullanır; görseldeki bölge adları İngilizcedir, bölge seçimi ve ilerleme işaretleri ise Türkçe arayüz katmanında çalışır. Haritanın dışındaki varlıkların lisans bilgileri ayrıca belgelenmelidir.
 
@@ -40,7 +40,7 @@ Tüm senaryolar kurgusaldır. Oyuncu girdisi kod olarak çalıştırılmaz; ger�
 ### Yol haritası
 
 - Tüm oyun metinlerinin doğal Türkçe ve İngilizce çevirileri.
-- Dünya bölgeleri için yeni oynanabilir bölümler.
+- Her bölge için başlangıç saha çalışmasının ötesinde yeni oynanabilir hikâye bölümleri ve etkinlikler.
 - Diğer bölümlere ait oynanabilir dersler, gizemler, karakter kayıtları ve keşiflerle Chronicle of Echoes günlüğünün genişletilmesi.
 - Arcane Disciplines içindeki henüz sınaması olmayan konulara oynanabilir dersler ve uygulamalar eklenmesi.
 - Nöbet Kulesi vakasının ötesinde yeni soruşturma vakaları.
@@ -68,8 +68,8 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 |---|---|
 | Title, new/continue game, character creation, settings | Complete |
 | Trial of Three Runes (14 questions, deterministic scoring, retake, choose another path) | Complete |
-| World map with data-driven unlocks (9 visible regions) | Existing regions plus two future-region markers. Only the **Crownlands** has playable content |
-| Turkish / English selector | Turkish default for new saves; menu, navigation, settings, map-region labels/descriptions, Bestiary interface and Realm Beast entries, and Chapter 1 dialogue, lessons, and challenges translated. Malware technical descriptions and most other narrative content remain English |
+| World map with data-driven unlocks (9 visible regions) | Crownlands chapter content plus one introductory field study in every other region when that region unlocks; later story content remains future work |
+| Turkish / English selector | Turkish default for new saves; UI and the introductory regional field studies are localized. Some Bestiary technical details, advanced encounters, and later narrative content remain English |
 | Field Journal | Tracks completed quests, passed-challenge findings, and the review queue |
 | Investigator’s Table | Classify and pin case evidence, order a keyboard-accessible timeline, correlate records, and choose a cautious conclusion. Drafts save locally; deterministic scoring grants partial XP |
 | Arcane Disciplines | Five selectable, localized branches show structured learning nodes and prerequisite states; mastery is derived from existing passed challenges. Some branches and later lessons still need playable challenges |
@@ -79,13 +79,13 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | Bestiary: Realm Beasts | 1 of 6 unlockable (the Shapeshifter). The rest are visible but sealed until future chapters |
 | **Malware Bestiary: 12 creatures with full structured entries** | Complete |
 | Malware encounters: **Worm, Trojan, Ransomware** (beginner + intermediate + boss) | Complete and playable |
-| Malware encounters: the other 9 creatures | **Field study only** (one beginner challenge each). Intermediate and boss are planned |
-| Regions other than Crownlands, other orders' starter quests | Sealed. Not implemented |
+| Malware encounters: the other 9 creatures | **Introductory field study only** (one beginner challenge each, localized in Turkish and English). No intermediate or boss encounter |
+| Regional content beyond the Crownlands chapter | Every unlocked non-Crownlands region has an introductory study linked from the map and journal. Region-specific story quests and additional activities are not implemented |
 | Ambient audio | Not built. Optional synthesized UI sounds only |
 
 ![World map](docs/screenshots/03-world-map.png)
 
-The in-game map uses the supplied `public/hexaria-world-map.png` illustration with interactive region controls layered on top. Region labels baked into the illustration are English; the selected-region panel follows the chosen language. The Chronicle of Echoes records current-chapter quests, discovered clues, unresolved questions, lessons, known characters, and milestones. Its read state and pinned objective are saved locally; entries are derived from existing gameplay progress, not mock data. Future chapters still need their own quests, discoveries, and spoiler-gated journal content. The Investigator’s Table opens after its three chapter prerequisites and teaches evidence classification, timeline reconstruction, event correlation, careful attribution, and corroboration. Draft answers save locally and its score is validated deterministically. Arcane Disciplines now presents five selectable, Turkish/English learning branches; assessment results only suggest a starting branch, and skill states derive from saved challenge records rather than XP. Current playable evidence supports selected Watcher, Veilkeeper, and Memory Keeper nodes. Several Shadow Seeker and Rune Architect objectives, along with later nodes in every branch, still need dedicated lessons and challenges before they can be mastered.
+The in-game map uses the supplied `public/hexaria-world-map.png` illustration with interactive region controls layered on top. Region labels baked into the illustration are English; the selected-region panel follows the chosen language. The Chronicle of Echoes records current-chapter quests, unlocked regional field studies, discovered clues, unresolved questions, lessons, known characters, and milestones. Its read state and pinned objective are saved locally; entries are derived from existing gameplay progress, not mock data. Future chapters still need their own quests, discoveries, and spoiler-gated journal content. The Investigator’s Table opens after its three chapter prerequisites and teaches evidence classification, timeline reconstruction, event correlation, careful attribution, and corroboration. Draft answers save locally and its score is validated deterministically. Arcane Disciplines now presents five selectable, Turkish/English learning branches; assessment results only suggest a starting branch, and skill states derive from saved challenge records rather than XP. Current playable evidence supports selected Watcher, Veilkeeper, and Memory Keeper nodes. Several Shadow Seeker and Rune Architect objectives, along with later nodes in every branch, still need dedicated lessons and challenges before they can be mastered.
 
 ## Game concept
 

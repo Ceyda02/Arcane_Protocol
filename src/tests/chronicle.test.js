@@ -88,6 +88,21 @@ describe('Chronicle of Echoes progression', () => {
     expect(first.journey.find((entry) => entry.id === 'journey:investigation:watchtower').status).toBe('active');
   });
 
+  it('adds localized regional studies to the active journal only after their region unlocks', () => {
+    const base = newStore().game;
+    expect(getChronicleData(base, 'en').quests.some((entry) => entry.type === 'study')).toBe(false);
+    const unlocked = {
+      ...base,
+      progress: { ...base.progress, completedQuests: ['bells-of-the-silent-watch'] },
+    };
+    const english = getChronicleData(unlocked, 'en').quests.find((entry) => entry.id === 'study:virus');
+    const turkish = getChronicleData(unlocked, 'tr').quests.find((entry) => entry.id === 'study:virus');
+    expect(english.title).toBe('The Virus: The Rune Plague');
+    expect(turkish.title).toBe('Virüs: Rün Vebası');
+    expect(turkish.objective).toBe('Virüsün bir ana dosyaya ihtiyaç duyduğunu açıkla.');
+    expect(turkish.route).toBe('/study/virus');
+  });
+
   it('persists read state, pinning, and tracker visibility while rejecting invalid objectives', () => {
     const store = newStore();
     const objectiveId = 'bells-of-the-silent-watch:c1-events';

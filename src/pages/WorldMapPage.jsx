@@ -4,11 +4,13 @@ import { Lock, Check, Diamond, MapPin } from 'lucide-react';
 import { useGame } from '../state/GameContext.jsx';
 import { REGIONS } from '../content/world.js';
 import { QUESTS } from '../content/index.js';
+import { CREATURES_BY_ID } from '../content/malware/creatures.js';
 import { regionStatus, regionProgress, unmetRequirements, questStatus } from '../engine/unlockEngine.js';
 import { Button, Panel, ProgressBar, StatusChip } from '../components/common/ui.jsx';
-import { questPath } from '../app/paths.js';
+import { questPath, studyPath } from '../app/paths.js';
 import { continuePath } from './TitlePage.jsx';
 import { t } from '../i18n/index.js';
+import { localizeBestiaryCreature } from '../i18n/bestiary.js';
 
 const ICON = { locked: Lock, available: Diamond, completed: Check };
 const MAP_IMAGE_POSITION = {
@@ -133,7 +135,7 @@ export default function WorldMapPage() {
               onClick={() => setSel(r.id)} aria-pressed={sel === r.id} aria-label={`${regionName(r)}, ${t(language, `map.${st}`)}`}>
               <Icon size={16} aria-hidden="true" />
               {r.id === 'crownlands' && <span className="marker-you"><MapPin size={11} aria-hidden="true" />{t(language, 'map.playerLocation')}</span>}
-              {st !== 'locked' && r.quests.some((id) => !game.progress.completedQuests.includes(id)) && <span className="marker-quest" aria-label={t(language, 'map.mainQuest')}>!</span>}
+              {st !== 'locked' && (r.quests.some((id) => !game.progress.completedQuests.includes(id)) || (r.studies || []).some((id) => !game.progress.challengeRecords[CREATURES_BY_ID[id]?.challenges.beginner]?.passed)) && <span className="marker-quest" aria-label={t(language, 'map.mainQuest')}>!</span>}
             </button>
           );
         })}
@@ -161,7 +163,30 @@ export default function WorldMapPage() {
           </div>
         ) : (
           <div className="quest-list">
-            <h3>{t(language, 'map.quests')}</h3>
+            {region.studies?.length > 0 && (
+              <>
+                <h3>{t(language, 'map.studies')}</h3>
+                {region.studies.map((creatureId) => {
+                  const creature = localizeBestiaryCreature(CREATURES_BY_ID[creatureId], language);
+                  const passed = Boolean(game.progress.challengeRecords[creature.challenges.beginner]?.passed);
+                  return (
+                    <div key={creatureId} className="quest-row">
+                      <div className="quest-info">
+                        <strong>{creature.name}: {creature.title}</strong>
+                        <p className="muted">{creature.tease}</p>
+                      </div>
+                      <div className="quest-side">
+                        <StatusChip status={passed ? 'completed' : 'available'} language={language} />
+                        <Button variant={passed ? 'ghost' : 'primary'} onClick={() => nav(studyPath(creatureId))}>
+                          {passed ? t(language, 'map.studyComplete') : t(language, 'map.studyProgress')}
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            )}
+            {region.quests.length > 0 && <h3>{t(language, 'map.quests')}</h3>}
             {[...region.quests, ...region.comingSoon].map((qid) => {
               const q = QUESTS[qid];
               if (!q) return null;
@@ -187,7 +212,7 @@ export default function WorldMapPage() {
                 </div>
               );
             })}
-            {region.quests.length === 0 && region.comingSoon.length === 0 && <p className="muted">{t(language, 'quest.noContent')}</p>}
+            {region.quests.length === 0 && !region.studies?.length && region.comingSoon.length === 0 && <p className="muted">{t(language, 'quest.noContent')}</p>}
           </div>
         )}
       </Panel>

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { gameReducer } from '../state/gameReducer.js';
-import { QUESTS } from '../content/index.js';
+import { QUESTS, MALWARE_CREATURES } from '../content/index.js';
 import { REGIONS } from '../content/world.js';
 import { questStatus, regionStatus, regionProgress, unmetRequirements } from '../engine/unlockEngine.js';
 import { meetsCompletion, nextQuest } from '../engine/questEngine.js';
@@ -94,5 +94,22 @@ describe('world map unlock conditions', () => {
     const after = regionProgress(by('crownlands'), completeChapter1(newStore()).game);
     expect(after.percent).toBe(25);
     expect(after.total).toBe(4);
+  });
+  it('every post-Crownlands region has an associated playable field study', () => {
+    const assigned = REGIONS.flatMap((region) => (region.studies || []).map((id) => ({ region, id })));
+    const studyCreatures = MALWARE_CREATURES.filter((creature) => creature.availability === 'field-study');
+    expect(assigned.map(({ id }) => id).sort()).toEqual(studyCreatures.map(({ id }) => id).sort());
+    for (const { region, id } of assigned) {
+      expect(MALWARE_CREATURES.find((creature) => creature.id === id)?.studyRegionId).toBe(region.id);
+      expect(regionStatus(region, newStore().game)).toBe('locked');
+    }
+  });
+  it('regional field study completion updates its progress and status', () => {
+    const region = REGIONS.find((entry) => entry.id === 'rune_gates');
+    let state = completeChapter1(newStore());
+    expect(regionProgress(region, state.game)).toEqual({ done: 0, total: 1, percent: 0, playable: true });
+    state = passChallenge(state, 'virus-beginner');
+    expect(regionProgress(region, state.game)).toEqual({ done: 1, total: 1, percent: 100, playable: true });
+    expect(regionStatus(region, state.game)).toBe('completed');
   });
 });

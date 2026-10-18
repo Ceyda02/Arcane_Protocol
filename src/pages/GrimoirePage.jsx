@@ -5,6 +5,8 @@ import { GRIMOIRE_PAGES, GRIMOIRE_BY_ID, GRIMOIRE_CATEGORIES } from '../content/
 import { Button, EmptyState, Panel } from '../components/common/ui.jsx';
 import { useSound } from '../hooks/useSound.js';
 import { t } from '../i18n/index.js';
+import { localizeBestiaryPage } from '../i18n/bestiary.js';
+import { localizeChapter1 } from '../i18n/chapter1.js';
 
 export default function GrimoirePage() {
   const { game, dispatch } = useGame();
@@ -15,7 +17,10 @@ export default function GrimoirePage() {
   const [filter, setFilter] = useState('all');
   const [selId, setSelId] = useState(null);
 
-  const unlocked = game.progress.grimoire.map((id) => GRIMOIRE_BY_ID[id]).filter(Boolean);
+  const unlocked = game.progress.grimoire
+    .map((id) => GRIMOIRE_BY_ID[id])
+    .filter(Boolean)
+    .map((page) => localizeBestiaryPage(localizeChapter1(page, language), language));
   const { bookmarks, reviewLater } = game.library;
   const list = useMemo(() => {
     const needle = q.trim().toLowerCase();
@@ -28,7 +33,7 @@ export default function GrimoirePage() {
     });
   }, [unlocked, q, cat, filter, bookmarks, reviewLater]);
 
-  const page = (selId && GRIMOIRE_BY_ID[selId] && game.progress.grimoire.includes(selId)) ? GRIMOIRE_BY_ID[selId] : list[0];
+  const page = selId ? list.find((entry) => entry.id === selId) ?? list[0] : list[0];
 
   if (unlocked.length === 0) {
     return <EmptyState title={t(language, 'grimoire.blank')}>{t(language, 'grimoire.blankHelp')}</EmptyState>;

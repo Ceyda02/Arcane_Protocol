@@ -391,6 +391,27 @@ describe('Malware Bestiary in the UI', () => {
     expect(screen.getByText(/Complete “The Bells of the Silent Watch”/)).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /^begin$/i })).not.toBeInTheDocument();
   });
+
+  it('opens an unlocked regional field study from the map in Turkish', async () => {
+    const user = userEvent.setup();
+    const game = completeChapter1(newStore()).game;
+    game.settings.language = 'tr';
+    seed(game);
+    renderApp('/map');
+    await user.click(screen.getByRole('button', { name: /Rün Kapıları, açık/i }));
+    expect(screen.getByRole('heading', { name: 'Bölge saha çalışmaları' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Saha çalışması' }));
+    expect(await screen.findByRole('heading', { name: 'Virüs: Rün Vebası' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Saha çalışmasına başla' }));
+    expect(await screen.findByRole('radio', { name: /Bir ana dosyaya eklenir/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('radio', { name: /Bir ana dosyaya eklenir/i }));
+    await user.click(screen.getByRole('button', { name: 'Yanıtımı kontrol et' }));
+    expect(await screen.findByText(/Aferin\./)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Tamam' }));
+    expect(await screen.findByRole('heading', { name: 'Saha çalışması tamamlandı' })).toBeInTheDocument();
+    expect(screen.getByText('Virüs: Dosya bulaştıran virüs')).toBeInTheDocument();
+    expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).progress.challengeRecords['virus-beginner'].passed).toBe(true);
+  });
 });
 
 describe('Grimoire', () => {

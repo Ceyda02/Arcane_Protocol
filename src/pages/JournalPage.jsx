@@ -95,6 +95,32 @@ function QuestCard({ entry, language, readIds, pinnedObjectiveId, onRead, onPin,
   );
 }
 
+function StudyCard({ entry, language, readIds, onRead, navigate }) {
+  const isRead = readIds.includes(entry.id);
+  return (
+    <li className={`chronicle-entry chronicle-quest-entry${isRead ? '' : ' is-new'}`}>
+      <div className="chronicle-entry-heading">
+        <h3>{entry.title}</h3>
+        <div className="chronicle-entry-badges">
+          {!isRead && <span className="chronicle-new-badge">{t(language, 'chronicle.new')}</span>}
+          <span className={`chronicle-status status-${entry.status}`}>{t(language, `chronicle.status.${entry.status}`)}</span>
+        </div>
+      </div>
+      <p>{entry.description}</p>
+      <p className="muted">{t(language, `region.${entry.regionId}`)} · {t(language, 'chronicle.type.encounter')}</p>
+      <p className="muted"><strong>{t(language, 'chronicle.objective')}:</strong> {entry.objective}</p>
+      <p className="chronicle-progress-label">{t(language, 'chronicle.progress')}: {entry.passed} / {entry.total}</p>
+      <ProgressBar value={entry.passed} max={entry.total} label={`${entry.title}: ${entry.passed} / ${entry.total}`} />
+      <div className="chronicle-entry-actions">
+        <Button onClick={() => navigate(entry.route)}>{t(language, entry.status === 'completed' ? 'map.review' : 'chronicle.resume')}</Button>
+        <Button variant="ghost" className="chronicle-read-toggle" onClick={() => onRead(entry.id, !isRead)}>
+          {t(language, isRead ? 'chronicle.markUnread' : 'chronicle.markRead')}
+        </Button>
+      </div>
+    </li>
+  );
+}
+
 export default function JournalPage() {
   const { game, dispatch } = useGame();
   const navigate = useNavigate();
@@ -226,6 +252,15 @@ export default function JournalPage() {
                 pinnedObjectiveId={chronicle.pinnedObjectiveId}
                 onRead={markRead}
                 onPin={pinObjective}
+                navigate={navigate}
+              />
+            ) : entry.type === 'study' ? (
+              <StudyCard
+                key={entry.id}
+                entry={entry}
+                language={language}
+                readIds={readIds}
+                onRead={markRead}
                 navigate={navigate}
               />
             ) : entry.type === 'person' ? (

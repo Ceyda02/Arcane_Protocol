@@ -21,6 +21,7 @@ export const REGIONS = [
     skills: ['networking'],
     unlock: { quests: ['bells-of-the-silent-watch'] },
     quests: [],
+    studies: ['virus'],
     comingSoon: [],
   },
   {
@@ -31,6 +32,7 @@ export const REGIONS = [
     skills: ['webapp', 'coding'],
     unlock: { quests: ['encounter-trojan'] },
     quests: [],
+    studies: ['spyware'],
     comingSoon: [],
   },
   {
@@ -41,6 +43,7 @@ export const REGIONS = [
     skills: ['logs_ir'],
     unlock: { quests: ['bells-of-the-silent-watch'] },
     quests: [],
+    studies: ['keylogger'],
     comingSoon: ['night-watch-2'],
   },
   {
@@ -51,6 +54,7 @@ export const REGIONS = [
     skills: ['vuln', 'webapp'],
     unlock: { quests: ['encounter-trojan'], minLevel: 3 },
     quests: [],
+    studies: ['rootkit'],
     comingSoon: [],
   },
   {
@@ -61,6 +65,7 @@ export const REGIONS = [
     skills: ['logs_ir', 'vuln'],
     unlock: { quests: ['encounter-worm', 'encounter-trojan'], minLevel: 4 },
     quests: [],
+    studies: ['botnet'],
     comingSoon: [],
   },
   {
@@ -71,6 +76,7 @@ export const REGIONS = [
     skills: ['forensics'],
     unlock: { quests: ['encounter-ransomware'] },
     quests: [],
+    studies: ['logic-bomb'],
     comingSoon: [],
   },
   {
@@ -81,6 +87,7 @@ export const REGIONS = [
     skills: ['malware', 'forensics'],
     unlock: { quests: ['encounter-ransomware'] },
     quests: [],
+    studies: ['wiper', 'dropper'],
     comingSoon: [],
   },
   {
@@ -91,6 +98,7 @@ export const REGIONS = [
     skills: ['logs_ir', 'forensics'],
     unlock: { quests: ['bells-of-the-silent-watch'], minLevel: 4 },
     quests: [],
+    studies: ['adware'],
     comingSoon: [],
   },
 ];
