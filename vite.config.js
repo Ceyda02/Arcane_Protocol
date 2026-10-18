@@ -23,10 +23,9 @@ function offlineServiceWorker() {
       const assets = files
         .map((file) => `./${relative(outputDirectory, file).split(sep).join('/')}`)
         .sort();
-      const version = createHash('sha256').update(assets.join('\n')).digest('hex').slice(0, 12);
-      const worker = `
+      const workerTemplate = `
 const CACHE_PREFIX = 'arcane-protocol-';
-const CACHE_NAME = CACHE_PREFIX + '${version}';
+const CACHE_NAME = CACHE_PREFIX + '__CACHE_VERSION__';
 const PRECACHE_URLS = ${JSON.stringify(assets)};
 
 self.addEventListener('install', (event) => {
@@ -53,17 +52,35 @@ self.addEventListener('fetch', (event) => {
 
   if (request.mode === 'navigate') {
     event.respondWith(
-      fetch(request).catch(() => caches.match('./index.html')),
+      fetch(request).catch(() => caches.match(new URL('./index.html', self.registration.scope).href)),
     );
     return;
   }
 
   event.respondWith(
-    caches.match(request).then((cached) => cached || fetch(request)),
+    caches.match(request, { ignoreVary: true }).then(async (cached) => {
+      if (cached) return cached;
+      try {
+        return await fetch(request);
+      } catch (error) {
+        const cacheUrl = new URL(request.url);
+        cacheUrl.search = '';
+        const fallback = await caches.match(cacheUrl.href, { ignoreVary: true });
+        if (fallback) return fallback;
+        throw error;
+      }
+    }),
   );
 });
 `;
-      writeFileSync(resolve(outputDirectory, 'service-worker.js'), worker);
+      const version = createHash('sha256')
+        .update(`${assets.join('\n')}\n${workerTemplate}`)
+        .digest('hex')
+        .slice(0, 12);
+      writeFileSync(
+        resolve(outputDirectory, 'service-worker.js'),
+        workerTemplate.replace('__CACHE_VERSION__', version),
+      );
     },
   };
 }
