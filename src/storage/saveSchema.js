@@ -6,7 +6,7 @@
  *
  * Nothing here touches secrets or credentials. Saves live in localStorage and are NOT authentication.
  */
-export const SAVE_VERSION = 6;
+export const SAVE_VERSION = 7;
 export const SKILL_IDS = ['networking', 'webapp', 'logs_ir', 'coding', 'vuln', 'forensics', 'malware'];
 export const PATH_IDS = ['blue', 'red', 'purple', 'echoes'];
 
@@ -95,6 +95,14 @@ const migrations = {
     ...old,
     version: 6,
     introCompleted: typeof old.introCompleted === 'boolean' ? old.introCompleted : Boolean(old.player),
+  }),
+  6: (old) => ({
+    ...old,
+    version: 7,
+    settings: {
+      ...(isObj(old.settings) ? old.settings : {}),
+      muted: old.settings?.muted === true ? false : old.settings?.muted,
+    },
   }),
 };
 

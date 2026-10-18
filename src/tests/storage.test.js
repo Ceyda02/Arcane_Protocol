@@ -86,6 +86,18 @@ describe('invalid, outdated, and unavailable storage', () => {
     expect(migrated.state.settings.musicMuted).toBe(false);
     expect(createInitialState().introCompleted).toBe(false);
   });
+  it('enables newly-defaulted audio for existing saves while preserving their progress', () => {
+    const migrated = sanitizeState({
+      version: 6,
+      settings: { language: 'en', muted: true, volume: 0.4, musicVolume: 0.3 },
+      progress: { xp: 125, completedQuests: ['bells-of-the-silent-watch'] },
+    });
+    expect(migrated.ok).toBe(true);
+    expect(migrated.state.settings.muted).toBe(false);
+    expect(migrated.state.settings.musicMuted).toBe(false);
+    expect(migrated.state.progress.xp).toBe(125);
+    expect(migrated.state.progress.completedQuests).toContain('bells-of-the-silent-watch');
+  });
   it('migrates v2 saves without losing progress and adds an empty investigation record map', () => {
     const r = sanitizeState({ version: 2, progress: { xp: 75, completedQuests: ['bells-of-the-silent-watch'] } });
     expect(r.ok).toBe(true);
