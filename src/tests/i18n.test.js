@@ -39,6 +39,9 @@ describe('language preference', () => {
     const keys = [
       'skillTree.title', 'skillTree.recommended', 'skillTree.tier.unexplored', 'skillTree.tier.demonstrated',
       'skillTree.tier.practiced', 'skillTree.measurementNote', 'skillTree.disclaimer',
+      'skillTree.disciplinesSubtitle', 'skillTree.recommendationNote', 'skillTree.state.mastered',
+      'skillTree.state.available', 'skillTree.state.discovered', 'skillTree.state.unknown',
+      'skillTree.openQuest', 'skillTree.completionCriteria', 'skillTree.disciplineNavigation',
       'investigation.title', 'investigation.sealed', 'investigation.evidenceTitle', 'investigation.connectionsTitle',
       'investigation.conclusionTitle', 'investigation.nextEvidenceTitle', 'investigation.submit',
       'investigation.caseTitle', 'investigation.case.watchtower.title', 'investigation.case.watchtower.intro',
@@ -51,6 +54,7 @@ describe('language preference', () => {
     for (const language of ['en', 'tr']) {
       for (const key of keys) expect(t(language, key)).not.toBe(key);
     }
+    expect(t('tr', 'skillTree.disciplinesSubtitle')).not.toBe(t('en', 'skillTree.disciplinesSubtitle'));
     for (const key of ['investigation.caseTitle', 'investigation.case.watchtower.intro', 'investigation.status.unresolved', 'investigation.timelineTitle']) {
       expect(t('tr', key)).not.toBe(t('en', key));
     }

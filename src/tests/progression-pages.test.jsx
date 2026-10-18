@@ -88,24 +88,28 @@ describe('investigation board and demonstrated skills', () => {
     expect(within(restoredCard).getByRole('radio', { name: 'Unverified / unresolved' })).toBeChecked();
   });
 
-  it('derives skill progress from distinct passed challenges and offers a next step', async () => {
+  it('shows all disciplines, derives mastery from challenge evidence, and lets players explore branches', async () => {
     const user = userEvent.setup();
     seed(english(completeChapter1(newStore()).game));
     renderApp('/skill-tree');
     expect(await screen.findByRole('heading', { name: 'Skill tree' })).toBeInTheDocument();
-    expect(screen.getAllByText(/demonstrated this concept in multiple passed challenges/i).length).toBeGreaterThan(0);
-    const malwareSkill = screen.getByRole('button', { name: /Malware analysis/i });
-    expect(malwareSkill).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.getAllByRole('link', { name: 'Open chapter' })).toHaveLength(1);
-    await user.click(malwareSkill);
-    expect(malwareSkill).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getAllByRole('link', { name: 'Open chapter' }).length).toBeGreaterThan(1);
-    expect(screen.getByRole('region', { name: /Malware analysis/i })).toBeVisible();
-    const forensicsSkill = screen.getByRole('button', { name: /Digital forensics/i });
-    await user.click(forensicsSkill);
-    expect(forensicsSkill).toHaveAttribute('aria-expanded', 'true');
-    expect(malwareSkill).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.queryByRole('region', { name: /Malware analysis/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Choose a discipline' })).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /The .* Path/ })).toHaveLength(5);
+
+    const memoryPath = screen.getByRole('button', { name: /The Memory Keeper’s Path/ });
+    await user.click(memoryPath);
+    const timelineNode = screen.getByRole('button', { name: /Rebuilding the Timeline/ });
+    await user.click(timelineNode);
+    expect(timelineNode).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('Pass Build the Timeline and Four Clocks, One Night.')).toBeVisible();
+    expect(within(timelineNode).getByText('Mastered')).toBeVisible();
+
+    await user.click(screen.getByRole('button', { name: /The Veilkeeper’s Path/ }));
+    const detectionNode = screen.getByRole('button', { name: /Validating a Detection/ });
+    await user.click(detectionNode);
+    expect(within(detectionNode).getByText('Mastered')).toBeVisible();
+    await user.click(memoryPath);
+    expect(screen.getByRole('button', { name: /Rebuilding the Timeline/ })).toBeInTheDocument();
     expect(screen.getByText(/not a certification/i)).toBeInTheDocument();
   });
 });
