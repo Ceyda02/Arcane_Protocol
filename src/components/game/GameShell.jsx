@@ -11,8 +11,7 @@ import { MusicToggle } from '../common/AudioController.jsx';
 import { t } from '../../i18n/index.js';
 
 const ChronicleTracker = lazy(() => import('./ChronicleTracker.jsx'));
-const DEVELOPER_PASSWORD_HASH = '9952ba4abce50980d9f2a35bd73f46c67d396f63cc7d6121fe824b12068b7946';
-const DEVELOPER_PASSWORD_SALT = 'arcane-protocol-dev:';
+const getDeveloperPassword = () => import.meta.env.VITE_DEVELOPER_PASSWORD;
 
 const NAV = [
   { to: '/map', key: 'nav.world', icon: Map },
@@ -50,26 +49,21 @@ export default function GameShell() {
       setDeveloperDialog(true);
     }
   };
-  const unlockDeveloperMode = async (event) => {
+  const unlockDeveloperMode = (event) => {
     event.preventDefault();
-    try {
-      const digest = await window.crypto.subtle.digest(
-        'SHA-256',
-        new TextEncoder().encode(`${DEVELOPER_PASSWORD_SALT}${developerPassword}`),
-      );
-      const hash = [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
-      if (hash !== DEVELOPER_PASSWORD_HASH) {
-        setDeveloperError(language === 'tr' ? 'Parola yanlış. Tekrar deneyin.' : 'Incorrect password. Try again.');
-        setDeveloperPassword('');
-        passwordInput.current?.focus();
-        return;
-      }
-      dispatch({ type: 'SET_DEVELOPER_MODE', enabled: true });
-      closeDeveloperDialog();
-    } catch (error) {
-      console.error('Unable to verify the developer-mode password.', error);
-      setDeveloperError(language === 'tr' ? 'Bu tarayıcı parolayı doğrulayamadı.' : 'This browser could not verify the password.');
+    const expectedPassword = getDeveloperPassword();
+    if (!expectedPassword) {
+      setDeveloperError(language === 'tr' ? 'Bu yerel derlemede geliştirici parolası ayarlanmamış.' : 'Developer mode is not configured in this local build.');
+      return;
     }
+    if (developerPassword !== expectedPassword) {
+      setDeveloperError(language === 'tr' ? 'Parola yanlış. Tekrar deneyin.' : 'Incorrect password. Try again.');
+      setDeveloperPassword('');
+      passwordInput.current?.focus();
+      return;
+    }
+    dispatch({ type: 'SET_DEVELOPER_MODE', enabled: true });
+    closeDeveloperDialog();
   };
 
   useEffect(() => {

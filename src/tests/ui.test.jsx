@@ -42,9 +42,7 @@ describe('new player flow', () => {
 
   it('opens developer mode after rapid profile clicks and accepts the password', async () => {
     const user = userEvent.setup();
-    const acceptedHash = '9952ba4abce50980d9f2a35bd73f46c67d396f63cc7d6121fe824b12068b7946';
-    const digestResult = Uint8Array.from(acceptedHash.match(/.{2}/g), (byte) => Number.parseInt(byte, 16)).buffer;
-    vi.spyOn(window.crypto.subtle, 'digest').mockResolvedValueOnce(digestResult);
+    vi.stubEnv('VITE_DEVELOPER_PASSWORD', 'test-only-password');
     seed(baseGame());
     renderApp('/map');
     const profile = screen.getByRole('link', { name: /open your profile/i });
@@ -56,6 +54,7 @@ describe('new player flow', () => {
     await user.click(screen.getByRole('link', { name: 'World' }));
     expect(screen.getByRole('button', { name: /the rune gates, available/i })).toBeInTheDocument();
     await waitFor(() => expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).developerMode).toBe(true));
+    vi.unstubAllEnvs();
   });
 
   it('shows a quick hint for the selected starting equipment', () => {
