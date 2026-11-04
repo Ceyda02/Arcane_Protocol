@@ -17,6 +17,23 @@ body {
   min-height: 100vh;
   image-rendering: pixelated;
 }
+#root { position: relative; z-index: 1; }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .48;
+  background-image:
+    radial-gradient(2px 2px at 18px 24px, rgba(255, 221, 130, .85) 45%, transparent 60%),
+    radial-gradient(1.5px 1.5px at 76px 92px, rgba(255, 239, 190, .7) 45%, transparent 60%),
+    radial-gradient(1px 1px at 132px 44px, rgba(180, 193, 255, .75) 45%, transparent 60%),
+    radial-gradient(1px 1px at 204px 138px, rgba(255, 221, 130, .55) 45%, transparent 60%);
+  background-size: 250px 180px;
+  animation: star-shimmer 5s steps(6, end) infinite alternate;
+}
+@keyframes star-shimmer { from { opacity: .22; } to { opacity: .68; } }
 h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height: 1.2; margin: 0 0 0.5em; letter-spacing: 0.02em; }
 h1 { font-size: calc(2rem * var(--text-scale)); color: var(--gold-bright); text-shadow: 0 3px 0 rgba(0,0,0,.5); }
 h2 { font-size: calc(1.5rem * var(--text-scale)); }

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { gameReducer } from '../state/gameReducer.js';
-import { levelFromXp, levelProgress, computeXpAward, updateStreak, newAchievements } from '../engine/progressionEngine.js';
+import { levelFromXp, levelProgress, computeXpAward, updateStreak, newAchievements, ACHIEVEMENTS } from '../engine/progressionEngine.js';
 import { CHALLENGES } from '../content/index.js';
 import { validateChallenge } from '../engine/challengeEngine.js';
 import { newStore, passChallenge, completeChapter1, correctAnswer } from './helpers.js';
@@ -54,6 +54,15 @@ describe('XP and levels', () => {
 });
 
 describe('achievements come from real logic', () => {
+  it('has twelve achievements and awards the new quest and lore milestones', () => {
+    expect(ACHIEVEMENTS).toHaveLength(12);
+    let s = newStore();
+    s.game.progress.completedQuests = ['one', 'two', 'three'];
+    s.game.progress.grimoire = Array.from({ length: 10 }, (_, index) => `page-${index}`);
+    expect(newAchievements(s.game)).toContain('quest_veteran');
+    expect(newAchievements(s.game)).toContain('lore_keeper');
+  });
+
   it('opening nothing grants nothing', () => {
     expect(newAchievements(newStore().game)).toEqual([]);
   });

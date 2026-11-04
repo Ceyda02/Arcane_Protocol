@@ -17,9 +17,9 @@ export default function GrimoirePage() {
   const [filter, setFilter] = useState('all');
   const [selId, setSelId] = useState(null);
 
-  const unlocked = game.progress.grimoire
-    .map((id) => GRIMOIRE_BY_ID[id])
-    .filter(Boolean)
+  const unlocked = (game.developerMode
+    ? GRIMOIRE_PAGES
+    : game.progress.grimoire.map((id) => GRIMOIRE_BY_ID[id]).filter(Boolean))
     .map((page) => localizeBestiaryPage(localizeChapter1(page, language), language));
   const { bookmarks, reviewLater } = game.library;
   const list = useMemo(() => {
@@ -42,7 +42,10 @@ export default function GrimoirePage() {
   return (
     <div className="grimoire">
       <h1>{t(language, 'grimoire.title')}</h1>
-      <p className="muted">{unlocked.length} / {GRIMOIRE_PAGES.length} {t(language, 'grimoire.found')}.</p>
+      <p className="muted">{game.developerMode ? game.progress.grimoire.length : unlocked.length} / {GRIMOIRE_PAGES.length} {t(language, 'grimoire.found')}.</p>
+      {game.developerMode && <p className="notice" role="note">{language === 'tr'
+        ? 'Geliştirici önizlemesi: tüm sayfalar görüntülenebilir; gerçek ilerlemen değişmez.'
+        : 'Developer preview: all pages are available to read; your progress is unchanged.'}</p>}
       <div className="grimoire-tools">
         <label className="field"><span>{t(language, 'grimoire.search')}</span><input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={t(language, 'grimoire.searchHint')} /></label>
         <label className="field"><span>{t(language, 'grimoire.category')}</span>

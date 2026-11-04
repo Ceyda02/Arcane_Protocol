@@ -16,7 +16,7 @@ describe('save and restore', () => {
   });
   it('round-trips progress without losing anything', () => {
     const store = memStore();
-    const game = completeChapter1(newStore()).game;
+    const game = { ...completeChapter1(newStore()).game, developerMode: true };
     expect(saveGame(game, store).ok).toBe(true);
     const r = loadGame(store);
     expect(r.status).toBe('loaded');
@@ -25,6 +25,7 @@ describe('save and restore', () => {
     expect(r.state.progress.bestiary).toEqual(game.progress.bestiary);
     expect(r.state.player).toEqual(game.player);
     expect(r.state.pathId).toBe('blue');
+    expect(r.state.developerMode).toBe(true);
     expect(hasSave(store)).toBe(true);
   });
   it('clearSave removes the data', () => {
@@ -97,6 +98,12 @@ describe('invalid, outdated, and unavailable storage', () => {
     expect(migrated.state.settings.musicMuted).toBe(false);
     expect(migrated.state.progress.xp).toBe(125);
     expect(migrated.state.progress.completedQuests).toContain('bells-of-the-silent-watch');
+  });
+  it('migrates version-seven saves with developer mode disabled by default', () => {
+    const migrated = sanitizeState({ version: 7, player: { name: 'Mira' }, progress: { xp: 20 } });
+    expect(migrated.ok).toBe(true);
+    expect(migrated.state.version).toBe(SAVE_VERSION);
+    expect(migrated.state.developerMode).toBe(false);
   });
   it('migrates v2 saves without losing progress and adds an empty investigation record map', () => {
     const r = sanitizeState({ version: 2, progress: { xp: 75, completedQuests: ['bells-of-the-silent-watch'] } });

@@ -14,9 +14,9 @@ import { t } from '../i18n/index.js';
 import { localizeBestiaryCreature } from '../i18n/bestiary.js';
 import { REGIONS } from '../content/world.js';
 
-function Creature({ c, status, selected, onPick, kind, language }) {
+function Creature({ c, status, selected, onPick, kind, language, preview = false }) {
   const src = asset(c.art);
-  const unlocked = Boolean(status);
+  const unlocked = Boolean(status) || preview;
   return (
     <li>
       <button type="button" className={`beast ${selected ? 'is-selected' : ''} ${unlocked ? '' : 'is-locked'}`} onClick={onPick} aria-pressed={selected}>
@@ -24,7 +24,11 @@ function Creature({ c, status, selected, onPick, kind, language }) {
           {src ? <img src={src} alt="" className={unlocked ? '' : 'silhouette'} /> : <span aria-hidden="true">{unlocked ? 'ᚱ' : '?'}</span>}
         </span>
         <span className="beast-name">{unlocked ? c.name : t(language, 'bestiary.unknownCreature')}</span>
-        <span className="muted beast-sub">{unlocked ? `${t(language, `bestiary.status.${status}`)}${kind === 'malware' ? ` · ${c.malwareType}` : ''}` : `🔒 ${c.tease}`}</span>
+        <span className="muted beast-sub">{status
+          ? `${t(language, `bestiary.status.${status}`)}${kind === 'malware' ? ` · ${c.malwareType}` : ''}`
+          : preview
+            ? (language === 'tr' ? 'Geliştirici önizlemesi' : 'Developer preview')
+            : `🔒 ${c.tease}`}</span>
       </button>
     </li>
   );
@@ -53,11 +57,12 @@ export default function BestiaryPage() {
   const detail = () => {
     if (!sel) return <Panel><p className="muted">{t(language, 'bestiary.chooseCreature')}</p></Panel>;
     const status = best[sel.id];
+    const visible = Boolean(status) || game.developerMode;
     if (tab === 'realm') {
       return (
         <Panel className="beast-detail">
-          <h2>{status ? sel.name : t(language, 'bestiary.unknownCreature')}</h2>
-          {status ? (
+          <h2>{visible ? sel.name : t(language, 'bestiary.unknownCreature')}</h2>
+          {visible ? (
             <>
               <p className="lore">{sel.lore}</p>
               <p><strong>{t(language, 'bestiary.detail.metaphor')}:</strong> {sel.metaphor}</p>
@@ -76,9 +81,9 @@ export default function BestiaryPage() {
     return (
       <div className="beast-detail-wrap">
         <Panel className="beast-detail">
-          <h2>{status ? `${sel.name}: ${sel.title}` : t(language, 'bestiary.unknownCreature')}</h2>
+          <h2>{visible ? `${sel.name}: ${sel.title}` : t(language, 'bestiary.unknownCreature')}</h2>
           <p className="muted">{t(language, `bestiary.category.${sel.category}`)} · {t(language, sel.availability === 'playable' ? 'bestiary.detail.fullEncounter' : 'bestiary.detail.fieldStudy')}</p>
-          {status ? <><p className="lore">{sel.lore}</p><p><strong>{t(language, 'bestiary.detail.scenario')}:</strong> {sel.scenario}</p><p className="muted">{t(language, 'bestiary.detail.reward')} {sel.rewards.xp} {t(language, 'bestiary.detail.xpAndPage')}</p></> : <p>{sel.tease}</p>}
+          {visible ? <><p className="lore">{sel.lore}</p><p><strong>{t(language, 'bestiary.detail.scenario')}:</strong> {sel.scenario}</p><p className="muted">{t(language, 'bestiary.detail.reward')} {sel.rewards.xp} {t(language, 'bestiary.detail.xpAndPage')}</p></> : <p>{sel.tease}</p>}
           {needs.length > 0 && <p className="notice">{t(language, 'bestiary.detail.meetRequirement')} {needs.join('; ')}.</p>}
           <div className="create-actions">
             {needs.length === 0 && quest && (qs === 'available' || qs === 'completed') && <Button onClick={() => nav(questPath(quest))}>{t(language, qs === 'completed' ? 'bestiary.detail.reviewEncounter' : status ? 'bestiary.detail.continueEncounter' : 'bestiary.detail.beginEncounter')}</Button>}
@@ -93,6 +98,9 @@ export default function BestiaryPage() {
   return (
     <div className="bestiary">
       <h1>{t(language, 'bestiary.title')}</h1>
+      {game.developerMode && <p className="notice" role="note">{language === 'tr'
+        ? 'Geliştirici önizlemesi: yaratık kayıtları görüntülenebilir; keşif ilerlemen değişmez.'
+        : 'Developer preview: creature entries are visible; discovery progress is unchanged.'}</p>}
       <div className="tabs" role="tablist" aria-label={t(language, 'bestiary.tabs')}>
         <button role="tab" type="button" aria-selected={tab === 'malware'} className={tab === 'malware' ? 'is-active' : ''} onClick={() => { setTab('malware'); setSelId(null); }}>{t(language, 'bestiary.malwareTab')} ({found}/{total})</button>
         <button role="tab" type="button" aria-selected={tab === 'realm'} className={tab === 'realm' ? 'is-active' : ''} onClick={() => { setTab('realm'); setSelId(null); }}>{t(language, 'bestiary.realmTab')}</button>
@@ -108,12 +116,12 @@ export default function BestiaryPage() {
                   <h2 id={`g-${cat.id}`}>{t(language, `bestiary.category.${cat.id}`)}</h2><p className="muted">{t(language, `bestiary.blurb.${cat.id}`)}</p>
                   <ul className="beast-list">{items.map((creature) => {
                     const localized = localizeBestiaryCreature(creature, language);
-                    return <Creature key={creature.id} c={localized} kind="malware" language={language} status={best[creature.id]} selected={selId === creature.id} onPick={() => setSelId(creature.id)} />;
+                    return <Creature key={creature.id} c={localized} kind="malware" language={language} status={best[creature.id]} preview={game.developerMode && !best[creature.id]} selected={selId === creature.id} onPick={() => setSelId(creature.id)} />;
                   })}</ul>
                 </section>
               );
             })
-            : <ul className="beast-list">{localizedList.map((c) => <Creature key={c.id} c={c} kind="realm" language={language} status={best[c.id]} selected={selId === c.id} onPick={() => setSelId(c.id)} />)}</ul>}
+            : <ul className="beast-list">{localizedList.map((c) => <Creature key={c.id} c={c} kind="realm" language={language} status={best[c.id]} preview={game.developerMode && !best[c.id]} selected={selId === c.id} onPick={() => setSelId(c.id)} />)}</ul>}
         </div>
         <div className="bestiary-detail" aria-live="polite">{detail()}</div>
       </div>

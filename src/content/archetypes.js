@@ -31,11 +31,11 @@ export const COLORS = [
 ];
 
 export const EQUIPMENT = [
-  { id: 'lantern', name: 'Watchman’s lantern', blurb: 'Lights dark corridors and darker logs.' },
-  { id: 'quill', name: 'Silver quill', blurb: 'For notes that must be exact.' },
-  { id: 'satchel', name: 'Satchel of scrolls', blurb: 'References close at hand.' },
-  { id: 'staff', name: 'Runed staff', blurb: 'A focus for careful spellwork.' },
-  { id: 'shortsword', name: 'Traveller’s blade', blurb: 'Seldom drawn, always carried.' },
+  { id: 'lantern', name: 'Watchman’s lantern', blurb: 'Helps you spot clues in dark corridors and system logs.' },
+  { id: 'quill', name: 'Silver quill', blurb: 'A reminder to record evidence precisely.' },
+  { id: 'satchel', name: 'Satchel of scrolls', blurb: 'Keeps reference notes close while you investigate.' },
+  { id: 'staff', name: 'Runed staff', blurb: 'A focus for tracing patterns and connections.' },
+  { id: 'shortsword', name: 'Traveller’s blade', blurb: 'A symbol of courage; it grants no combat advantage.' },
 ];
 
 export const ADDRESS_OPTIONS = [

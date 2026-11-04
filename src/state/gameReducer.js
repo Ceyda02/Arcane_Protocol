@@ -86,6 +86,9 @@ function reduceGame(game, action, events) {
     case 'SET_PATH':
       return { ...game, pathId: action.pathId };
 
+    case 'SET_DEVELOPER_MODE':
+      return { ...game, developerMode: Boolean(action.enabled) };
+
     case 'SET_QUEST_STAGE': {
       const prev = game.progress.questState[action.questId] ?? { stage: 0, flags: {} };
       const stage = Math.max(0, action.stage);

@@ -7,6 +7,7 @@ const done = (state, id) => state.progress.completedQuests.includes(id);
 
 /** Describe requirements that are not yet met. Empty array = unlocked. */
 export function unmetRequirements(rule, state, quests = QUESTS) {
+  if (state.developerMode) return [];
   const out = [];
   for (const id of rule.quests || []) if (!done(state, id)) out.push(`Complete “${quests[id]?.title ?? id}”`);
   if (rule.anyQuests?.length && !rule.anyQuests.some((id) => done(state, id))) {

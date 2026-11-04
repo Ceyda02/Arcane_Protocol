@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Lightbulb } from 'lucide-react';
 import { useGame } from '../state/GameContext.jsx';
 import { ARCHETYPES, PORTRAITS, COLORS, EQUIPMENT, ADDRESS_OPTIONS, DEFAULT_PLAYER } from '../content/archetypes.js';
 import { Button, Panel, Portrait } from '../components/common/ui.jsx';
@@ -73,12 +74,12 @@ export default function CharacterCreationPage() {
               ))}
             </div>
           </fieldset>
-          <label className="field">
+          <label className="field equipment-field">
             <span>Starting equipment</span>
             <select value={p.equipmentId} onChange={(e) => set({ equipmentId: e.target.value })}>
               {EQUIPMENT.map((e) => <option key={e.id} value={e.id}>{e.name}</option>)}
             </select>
-            <span className="muted">{EQUIPMENT.find((e) => e.id === p.equipmentId)?.blurb}</span>
+            <span className="equipment-hint"><Lightbulb size={16} aria-hidden="true" /><span><strong>Quick hint:</strong> {EQUIPMENT.find((e) => e.id === p.equipmentId)?.blurb}</span></span>
           </label>
           <div className="create-actions">
             <Button type="submit">Begin the adventure</Button>

@@ -82,6 +82,8 @@ export const ACHIEVEMENTS = [
       return r?.passed && r.hintsUsed === 0;
     }),
   },
+  { id: 'quest_veteran', name: 'Quest Veteran', desc: 'Complete three quests.', test: (s) => s.progress.completedQuests.length >= 3 },
+  { id: 'lore_keeper', name: 'Lore Keeper', desc: 'Unlock ten Grimoire pages.', test: (s) => s.progress.grimoire.length >= 10 },
 ];
 
 /** Returns ids of achievements newly earned by `state`. */

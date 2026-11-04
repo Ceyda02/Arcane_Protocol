@@ -11,7 +11,7 @@ function musicScene(pathname) {
 }
 
 export default function AudioController() {
-  const { game, dispatch } = useGame();
+  const { game } = useGame();
   const { pathname } = useLocation();
   const settingsRef = useRef(game.settings);
   const unlockedRef = useRef(false);
@@ -46,6 +46,13 @@ export default function AudioController() {
     setMusicScene(musicScene(pathname), game.settings);
   }, [pathname, game.settings.muted, game.settings.musicMuted, game.settings.musicVolume]);
 
+  return null;
+}
+
+export function MusicToggle({ inline = false }) {
+  const { game, dispatch } = useGame();
+  const { pathname } = useLocation();
+  if (!inline && !['/', '/intro', '/create'].includes(pathname)) return null;
   const musicMuted = game.settings.muted || game.settings.musicMuted;
   const toggleMusic = () => {
     if (game.settings.muted) {
@@ -60,7 +67,7 @@ export default function AudioController() {
 
   return (
     <button
-      className="music-toggle"
+      className={inline ? 'music-toggle-inline' : 'music-toggle'}
       type="button"
       onClick={toggleMusic}
       aria-label={t(game.settings.language, musicMuted ? 'audio.unmuteMusic' : 'audio.muteMusic')}

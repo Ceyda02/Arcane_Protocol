@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useGame } from '../state/GameContext.jsx';
 import { t } from '../i18n/index.js';
 import GameShell from '../components/game/GameShell.jsx';
-import AudioController from '../components/common/AudioController.jsx';
+import AudioController, { MusicToggle } from '../components/common/AudioController.jsx';
 import TitlePage from '../pages/TitlePage.jsx';
 import CharacterCreationPage from '../pages/CharacterCreationPage.jsx';
 import IntroPage from '../pages/IntroPage.jsx';
@@ -40,6 +40,7 @@ export default function App() {
   return (
     <>
       <AudioController />
+      <MusicToggle />
       <Routes>
         <Route path="/" element={<TitlePage />} />
         <Route path="/intro" element={<IntroPage />} />

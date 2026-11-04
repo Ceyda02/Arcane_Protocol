@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
@@ -7,6 +7,7 @@ import App from '../app/App.jsx';
 import { SAVE_KEY } from '../storage/saveStorage.js';
 import { createInitialState } from '../storage/saveSchema.js';
 import { DEFAULT_PLAYER } from '../content/archetypes.js';
+import { GRIMOIRE_PAGES } from '../content/lessons/grimoire.js';
 import { completeChapter1, newStore } from './helpers.js';
 
 const seed = (game) => window.localStorage.setItem(SAVE_KEY, JSON.stringify(game));
@@ -28,6 +29,39 @@ describe('new player flow', () => {
     renderApp('/');
     await user.click(screen.getByRole('button', { name: 'Turn music on' }));
     expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).settings.muted).toBe(false);
+  });
+
+  it('shows the music control beside Settings in the game navigation', () => {
+    seed(baseGame());
+    renderApp('/profile');
+    const settings = screen.getByRole('link', { name: /settings/i });
+    const music = screen.getByRole('button', { name: 'Turn music off' });
+    expect(settings.parentElement).toContainElement(music);
+    expect(music).toHaveClass('music-toggle-inline');
+  });
+
+  it('opens developer mode after rapid profile clicks and accepts the password', async () => {
+    const user = userEvent.setup();
+    const acceptedHash = '9952ba4abce50980d9f2a35bd73f46c67d396f63cc7d6121fe824b12068b7946';
+    const digestResult = Uint8Array.from(acceptedHash.match(/.{2}/g), (byte) => Number.parseInt(byte, 16)).buffer;
+    vi.spyOn(window.crypto.subtle, 'digest').mockResolvedValueOnce(digestResult);
+    seed(baseGame());
+    renderApp('/map');
+    const profile = screen.getByRole('link', { name: /open your profile/i });
+    for (let index = 0; index < 5; index += 1) await user.click(profile);
+    expect(await screen.findByRole('alertdialog', { name: /developer mode access/i })).toBeInTheDocument();
+    await user.type(screen.getByLabelText('Password'), 'test-only-password');
+    await user.click(screen.getByRole('button', { name: 'Unlock' }));
+    expect(await screen.findByText(/developer mode active/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('link', { name: 'World' }));
+    expect(screen.getByRole('button', { name: /the rune gates, available/i })).toBeInTheDocument();
+    await waitFor(() => expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).developerMode).toBe(true));
+  });
+
+  it('shows a quick hint for the selected starting equipment', () => {
+    renderApp('/create');
+    expect(screen.getByText(/quick hint:/i)).toBeInTheDocument();
+    expect(screen.getByText(/helps you spot clues in dark corridors and system logs/i)).toBeInTheDocument();
   });
 
   it('title -> character creation -> assessment -> results -> map', async () => {
@@ -200,7 +234,7 @@ describe('localization and world map', () => {
     expect(screen.getByRole('heading', { name: 'Krallık Toprakları' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Unutulmuş Gözlemevi, kilitli/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Çürümüş Topraklar, kilitli/i })).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: /Hexaria’nın dağ krallıklarını/i })).toHaveAttribute('src', '/hexaria-world-map.jpg');
+    expect(document.querySelector('.map-routes')).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: /Ana gezinme/i })).toBeInTheDocument();
     const encounterTitle = screen.getByText('Yayılan Çürüme');
     const encounterBadge = screen.getAllByText('Yaratık karşılaşması').find((badge) => badge.parentElement === encounterTitle.parentElement);
@@ -438,6 +472,8 @@ describe('Malware Bestiary in the UI', () => {
     const user = userEvent.setup();
     seed(baseGame());
     renderApp('/map');
+    expect(document.querySelector('.map-routes')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /the crownlands, available/i })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /the rune gates, locked/i }));
     expect(screen.getByText(/to enter/i)).toBeInTheDocument();
     expect(screen.getByText(/Complete “The Bells of the Silent Watch”/)).toBeInTheDocument();
@@ -467,6 +503,15 @@ describe('Malware Bestiary in the UI', () => {
 });
 
 describe('Grimoire', () => {
+  it('developer preview exposes every page without recording it as unlocked', () => {
+    seed(baseGame({ developerMode: true }));
+    renderApp('/grimoire');
+    const pageList = screen.getByRole('list', { name: 'Pages' });
+    expect(within(pageList).getAllByRole('button')).toHaveLength(GRIMOIRE_PAGES.length);
+    expect(screen.getByText(/developer preview: all pages are available to read/i)).toBeInTheDocument();
+    expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).progress.grimoire).toEqual([]);
+  });
+
   it('shows an empty state at first, then search, bookmarks and review-later work', async () => {
     const user = userEvent.setup();
     seed(baseGame());

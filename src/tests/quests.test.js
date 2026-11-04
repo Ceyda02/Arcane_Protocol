@@ -74,6 +74,13 @@ describe('world map unlock conditions', () => {
     expect(regionStatus(by('crownlands'), g)).toBe('available');
     for (const r of REGIONS.filter((x) => x.id !== 'crownlands')) expect(regionStatus(r, g), r.id).toBe('locked');
   });
+  it('developer mode opens progression-locked regions and quests without changing completion', () => {
+    const game = { ...newStore().game, developerMode: true };
+    expect(regionStatus(by('veil_of_twilight'), game)).toBe('available');
+    expect(questStatus(QUESTS['encounter-ransomware'], game)).toBe('available');
+    expect(unmetRequirements(by('veil_of_twilight').unlock, game)).toEqual([]);
+    expect(game.progress.completedQuests).toEqual([]);
+  });
   it('Chapter 1 opens the Rune Gates and the Nightwatch Citadel', () => {
     const g = completeChapter1(newStore()).game;
     expect(regionStatus(by('rune_gates'), g)).toBe('available');
