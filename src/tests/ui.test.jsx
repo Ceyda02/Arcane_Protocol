@@ -233,7 +233,7 @@ describe('localization and world map', () => {
     expect(screen.getByRole('heading', { name: 'Krallık Toprakları' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Unutulmuş Gözlemevi, kilitli/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Çürümüş Topraklar, kilitli/i })).toBeInTheDocument();
-    expect(document.querySelector('.map-routes')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /Hexaria’nın dağ krallıklarını/i })).toHaveAttribute('src', '/hexaria-world-map.jpg');
     expect(screen.getByRole('navigation', { name: /Ana gezinme/i })).toBeInTheDocument();
     const encounterTitle = screen.getByText('Yayılan Çürüme');
     const encounterBadge = screen.getAllByText('Yaratık karşılaşması').find((badge) => badge.parentElement === encounterTitle.parentElement);
@@ -471,7 +471,7 @@ describe('Malware Bestiary in the UI', () => {
     const user = userEvent.setup();
     seed(baseGame());
     renderApp('/map');
-    expect(document.querySelector('.map-routes')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /Pixel-art map of Hexaria/i })).toHaveAttribute('src', '/hexaria-world-map.jpg');
     expect(screen.getByRole('button', { name: /the crownlands, available/i })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /the rune gates, locked/i }));
     expect(screen.getByText(/to enter/i)).toBeInTheDocument();

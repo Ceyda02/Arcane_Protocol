@@ -14,15 +14,15 @@ import { localizeBestiaryCreature } from '../i18n/bestiary.js';
 
 const ICON = { locked: Lock, available: Diamond, completed: Check };
 const MAP_IMAGE_POSITION = {
-  rune_gates: [28, 27],
-  shattered_web: [71, 29],
-  nightwatch_citadel: [84, 48],
-  crownlands: [51, 51],
-  crimson_depths: [72, 76],
-  veil_of_twilight: [39, 78],
-  memory_crypt: [18, 65],
-  blighted_reach: [17, 43],
-  forgotten_observatory: [49, 15],
+  rune_gates: [28, 28],
+  shattered_web: [65, 29],
+  nightwatch_citadel: [86, 42],
+  crownlands: [56, 63],
+  crimson_depths: [76, 84],
+  veil_of_twilight: [47, 83],
+  memory_crypt: [21, 69],
+  blighted_reach: [19, 40],
+  forgotten_observatory: [54, 16],
 };
 const QUEST_TRANSLATIONS = {
   'bells-of-the-silent-watch': 'quest.bells',
@@ -71,6 +71,7 @@ export default function WorldMapPage() {
     <div className="map-page">
       <h1 className="sr-only">{t(language, 'map.title')}</h1>
       <div className="map-wrap">
+        <img className="map-photo" src={`${import.meta.env.BASE_URL}hexaria-world-map.jpg`} alt={t(language, 'map.imageAlt')} />
         {false && <svg className="map-features" viewBox="0 0 64 40" preserveAspectRatio="none" shapeRendering="crispEdges" aria-hidden="true">
           <g className="map-rivers" fill="none" strokeLinecap="square">
             <path d="M7 18 L15 20 L20 18 L26 21 L31 20 L37 24 L43 23 L48 27 L56 28" stroke="#183959" strokeWidth="2.2" />
@@ -125,11 +126,6 @@ export default function WorldMapPage() {
             <path d="M24 14h1v2h1v1h-2zM41 27h1v2h1v1h-2zM56 19h1v2h1v1h-2z" />
           </g>
         </svg>}
-        <svg className="map-routes" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M51 51 28 27M51 51 49 15M51 51 71 29M51 51 84 48M51 51 72 76M51 51 39 78M51 51 18 65M51 51 17 43" />
-          <circle cx="51" cy="51" r="20" />
-          <circle cx="51" cy="51" r="31" />
-        </svg>
         {REGIONS.map((r) => {
           const st = regionStatus(r, game);
           const Icon = ICON[st] ?? Diamond;
@@ -138,7 +134,6 @@ export default function WorldMapPage() {
             <button key={r.id} type="button" className={`marker marker-${st} ${sel === r.id ? 'is-selected' : ''}`} style={{ left: `${left}%`, top: `${top}%` }}
               onClick={() => setSel(r.id)} aria-pressed={sel === r.id} aria-label={`${regionName(r)}, ${t(language, `map.${st}`)}`}>
               <Icon size={16} aria-hidden="true" />
-              <span className="marker-label">{regionName(r)}</span>
               {r.id === 'crownlands' && <span className="marker-you"><MapPin size={11} aria-hidden="true" />{t(language, 'map.playerLocation')}</span>}
               {st !== 'locked' && (r.quests.some((id) => !game.progress.completedQuests.includes(id)) || (r.studies || []).some((id) => !game.progress.challengeRecords[CREATURES_BY_ID[id]?.challenges.beginner]?.passed)) && <span className="marker-quest" aria-label={t(language, 'map.mainQuest')}>!</span>}
             </button>
