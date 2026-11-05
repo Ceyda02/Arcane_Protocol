@@ -6,7 +6,7 @@
  *
  * Nothing here touches secrets or credentials. Saves live in localStorage and are NOT authentication.
  */
-export const SAVE_VERSION = 8;
+export const SAVE_VERSION = 9;
 export const SKILL_IDS = ['networking', 'webapp', 'logs_ir', 'coding', 'vuln', 'forensics', 'malware'];
 export const PATH_IDS = ['blue', 'red', 'purple', 'echoes'];
 
@@ -15,6 +15,7 @@ const MAX_LIST = 500;
 
 export const defaultSettings = () => ({
   language: 'tr',
+  difficulty: 'normal',
   textSpeed: 'normal', // 'slow' | 'normal' | 'fast' | 'instant'
   textSize: 'normal', // 'normal' | 'large' | 'xlarge'
   reducedMotion: 'system', // 'system' | 'on' | 'off'
@@ -31,6 +32,7 @@ export function createInitialState() {
     updatedAt: Date.now(),
     introCompleted: false,
     developerMode: false,
+    tutorialCompleted: false,
     player: null,
     assessment: { completed: false, answers: {}, result: null },
     pathId: null,
@@ -45,6 +47,7 @@ export function createInitialState() {
       chronicle: { readEntryIds: [], pinnedObjectiveId: null, trackerHidden: false },
       grimoire: [],
       bestiary: {},
+      training: {},
       achievements: [],
       reviewQueue: [],
       pathsPlayed: [],
@@ -81,6 +84,7 @@ const migrations = {
     }
     fresh.progress.xp = num(old.xp, 0);
     fresh.progress.completedQuests = strList(old.completed);
+    fresh.tutorialCompleted = Boolean(fresh.player);
     return fresh;
   },
   // v1 predates language preferences. Keep its English presentation on upgrade.
@@ -106,6 +110,11 @@ const migrations = {
     },
   }),
   7: (old) => ({ ...old, version: 8, developerMode: Boolean(old.developerMode) }),
+  8: (old) => ({
+    ...old,
+    version: 9,
+    tutorialCompleted: typeof old.tutorialCompleted === 'boolean' ? old.tutorialCompleted : Boolean(old.player),
+  }),
 };
 
 export function migrateSave(raw) {
@@ -247,6 +256,19 @@ function sanitizeProgress(p) {
     }
   }
 
+  const training = {};
+  if (isObj(p.training)) {
+    for (const id of ['packetAnalysis', 'cipher']) {
+      const record = p.training[id];
+      if (isObj(record)) {
+        training[id] = {
+          passed: Boolean(record.passed),
+          attempts: Math.floor(num(record.attempts, 0, 0, 10000)),
+        };
+      }
+    }
+  }
+
   return {
     xp: num(p.xp, 0, 0, 1e8),
     skillXp,
@@ -258,6 +280,7 @@ function sanitizeProgress(p) {
     chronicle,
     grimoire: strList(p.grimoire),
     bestiary,
+    training,
     achievements: strList(p.achievements),
     reviewQueue: strList(p.reviewQueue),
     pathsPlayed: strList(p.pathsPlayed).filter((x) => PATH_IDS.includes(x)),
@@ -269,6 +292,7 @@ function sanitizeSettings(s) {
   if (!isObj(s)) return d;
   return {
     language: oneOf(s.language, ['tr', 'en'], d.language),
+    difficulty: oneOf(s.difficulty, ['easy', 'normal', 'hard'], d.difficulty),
     textSpeed: oneOf(s.textSpeed, ['slow', 'normal', 'fast', 'instant'], d.textSpeed),
     textSize: oneOf(s.textSize, ['normal', 'large', 'xlarge'], d.textSize),
     reducedMotion: oneOf(s.reducedMotion, ['system', 'on', 'off'], d.reducedMotion),
@@ -289,6 +313,7 @@ export function sanitizeState(raw) {
     updatedAt: num(d.updatedAt, Date.now(), 0, 4e12),
     introCompleted: typeof d.introCompleted === 'boolean' ? d.introCompleted : Boolean(d.player),
     developerMode: Boolean(d.developerMode),
+    tutorialCompleted: typeof d.tutorialCompleted === 'boolean' ? d.tutorialCompleted : Boolean(d.player),
     player: sanitizePlayer(d.player),
     assessment: sanitizeAssessment(d.assessment),
     pathId: oneOf(d.pathId, PATH_IDS, null),

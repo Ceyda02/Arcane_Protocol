@@ -18,6 +18,14 @@ export default function SettingsPage() {
       <h1>{t(language, 'settings.title')}</h1>
       <Panel>
         <h2>{t(language, 'settings.reading')}</h2>
+        <label className="field"><span>{t(language, 'settings.difficulty')}</span>
+          <select value={s.difficulty} onChange={(e) => set({ difficulty: e.target.value })}>
+            <option value="easy">{t(language, 'settings.difficulty.easy')}</option>
+            <option value="normal">{t(language, 'settings.difficulty.normal')}</option>
+            <option value="hard">{t(language, 'settings.difficulty.hard')}</option>
+          </select>
+        </label>
+        <p className="muted">{t(language, 'settings.difficultyNote')}</p>
         <label className="field"><span>{t(language, 'settings.language')}</span>
           <select value={s.language} onChange={(e) => set({ language: e.target.value })}>
             <option value="tr">{t(language, 'language.turkish')}</option><option value="en">{t(language, 'language.english')}</option>
@@ -38,6 +46,11 @@ export default function SettingsPage() {
             <option value="system">{t(language, 'settings.system')}</option><option value="on">{t(language, 'settings.on')}</option><option value="off">{t(language, 'settings.off')}</option>
           </select>
         </label>
+      </Panel>
+      <Panel>
+        <h2>{t(language, 'guide.settingsTitle')}</h2>
+        <p>{t(language, 'guide.settingsBody')}</p>
+        <Button onClick={() => { dispatch({ type: 'SET_TUTORIAL_COMPLETE', completed: false }); nav('/map'); }}>{t(language, 'guide.replay')}</Button>
       </Panel>
       <Panel>
         <h2>{t(language, 'settings.sound')}</h2>

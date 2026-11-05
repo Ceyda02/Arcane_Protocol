@@ -35,6 +35,7 @@ export default function DialogueRunner({ nodes, flags: initialFlags = {}, onSetF
   const nextRef = useRef(null);
 
   const node = localizeChapter1(items[cursor], game.settings.language);
+  const localizedCompleteLabel = localizeChapter1(completeLabel, game.settings.language);
   const isChoice = node?.type === 'choice';
   const speaker = node && !isChoice ? CHARACTERS[node.speaker] ?? CHARACTERS.narrator : null;
   const text = node && !isChoice ? fillTemplate(node.text, player) : '';
@@ -81,7 +82,7 @@ export default function DialogueRunner({ nodes, flags: initialFlags = {}, onSetF
   }, [speaker]);
 
   if (finished) {
-    return <div className="dialogue-end"><Button onClick={onComplete}>{completeLabel}</Button></div>;
+    return <div className="dialogue-end"><Button onClick={onComplete}>{localizedCompleteLabel}</Button></div>;
   }
 
   return (

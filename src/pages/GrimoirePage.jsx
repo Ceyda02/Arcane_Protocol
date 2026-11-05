@@ -7,6 +7,7 @@ import { useSound } from '../hooks/useSound.js';
 import { t } from '../i18n/index.js';
 import { localizeBestiaryPage } from '../i18n/bestiary.js';
 import { localizeChapter1 } from '../i18n/chapter1.js';
+import { localizeGrimoirePage } from '../i18n/grimoire.js';
 
 export default function GrimoirePage() {
   const { game, dispatch } = useGame();
@@ -20,7 +21,7 @@ export default function GrimoirePage() {
   const unlocked = (game.developerMode
     ? GRIMOIRE_PAGES
     : game.progress.grimoire.map((id) => GRIMOIRE_BY_ID[id]).filter(Boolean))
-    .map((page) => localizeBestiaryPage(localizeChapter1(page, language), language));
+    .map((page) => localizeGrimoirePage(localizeBestiaryPage(localizeChapter1(page, language), language), language));
   const { bookmarks, reviewLater } = game.library;
   const list = useMemo(() => {
     const needle = q.trim().toLowerCase();

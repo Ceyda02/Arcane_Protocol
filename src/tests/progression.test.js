@@ -29,6 +29,21 @@ describe('XP and levels', () => {
     expect(some).toBeLessThan(none);
     expect(many).toBeGreaterThan(0);
   });
+  it('hard mode increases hint costs while preserving easy-mode free-hint rewards', () => {
+    const c = CHALLENGES['c1-events'];
+    const r = validateChallenge(c, correctAnswer(c));
+    expect(computeXpAward(c, r, 1, undefined, 2)).toBeLessThan(computeXpAward(c, r, 1, undefined));
+    expect(computeXpAward(c, r, 0, undefined)).toBe(computeXpAward(c, r, 0, undefined, 1));
+  });
+  it('records completed Academy exercises once and reveals their Bestiary entries', () => {
+    let s = gameReducer(newStore(), { type: 'COMPLETE_TRAINING', trainingId: 'packetAnalysis', passed: true });
+    expect(s.game.progress.training.packetAnalysis).toEqual({ passed: true, attempts: 1 });
+    expect(s.game.progress.bestiary.botnet).toBe('investigated');
+    expect(s.game.progress.xp).toBe(10);
+    s = gameReducer(s, { type: 'COMPLETE_TRAINING', trainingId: 'packetAnalysis', passed: true });
+    expect(s.game.progress.training.packetAnalysis.attempts).toBe(2);
+    expect(s.game.progress.xp).toBe(10);
+  });
   it('failed attempts award nothing and join the review queue; passing clears it', () => {
     const c = CHALLENGES['c1-events'];
     const fail = validateChallenge(c, {});

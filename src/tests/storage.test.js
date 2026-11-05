@@ -74,6 +74,7 @@ describe('invalid, outdated, and unavailable storage', () => {
     expect(r.status).toBe('migrated');
     expect(r.state.version).toBe(SAVE_VERSION);
     expect(r.state.player.name).toBe('Old Hero');
+    expect(r.state.tutorialCompleted).toBe(true);
     expect(r.state.progress.xp).toBe(120);
     expect(r.state.progress.completedQuests).toEqual(['bells-of-the-silent-watch']);
   });
@@ -104,6 +105,32 @@ describe('invalid, outdated, and unavailable storage', () => {
     expect(migrated.ok).toBe(true);
     expect(migrated.state.version).toBe(SAVE_VERSION);
     expect(migrated.state.developerMode).toBe(false);
+  });
+  it('migrates existing version-eight saves without replaying the first-time guide', () => {
+    const migrated = sanitizeState({
+      version: 8,
+      player: { name: 'Mira' },
+      settings: { difficulty: 'hard' },
+      progress: { xp: 20 },
+    });
+    expect(migrated.ok).toBe(true);
+    expect(migrated.state.version).toBe(SAVE_VERSION);
+    expect(migrated.state.tutorialCompleted).toBe(true);
+    expect(migrated.state.settings.difficulty).toBe('hard');
+  });
+  it('sanitizes difficulty and academy training records', () => {
+    const migrated = sanitizeState({
+      version: SAVE_VERSION,
+      settings: { difficulty: 'impossible' },
+      progress: {
+        training: {
+          packetAnalysis: { passed: true, attempts: 2, extra: 'ignored' },
+          forged: { passed: true, attempts: 1 },
+        },
+      },
+    });
+    expect(migrated.state.settings.difficulty).toBe('normal');
+    expect(migrated.state.progress.training).toEqual({ packetAnalysis: { passed: true, attempts: 2 } });
   });
   it('migrates v2 saves without losing progress and adds an empty investigation record map', () => {
     const r = sanitizeState({ version: 2, progress: { xp: 75, completedQuests: ['bells-of-the-silent-watch'] } });

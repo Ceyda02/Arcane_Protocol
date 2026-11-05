@@ -66,6 +66,7 @@ export default function BestiaryPage() {
             <>
               <p className="lore">{sel.lore}</p>
               <p><strong>{t(language, 'bestiary.detail.metaphor')}:</strong> {sel.metaphor}</p>
+              {sel.weakness && <p className="notice"><strong>{t(language, 'bestiary.detail.weakness')}:</strong> {sel.weakness}</p>}
               <p><strong>{t(language, 'bestiary.detail.concepts')}:</strong> {sel.concepts.join(', ')}.</p>
               <p><strong>{t(language, 'bestiary.detail.clue')}:</strong> {sel.clue}</p>
               <p className="muted">{sel.lesson}</p>
@@ -83,7 +84,7 @@ export default function BestiaryPage() {
         <Panel className="beast-detail">
           <h2>{visible ? `${sel.name}: ${sel.title}` : t(language, 'bestiary.unknownCreature')}</h2>
           <p className="muted">{t(language, `bestiary.category.${sel.category}`)} · {t(language, sel.availability === 'playable' ? 'bestiary.detail.fullEncounter' : 'bestiary.detail.fieldStudy')}</p>
-          {visible ? <><p className="lore">{sel.lore}</p><p><strong>{t(language, 'bestiary.detail.scenario')}:</strong> {sel.scenario}</p><p className="muted">{t(language, 'bestiary.detail.reward')} {sel.rewards.xp} {t(language, 'bestiary.detail.xpAndPage')}</p></> : <p>{sel.tease}</p>}
+          {visible ? <><p className="lore">{sel.lore}</p><p><strong>{t(language, 'bestiary.detail.scenario')}:</strong> {sel.scenario}</p>{sel.prevention?.[0] && <p className="notice"><strong>{t(language, 'bestiary.detail.weakness')}:</strong> {sel.prevention[0]}</p>}<p className="muted">{t(language, 'bestiary.detail.reward')} {sel.rewards.xp} {t(language, 'bestiary.detail.xpAndPage')}</p></> : <p>{sel.tease}</p>}
           {needs.length > 0 && <p className="notice">{t(language, 'bestiary.detail.meetRequirement')} {needs.join('; ')}.</p>}
           <div className="create-actions">
             {needs.length === 0 && quest && (qs === 'available' || qs === 'completed') && <Button onClick={() => nav(questPath(quest))}>{t(language, qs === 'completed' ? 'bestiary.detail.reviewEncounter' : status ? 'bestiary.detail.continueEncounter' : 'bestiary.detail.beginEncounter')}</Button>}

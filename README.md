@@ -25,6 +25,8 @@ Harita, kullanıcı tarafından sağlanan JPEG görselini `public/hexaria-world-
 
 Yeni oyun, Hexaria sarayını ve yaklaşan tehdidi tanıtan, atlanabilir dört sahneli bir girişle başlar. İlk sahnede kullanıcı tarafından sağlanan karakter görseli, karakter altındaki başlıklar kaldırılmış kırpılmış kopyası ve altın çerçeve/parıltıyla gösterilir. Giriş metinleri Türkçe ve İngilizcedir. Girişin tamamlanma bilgisi kayıtta tutulur; eski karakter kayıtları giriş tamamlanmış kabul edilir. Sağlanan `public/audio/Loop_The_Bards_Tale.wav` ana oyun müziği; `public/audio/ui_*.wav` dosyaları arayüz sesleri olarak kullanılır. Müzik varsayılan olarak açıktır; sol üstteki düğmeden kapatılıp açılabilir. Tarayıcılar otomatik oynatmayı engellerse müzik ilk kullanıcı etkileşiminde başlar. Önceki sürümün sessiz varsayılanıyla kaydedilen eski kayıtlar yeni varsayılana geçirilirken oyun ilerlemesi ve ses düzeyleri korunur. Ayarlardaki genel sessize alma ve ayrı müzik/efekt düzeyleri durur.
 
+İlk defa haritaya gelen oyuncular için Runa’nın atlanabilir, tekrar açılabilir rehberi bulunur. Ayarlardaki Kolay/Normal/Zor seçimi, sınamalarda otomatik ücretsiz ipucunu ve ipucu XP maliyetini değiştirir. Siber Güvenlik Akademisi iki yerel, tamamen kurgusal etkinlik sunar: dokümantasyon IP’leri kullanan paket akışı incelemesi ve Sezar şifresiyle çevrimdışı yedek kavramını bulma. Etkinlikler gerçek ağ trafiğini yakalamaz veya engellemez. Keşfedilen zararlı yazılım yaratıklarının Yaratık Kitabı kayıtlarında ilk savunma/önlem noktası ayrıca vurgulanır.
+
 Yankıların Kroniği, geçerli bölüm için altı sekme sunar: görevler, ipuçları, çözülmemiş gizemler, öğrenilen dersler, karşılaşılan kişiler ve yolculuk. Görevler sınama ilerlemesini, bölgesini ve ödüllerini gösterir; okunma işaretleri ve sabitlenen hedef yerel kayıtta saklanır. Sabit hedef oyun ekranında gizlenebilir küçük bir takipçi olarak görünür. İpuçları ve kişiler yalnızca mevcut ilerlemenin ortaya çıkardığı bilgilere göre gösterilir; soruşturma sonucu saldırı kanıtı gibi sunulmaz. Nöbet Kulesi soruşturması, kanıtları ilgili/ilgisiz/çözümlenmemiş olarak sınıflandırmayı, seçilen kanıtları panoya eklemeyi, olayları klavyeyle sıralamayı ve kanıtların desteklediği ölçülü bir sonuç çıkarmayı içerir. Soruşturma taslağı bu cihazda kaydedilir; puan ve XP kanıt incelemesinin doğruluğuna göre verilir. Arcane Disciplines, değerlendirme sonucunu yalnızca başlangıç önerisi olarak sunan beş Türkçe/İngilizce dala ayrılır. Ustalık, kayıtlı sınama başarılarından türetilir; henüz sınaması olmayan konular açıkça gelecek içerik olarak belirtilir ve başka dallara geçmek mevcut ilerlemeyi kilitlemez.
 
 ### Güvenlik sınırları
@@ -61,6 +63,8 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | Area | Status |
 |---|---|
 | Title, new/continue game, character creation, settings | Complete |
+| First-visit guide and Easy / Normal / Hard learning assistance | Complete; guide can be replayed from Settings |
+| Hexaria Hack Academy | Two safe local exercises: synthetic packet-log triage and a Caesar-cipher backup puzzle |
 | Trial of Three Runes (14 questions, deterministic scoring, retake, choose another path) | Complete |
 | World map with data-driven unlocks (9 visible regions) | Crownlands chapter content plus one introductory field study in every other region when that region unlocks; later story content remains future work |
 | Turkish / English selector | Turkish default for new saves; UI and the introductory regional field studies are localized. Some Bestiary technical details, advanced encounters, and later narrative content remain English |
@@ -71,11 +75,13 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | Chapter 1: *The Bells of the Silent Watch* (5 challenges, dialogue, lessons) | Complete and playable |
 | Cyber Grimoire (search, filter, bookmarks, review later) | Complete |
 | Bestiary: Realm Beasts | 1 of 6 unlockable (the Shapeshifter). The rest are visible but sealed until future chapters |
-| **Malware Bestiary: 12 creatures with full structured entries** | Complete |
+| **Malware Bestiary: 12 creatures with full structured entries and discoverable defensive weaknesses** | Complete |
 | Malware encounters: **Worm, Trojan, Ransomware** (beginner + intermediate + boss) | Complete and playable |
 | Malware encounters: the other 9 creatures | **Introductory field study only** (one beginner challenge each, localized in Turkish and English). No intermediate or boss encounter |
 | Regional content beyond the Crownlands chapter | Every unlocked non-Crownlands region has an introductory study linked from the map and journal. Region-specific story quests and additional activities are not implemented |
 | Music and sound effects | User-supplied looping main OST plus five supplied UI WAV assets; music on by default with a top-left toggle and separate settings volumes |
+
+First-time players can take or replay Runa’s map guide. Easy / Normal / Hard settings change challenge hint support and the Academy packet exercise. The Hack Academy offers a synthetic packet-log investigation and a Caesar-cipher puzzle; both run locally with fictional data and no live network access. Discovered Malware Bestiary entries highlight a practical defensive weakness.
 
 ![World map](docs/screenshots/03-world-map.png)
 

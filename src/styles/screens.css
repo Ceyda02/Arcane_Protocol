@@ -419,3 +419,44 @@
   .profile-identity .bar { margin-inline: auto; }
   .create-preview { position: static; }
 }
+
+/* ---------- First-visit guide ---------- */
+.guide-card { position: fixed; right: 1rem; bottom: 1rem; z-index: 80; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .8rem; width: min(440px, calc(100vw - 2rem)); padding: 1rem 1.15rem; border: 4px solid #6b4f12; border-color: var(--gold); background-color: #f3e2b9; background-image: radial-gradient(rgba(120,80,30,.08) 1px, transparent 1px); background-size: 5px 5px; color: #211a12; opacity: 1; box-shadow: 0 0 0 4px #231a14, 0 10px 0 rgba(0,0,0,.7); }
+.guide-card h2 { color: #512b18; text-shadow: none; }
+.guide-card .guide-step { color: #624312; }
+.guide-mascot { display: block; width: 76px; height: 76px; object-fit: cover; object-position: 50% 55%; border: 3px solid #71511c; image-rendering: pixelated; }
+.guide-step { margin: 0; color: var(--gold-bright); font: 700 .8rem var(--font-display); text-transform: uppercase; }
+.guide-card h2 { margin: .25rem 0; font-size: 1.2rem; }
+.guide-card p { margin-block: .35rem; }
+.pixel-book-icon { display: block; width: 24px; height: 24px; object-fit: contain; image-rendering: pixelated; flex: none; }
+.lesson-book-icon { width: 34px; height: 34px; }
+.guide-actions { display: flex; justify-content: flex-end; gap: .5rem; margin-top: .75rem; }
+.guide-target { outline: 4px solid var(--gold-bright) !important; outline-offset: 3px; box-shadow: 0 0 0 8px rgba(255,215,100,.2); }
+
+/* ---------- Hack Academy training games ---------- */
+.academy-difficulty { display: inline-block; padding: .35rem .65rem; border: 2px solid var(--gold); color: var(--gold-bright); font-family: var(--font-display); }
+.academy-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
+.academy-exercise h2 { margin-top: 0; }
+.packet-stream { display: grid; gap: .4rem; margin: 1rem 0; }
+.packet-row { display: grid; grid-template-columns: auto 4rem minmax(0, 1fr); gap: .55rem; align-items: start; padding: .6rem; border: 2px solid #62533d; background: rgba(8,12,25,.75); cursor: pointer; animation: packet-enter .24s steps(4, end) both; }
+.packet-row:nth-child(2) { animation-delay: .08s; }
+.packet-row:nth-child(3) { animation-delay: .16s; }
+.packet-row:nth-child(4) { animation-delay: .24s; }
+.packet-row:nth-child(5) { animation-delay: .32s; }
+.packet-row:nth-child(6) { animation-delay: .4s; }
+.packet-row:nth-child(7) { animation-delay: .48s; }
+@keyframes packet-enter { from { opacity: 0; transform: translateY(-.35rem); } to { opacity: 1; transform: translateY(0); } }
+.packet-row.is-selected { border-color: var(--gold-bright); background: rgba(169,127,45,.18); }
+.packet-row input { margin-top: .2rem; accent-color: var(--gold-bright); }
+.packet-time { color: var(--gold-bright); font-variant-numeric: tabular-nums; }
+.packet-row code { overflow-wrap: anywhere; }
+.cipher-scroll { padding: .8rem; border: 3px solid #9a7a43; background: #171326; color: var(--gold-bright); font: 700 1.4rem var(--font-display); letter-spacing: .12em; overflow-wrap: anywhere; }
+.cipher-form { display: flex; align-items: end; gap: .6rem; flex-wrap: wrap; }
+.cipher-form .field { flex: 1; min-width: 180px; }
+@media (max-width: 800px) { .academy-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 560px) {
+  .guide-card { right: .5rem; bottom: 5.4rem; width: calc(100vw - 1rem); }
+  .packet-row { grid-template-columns: auto minmax(0, 1fr); }
+  .packet-time { grid-column: 2; grid-row: 1; }
+  .packet-row code { grid-column: 1 / -1; }
+}

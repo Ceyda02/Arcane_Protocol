@@ -12,8 +12,26 @@ import { FIELD_STUDY_TRANSLATION_IDS, localizeMalwareChallenge } from '../i18n/m
 import { REGIONS } from '../content/world.js';
 import { localizeAssessmentQuestion, localizeUnsureOption } from '../i18n/assessment.js';
 import { ASSESSMENT_QUESTIONS, UNSURE_OPTION } from '../content/assessment.js';
+import { GRIMOIRE_BY_ID } from '../content/lessons/grimoire.js';
+import { localizeGrimoirePage } from '../i18n/grimoire.js';
 
 describe('language preference', () => {
+  it('fully localizes all foundational Chapter 1 Grimoire pages', () => {
+    const ids = ['events-alerts-incidents', 'reading-the-ledger', 'timelines-and-time-zones', 'context-and-correlation'];
+    for (const id of ids) {
+      const english = GRIMOIRE_BY_ID[id];
+      const turkish = localizeGrimoirePage(english, 'tr');
+      expect(turkish.title, `${id} title`).not.toBe(english.title);
+      expect(turkish.source, `${id} source`).toBe('Sessiz Nöbetin Çanları');
+      for (const field of ['concept', 'plain', 'technical', 'mistake', 'takeaway']) {
+        expect(turkish[field], `${id} ${field}`).not.toBe(english[field]);
+      }
+      expect(turkish.example.label, `${id} example label`).not.toBe(english.example.label);
+      expect(turkish.example.text, `${id} example`).not.toBe(english.example.text);
+    }
+    expect(localizeGrimoirePage(GRIMOIRE_BY_ID['reading-the-ledger'], 'en')).toBe(GRIMOIRE_BY_ID['reading-the-ledger']);
+  });
+
   it('defaults new games to Turkish', () => {
     expect(createInitialState().settings.language).toBe('tr');
   });

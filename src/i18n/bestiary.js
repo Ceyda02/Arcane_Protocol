@@ -83,6 +83,7 @@ const REALM_TRANSLATIONS = {
     metaphor: 'Güvenilir kimliklerin güvenilmez biçimde davranmasını ve iddia ettiği şey olmayan girdileri anlatan bir öykü mecazı.',
     concepts: ['Bağlam', 'İlişkilendirme', 'Normal davranış kalıpları'],
     clue: 'Eylemleri, o kimlik için normal olan davranışlarla karşılaştır.',
+    weakness: 'Girdiyi kullanım bağlamına göre doğrula ve hassas eylemleri güvenilir davranış kalıplarıyla karşılaştır.',
     lesson: '1. bölümde karşılaşıldı. Sonraki bölümlerde Şekil Değiştiren, girdi doğrulama ve enjeksiyon konularını öğretir.',
   },
   wraith: {
@@ -92,6 +93,7 @@ const REALM_TRANSLATIONS = {
     metaphor: 'Sıradan olayların arasına gizlenmiş şüpheli etkinlik.',
     concepts: ['Log analizi', 'Olay ilişkilendirme', 'Tespit mühendisliği'],
     clue: 'En gürültülü olana değil, tekrar edene bak.',
+    weakness: 'Logları merkezileştirip koru; farklı kaynaklardaki tekrar eden olayları ilişkilendir.',
     lesson: 'İlerideki Gece Nöbeti bölümünde planlanıyor.',
   },
   werewolf: {
@@ -101,6 +103,7 @@ const REALM_TRANSLATIONS = {
     metaphor: 'Alışılmış davranışlarından farklı hareket eden, ele geçirilmiş bir hesap.',
     concepts: ['Davranış göstergeleri', 'Uyarı önceliklendirme', 'Olay incelemesi'],
     clue: 'Bu gece olanları olağan davranışla karşılaştır.',
+    weakness: 'Kimlik avına dayanıklı çok faktörlü doğrulama kullan ve normalden sapan oturum açma denemelerini incele.',
     lesson: 'İlerideki Gece Nöbeti bölümünde planlanıyor.',
   },
   vampire: {
@@ -110,6 +113,7 @@ const REALM_TRANSLATIONS = {
     metaphor: 'Çalınan kimlik bilgilerini anlatan bir mecazdır. Teknik terimler kimlik bilgisi hırsızlığı, hesap ele geçirme ve oturum ele geçirmedir.',
     concepts: ['Kimlik bilgisi güvenliği', 'Çok faktörlü kimlik doğrulama', 'Oturum yönetimi'],
     clue: 'Onu kim, nereden davet etti?',
+    weakness: 'Kimlik avına dayanıklı çok faktörlü doğrulama, güvenli oturum yönetimi ve oturumları hızla iptal etme, çalınmış kimlik bilgilerinin etkisini azaltır.',
     lesson: 'Parçalanmış Ağ bölümü için planlanıyor.',
   },
   mimic: {
@@ -119,6 +123,7 @@ const REALM_TRANSLATIONS = {
     metaphor: 'Güvenilir görünen yanıltıcı girdi.',
     concepts: ['Veri doğrulama', 'Güvenli ayrıştırma', 'Varsayımları doğrulama'],
     clue: 'Varsayma; doğrula.',
+    weakness: 'Güven sınırlarında girdiyi doğrula; dosyaları kullanmadan önce kaynağını ve imzasını denetle.',
     lesson: 'Parçalanmış Ağ bölümü için planlanıyor.',
   },
   'memory-eater': {
@@ -128,6 +133,7 @@ const REALM_TRANSLATIONS = {
     metaphor: 'Kanıtın kaybolması, değiştirilmesi veya yok edilmesi.',
     concepts: ['Kanıtı koruma', 'Log bütünlüğü', 'Adli bilişim muhakemesi'],
     clue: 'Burada olması gerekirken olmayan ne?',
+    weakness: 'Önemli kanıtların kurcalamaya dayanıklı log kopyalarını ve sınanmış çevrimdışı yedeklerini tut.',
     lesson: 'Anı Mahzeni bölümü için planlanıyor.',
   },
 };

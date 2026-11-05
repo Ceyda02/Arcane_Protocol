@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { BookOpen, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { CHARACTERS } from '../../content/characters.js';
 import { Button, Panel, Portrait } from '../common/ui.jsx';
+import PixelBookIcon from '../common/PixelBookIcon.jsx';
 import { localizeChapter1 } from '../../i18n/chapter1.js';
 import { t } from '../../i18n/index.js';
 import { useGame } from '../../state/GameContext.jsx';
@@ -17,7 +18,7 @@ export default function LessonView({ lesson, flags = {}, onContinue }) {
   return (
     <Panel className="lesson" aria-labelledby="lesson-title">
       <header className="lesson-head">
-        <BookOpen aria-hidden="true" />
+        <PixelBookIcon className="lesson-book-icon" />
         <h2 id="lesson-title">{localizedLesson.title}</h2>
       </header>
       {intro && (
@@ -35,7 +36,7 @@ export default function LessonView({ lesson, flags = {}, onContinue }) {
       {localizedLesson.technical && (
         <div className="deeper">
           <button type="button" className="link-btn" onClick={() => setDeeper((d) => !d)} aria-expanded={deeper}>
-            <ChevronDown size={14} aria-hidden="true" className={deeper ? 'rot' : ''} /> {t(game.settings.language, deeper ? 'chapter.hide' : 'chapter.show')} {t(game.settings.language, 'chapter.technicalDetail')}
+            <ChevronDown size={14} aria-hidden="true" className={deeper ? 'rot' : ''} /> {t(game.settings.language, deeper ? 'chapter.hideTechnical' : 'chapter.showTechnical')}
           </button>
           {deeper && <p className="deeper-text">{localizedLesson.technical}</p>}
         </div>

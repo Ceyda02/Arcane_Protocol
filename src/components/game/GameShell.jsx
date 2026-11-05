@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
-import { Map, BookOpen, Skull, User, Settings, ScrollText } from 'lucide-react';
+import { Map, Skull, User, Settings, ScrollText, School } from 'lucide-react';
 import { useGame } from '../../state/GameContext.jsx';
 import { levelProgress } from '../../engine/progressionEngine.js';
 import { PATHS } from '../../content/paths.js';
@@ -9,18 +9,55 @@ import { ProgressBar } from '../common/ui.jsx';
 import Toasts from './Toasts.jsx';
 import { MusicToggle } from '../common/AudioController.jsx';
 import { t } from '../../i18n/index.js';
+import guideMage from '../../assets/guide-mage.png';
+import PixelBookIcon from '../common/PixelBookIcon.jsx';
 
 const ChronicleTracker = lazy(() => import('./ChronicleTracker.jsx'));
 const getDeveloperPassword = () => import.meta.env.VITE_DEVELOPER_PASSWORD;
 
 const NAV = [
   { to: '/map', key: 'nav.world', icon: Map },
-  { to: '/grimoire', key: 'nav.grimoire', icon: BookOpen },
+  { to: '/grimoire', key: 'nav.grimoire', icon: null },
   { to: '/journal', key: 'nav.journal', icon: ScrollText },
   { to: '/bestiary', key: 'nav.bestiary', icon: Skull },
+  { to: '/academy', key: 'nav.academy', icon: School },
   { to: '/profile', key: 'nav.profile', icon: User },
   { to: '/settings', key: 'nav.settings', icon: Settings },
 ];
+
+const GUIDE_STEPS = [
+  { target: '.map-wrap', title: 'guide.welcomeTitle', body: 'guide.welcomeBody' },
+  { target: '.map-wrap', title: 'guide.mapTitle', body: 'guide.mapBody' },
+  { target: '.hud-nav', title: 'guide.journalTitle', body: 'guide.journalBody' },
+  { target: '.hud-nav', title: 'guide.academyTitle', body: 'guide.academyBody' },
+];
+
+function GuideOverlay({ language, onFinish }) {
+  const [step, setStep] = useState(0);
+  const current = GUIDE_STEPS[step];
+  useEffect(() => {
+    const target = document.querySelector(current.target);
+    target?.classList.add('guide-target');
+    return () => target?.classList.remove('guide-target');
+  }, [current.target]);
+
+  return (
+    <aside className="guide-card panel panel-parchment" role="region" aria-live="polite" aria-labelledby="guide-title">
+      <img className="guide-mascot" src={guideMage} alt={t(language, 'guide.mageAlt')} />
+      <div>
+        <p className="guide-step">{t(language, 'guide.label')} · {step + 1}/{GUIDE_STEPS.length}</p>
+        <h2 id="guide-title">{t(language, current.title)}</h2>
+        <p>{t(language, current.body)}</p>
+        <div className="guide-actions">
+          <button type="button" className="btn btn-ghost" onClick={onFinish}>{t(language, 'guide.skip')}</button>
+          <button type="button" className="btn btn-primary" onClick={() => step + 1 === GUIDE_STEPS.length ? onFinish() : setStep((value) => value + 1)}>
+            {t(language, step + 1 === GUIDE_STEPS.length ? 'guide.finish' : 'guide.next')}
+          </button>
+        </div>
+      </div>
+    </aside>
+  );
+}
 
 export default function GameShell() {
   const { game, saveStatus, dispatch } = useGame();
@@ -93,7 +130,7 @@ export default function GameShell() {
         <nav className="hud-nav" aria-label={t(language, 'nav.main')}>
           {NAV.map(({ to, key, icon: Icon }) => (
             <NavLink key={to} to={to} className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              <Icon size={18} aria-hidden="true" /><span>{t(language, key)}</span>
+                  {Icon ? <Icon size={18} aria-hidden="true" /> : <PixelBookIcon />}<span>{t(language, key)}</span>
             </NavLink>
           ))}
           <MusicToggle inline />
@@ -106,6 +143,9 @@ export default function GameShell() {
             {language === 'tr' ? 'Kapat' : 'Exit developer mode'}
           </button>
         </div>
+      )}
+      {!game.tutorialCompleted && pathname === '/map' && (
+        <GuideOverlay language={language} onFinish={() => dispatch({ type: 'SET_TUTORIAL_COMPLETE', completed: true })} />
       )}
       {!saveStatus.ok && (
         <div className="banner banner-warn" role="alert">

@@ -17,6 +17,7 @@ import BestiaryPage from '../pages/BestiaryPage.jsx';
 import ProfilePage from '../pages/ProfilePage.jsx';
 import ReviewPage from '../pages/ReviewPage.jsx';
 import SettingsPage from '../pages/SettingsPage.jsx';
+import AcademyPage from '../pages/AcademyPage.jsx';
 
 const InvestigationBoardPage = lazy(() => import('../pages/InvestigationBoardPage.jsx'));
 const SkillTreePage = lazy(() => import('../pages/SkillTreePage.jsx'));
@@ -54,6 +55,7 @@ export default function App() {
           <Route path="/study/:creatureId" element={<EncounterPage />} />
           <Route path="/grimoire" element={<GrimoirePage />} />
           <Route path="/bestiary" element={<BestiaryPage />} />
+          <Route path="/academy" element={<AcademyPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/review" element={<ReviewPage />} />
           <Route path="/settings" element={<SettingsPage />} />

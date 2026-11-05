@@ -89,6 +89,9 @@ function reduceGame(game, action, events) {
     case 'SET_DEVELOPER_MODE':
       return { ...game, developerMode: Boolean(action.enabled) };
 
+    case 'SET_TUTORIAL_COMPLETE':
+      return { ...game, tutorialCompleted: Boolean(action.completed) };
+
     case 'SET_QUEST_STAGE': {
       const prev = game.progress.questState[action.questId] ?? { stage: 0, flags: {} };
       const stage = Math.max(0, action.stage);
@@ -103,7 +106,13 @@ function reduceGame(game, action, events) {
     case 'RECORD_CHALLENGE': {
       const challenge = CHALLENGES[action.challengeId];
       if (!challenge) return game;
-      const { progress: p1, award } = applyChallengeResult(game.progress, challenge, action.result, action.hintsUsed ?? 0);
+      const { progress: p1, award } = applyChallengeResult(
+        game.progress,
+        challenge,
+        action.result,
+        action.hintsUsed ?? 0,
+        action.hintPenaltyMultiplier ?? 1,
+      );
       let progress = p1;
       if (award) events.push({ type: 'xp', amount: award, skill: challenge.skill });
       let streak = game.streak;
@@ -228,6 +237,24 @@ function reduceGame(game, action, events) {
       return finalize({ ...game, progress }, events, levelBefore);
     }
 
+    case 'COMPLETE_TRAINING': {
+      if (!['packetAnalysis', 'cipher'].includes(action.trainingId)) return game;
+      const previous = game.progress.training[action.trainingId] ?? { passed: false, attempts: 0 };
+      const passed = Boolean(action.passed);
+      const training = {
+        ...game.progress.training,
+        [action.trainingId]: { passed: previous.passed || passed, attempts: previous.attempts + 1 },
+      };
+      let progress = { ...game.progress, training };
+      if (passed && !previous.passed) {
+        const creatureId = action.trainingId === 'packetAnalysis' ? 'botnet' : 'virus';
+        progress = addXp(progress, 10, action.trainingId === 'packetAnalysis' ? 'networking' : 'coding');
+        events.push({ type: 'xp', amount: 10, skill: action.trainingId === 'packetAnalysis' ? 'networking' : 'coding', label: 'Academy training' });
+        progress = { ...progress, bestiary: bestiaryUp(progress.bestiary, creatureId, 'investigated', events) };
+      }
+      return finalize({ ...game, progress }, events, levelBefore);
+    }
+
     case 'TOGGLE_BOOKMARK': {
       const has = game.library.bookmarks.includes(action.id);
       return { ...game, library: { ...game.library, bookmarks: has ? game.library.bookmarks.filter((x) => x !== action.id) : [...game.library.bookmarks, action.id] } };
@@ -238,7 +265,16 @@ function reduceGame(game, action, events) {
     }
 
     case 'UPDATE_SETTINGS':
-      return { ...game, settings: { ...game.settings, ...action.settings } };
+      return {
+        ...game,
+        settings: {
+          ...game.settings,
+          ...action.settings,
+          difficulty: ['easy', 'normal', 'hard'].includes(action.settings?.difficulty)
+            ? action.settings.difficulty
+            : game.settings.difficulty,
+        },
+      };
 
     default:
       return game;

@@ -4,17 +4,102 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { GameProvider } from '../state/GameContext.jsx';
 import App from '../app/App.jsx';
+import DialogueRunner from '../components/dialogue/DialogueRunner.jsx';
 import { SAVE_KEY } from '../storage/saveStorage.js';
 import { createInitialState } from '../storage/saveSchema.js';
 import { DEFAULT_PLAYER } from '../content/archetypes.js';
 import { GRIMOIRE_PAGES } from '../content/lessons/grimoire.js';
 import { completeChapter1, newStore } from './helpers.js';
+import { decodeCaesar } from '../pages/AcademyPage.jsx';
 
 const seed = (game) => window.localStorage.setItem(SAVE_KEY, JSON.stringify(game));
-const baseGame = (over = {}) => ({ ...createInitialState(), player: { ...DEFAULT_PLAYER }, pathId: 'blue', settings: { ...createInitialState().settings, language: 'en', textSpeed: 'instant', reducedMotion: 'on' }, ...over });
+const baseGame = (over = {}) => ({ ...createInitialState(), player: { ...DEFAULT_PLAYER }, pathId: 'blue', tutorialCompleted: true, settings: { ...createInitialState().settings, language: 'en', textSpeed: 'instant', reducedMotion: 'on' }, ...over });
 const renderApp = (route = '/') => render(<GameProvider><MemoryRouter initialEntries={[route]}><App /></MemoryRouter></GameProvider>);
 
 describe('new player flow', () => {
+  it('guides a first-time player around the map and can be completed', async () => {
+    const user = userEvent.setup();
+    seed(baseGame({ tutorialCompleted: false }));
+    renderApp('/map');
+    expect(await screen.findByRole('region', { name: /Welcome to the training grounds/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    expect(screen.getByRole('heading', { name: 'Choose a place to explore' })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    await user.click(screen.getByRole('button', { name: 'Next' }));
+    await user.click(screen.getByRole('button', { name: 'Start exploring' }));
+    await waitFor(() => expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).tutorialCompleted).toBe(true));
+  });
+
+  it('updates the chosen difficulty from settings', async () => {
+    const user = userEvent.setup();
+    seed(baseGame());
+    renderApp('/settings');
+    await user.selectOptions(screen.getByLabelText('Learning difficulty'), 'easy');
+    await waitFor(() => expect(JSON.parse(window.localStorage.getItem(SAVE_KEY)).settings.difficulty).toBe('easy'));
+  });
+
+  it('completes safe packet and Caesar-cipher exercises and reveals field notes', async () => {
+    const user = userEvent.setup();
+    seed(baseGame());
+    renderApp('/academy');
+    expect(screen.getByRole('heading', { name: 'Hexaria Hack Academy' })).toBeInTheDocument();
+    const packets = screen.getAllByRole('checkbox');
+    await user.click(packets[1]);
+    await user.click(packets[3]);
+    await user.click(screen.getByRole('button', { name: 'Block selected entries' }));
+    expect(await screen.findByText('The beacon is contained.')).toBeInTheDocument();
+    await user.type(screen.getByLabelText('Decoded phrase'), 'OFFLINE BACKUP');
+    await user.click(screen.getByRole('button', { name: 'Open the seal' }));
+    expect(await screen.findByText('The seal opens.')).toBeInTheDocument();
+    await waitFor(() => {
+      const saved = JSON.parse(window.localStorage.getItem(SAVE_KEY));
+      expect(saved.progress.training.packetAnalysis.passed).toBe(true);
+      expect(saved.progress.training.cipher.passed).toBe(true);
+      expect(saved.progress.bestiary.botnet).toBe('investigated');
+      expect(saved.progress.bestiary.virus).toBe('investigated');
+    });
+  });
+
+  it('scales the Academy packet set for easy mode and accepts the Turkish cipher answer', async () => {
+    const user = userEvent.setup();
+    const game = baseGame({ settings: { ...createInitialState().settings, language: 'tr', difficulty: 'easy' } });
+    seed(game);
+    renderApp('/academy');
+    expect(screen.getAllByRole('checkbox')).toHaveLength(3);
+    const packets = screen.getAllByRole('checkbox');
+    await user.click(packets[1]);
+    await user.click(packets[2]);
+    await user.click(screen.getByRole('button', { name: 'Seçilen kayıtları engelle' }));
+    expect(await screen.findByText('İşaret fişeği kontrol altına alındı.')).toBeInTheDocument();
+
+    await user.type(screen.getByLabelText('Çözülen ifade'), 'ÇEVRİMDIŞI YEDEK');
+    await user.click(screen.getByRole('button', { name: 'Mührü aç' }));
+    expect(await screen.findByText('Mühür açıldı.')).toBeInTheDocument();
+    expect(decodeCaesar('RIIOLQH EDFNXS', 3)).toBe('OFFLINE BACKUP');
+  });
+
+  it('shows a real defensive weakness in a discovered creature entry', async () => {
+    const user = userEvent.setup();
+    const game = baseGame();
+    game.progress.bestiary.ransomware = 'seen';
+    seed(game);
+    renderApp('/bestiary');
+    await user.click(screen.getByRole('button', { name: /The Ransomware/i }));
+    expect(screen.getByText('Defensive weakness:')).toBeInTheDocument();
+    expect(screen.getAllByText(/Keep offline or immutable backups and test restores/)).toHaveLength(2);
+  });
+
+  it('reveals translated MFA guidance for a discovered credential-stealing creature', async () => {
+    const user = userEvent.setup();
+    const game = baseGame({ settings: { ...createInitialState().settings, language: 'tr' } });
+    game.progress.bestiary.vampire = 'seen';
+    seed(game);
+    renderApp('/bestiary');
+    await user.click(screen.getByRole('tab', { name: /Diyar Yaratıkları/i }));
+    await user.click(screen.getByRole('button', { name: /Ödünç İsimlerin Vampiri/i }));
+    expect(screen.getByText(/Kimlik avına dayanıklı çok faktörlü doğrulama/)).toBeInTheDocument();
+  });
+
   it('toggles music independently and can turn on audio for saves muted by older defaults', async () => {
     const user = userEvent.setup();
     seed(baseGame({ settings: { ...createInitialState().settings, language: 'en', muted: false } }));
@@ -214,6 +299,55 @@ describe('persistence', () => {
 });
 
 describe('localization and world map', () => {
+  it('shows complete Turkish copy for the four Chapter 1 Grimoire pages', async () => {
+    const user = userEvent.setup();
+    const game = baseGame({ settings: { ...createInitialState().settings, language: 'tr' } });
+    game.progress.grimoire = [
+      'events-alerts-incidents',
+      'reading-the-ledger',
+      'timelines-and-time-zones',
+      'context-and-correlation',
+    ];
+    seed(game);
+    renderApp('/grimoire');
+
+    const pages = [
+      ['Olaylar, Uyarılar ve Güvenlik Vakaları', 'Olay, gerçekleşip kayda alınan bir şeydir.', 'Kapı örneği'],
+      ['Log Tablosunu Okuma', 'Her log satırı bir şeyin ne zaman olduğunu', 'Şüpheli örüntü (sentetik)'],
+      ['Zaman Çizelgeleri ve Saat Dilimleri', 'Neden-sonuç ilişkisini görmek için olayları zamana göre sırala.', 'UTC’ye dönüştürme'],
+      ['Bağlam, Olay İlişkilendirme ve Yanlış Pozitifler', 'Birkaç başarısız deneme yazım hatası olabilir', 'Birleşen zayıf işaretler (sentetik)'],
+    ];
+    for (const [title, body, example] of pages) {
+      await user.click(screen.getByRole('button', { name: new RegExp(title, 'i') }));
+      expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
+      expect(screen.getByText(new RegExp(body, 'i'))).toBeInTheDocument();
+      expect(screen.getByText(example)).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Sade anlatım' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Teknik açıklama' })).toBeInTheDocument();
+    }
+  });
+
+  it('uses complete, grammatically ordered Turkish technical-detail and dialogue labels', async () => {
+    const user = userEvent.setup();
+    seed(baseGame({
+      settings: { ...createInitialState().settings, language: 'tr', textSpeed: 'instant', reducedMotion: 'on' },
+      progress: {
+        ...createInitialState().progress,
+        questState: { 'bells-of-the-silent-watch': { stage: 1, flags: {} } },
+      },
+    }));
+    const app = renderApp('/quest/bells-of-the-silent-watch');
+    await user.click(screen.getByRole('button', { name: 'Teknik ayrıntıyı göster' }));
+    expect(screen.getByRole('button', { name: 'Teknik ayrıntıyı gizle' })).toBeInTheDocument();
+    app.unmount();
+
+    seed(baseGame({ settings: { ...createInitialState().settings, language: 'tr', textSpeed: 'instant', reducedMotion: 'on' } }));
+    const { unmount } = render(<GameProvider><DialogueRunner nodes={[{ speaker: 'narrator', text: 'Bir kayıt göründü.' }]} onComplete={() => {}} /></GameProvider>);
+    await user.click(screen.getByRole('button', { name: 'İleri' }));
+    expect(screen.getByRole('button', { name: 'Devam et' })).toBeInTheDocument();
+    unmount();
+  });
+
   it('defaults the main menu to Turkish and persists a language change', async () => {
     const user = userEvent.setup();
     renderApp('/');

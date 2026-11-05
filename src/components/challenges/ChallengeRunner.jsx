@@ -35,6 +35,9 @@ export default function ChallengeRunner({ challenge, grimoire, onContinue, onRes
     game.settings.language,
   );
   const localizedContinueLabel = localizeChapter1(continueLabel, game.settings.language);
+  const difficulty = game.settings.difficulty ?? 'normal';
+  const freeHintCount = difficulty === 'easy' && localizedChallenge.hints?.length ? 1 : 0;
+  const hintPenaltyMultiplier = difficulty === 'hard' ? 2 : 1;
   const [answer, setAnswer] = useState(challenge.type === 'sort_order' ? challenge.data.items.map((i) => i.id) : undefined);
   const [hintsShown, setHintsShown] = useState(0);
   const [result, setResult] = useState(null);
@@ -49,11 +52,11 @@ export default function ChallengeRunner({ challenge, grimoire, onContinue, onRes
 
   const submit = () => {
     const res = validateChallenge(challenge, answer);
-    const xp = computeXpAward(challenge, res, hintsShown, record);
+    const xp = computeXpAward(challenge, res, hintsShown, record, hintPenaltyMultiplier);
     setResult(localizeChapter1(res, game.settings.language));
     setAward(xp);
     play(res.passed ? 'correct' : 'wrong');
-    dispatch({ type: 'RECORD_CHALLENGE', challengeId: challenge.id, result: res, hintsUsed: hintsShown, grimoire });
+    dispatch({ type: 'RECORD_CHALLENGE', challengeId: challenge.id, result: res, hintsUsed: hintsShown, hintPenaltyMultiplier, grimoire });
     onResult?.(res);
     setTimeout(() => feedbackRef.current?.focus(), 0);
   };
@@ -79,10 +82,11 @@ export default function ChallengeRunner({ challenge, grimoire, onContinue, onRes
 
       {hints.length > 0 && !result?.passed && (
         <div className="hints">
-          {hints.slice(0, hintsShown).map((h, i) => <p key={i} className="hint">          <Lightbulb size={14} aria-hidden="true" /> <span className="sr-only">{t(game.settings.language, 'challenge.hint')} {i + 1}: </span>{h}</p>)}
-          {getHint(challenge, hintsShown) !== null && (
+          {freeHintCount > 0 && <p className="hint"><Lightbulb size={14} aria-hidden="true" /> <span className="sr-only">{t(game.settings.language, 'challenge.hint')}: </span>{hints[0]}</p>}
+          {hints.slice(freeHintCount, freeHintCount + hintsShown).map((h, i) => <p key={i} className="hint"><Lightbulb size={14} aria-hidden="true" /> <span className="sr-only">{t(game.settings.language, 'challenge.hint')} {i + freeHintCount + 1}: </span>{h}</p>)}
+          {getHint(challenge, hintsShown + freeHintCount) !== null && (
             <Button variant="ghost" onClick={() => setHintsShown((n) => n + 1)}>
-              {t(game.settings.language, 'challenge.showHint')} ({hints.length - hintsShown} {t(game.settings.language, 'challenge.left')}{hintsShown === 0 && !wasPassed ? `, ${t(game.settings.language, 'challenge.smallXpCost')}` : ''})
+              {t(game.settings.language, 'challenge.showHint')} ({hints.length - hintsShown - freeHintCount} {t(game.settings.language, 'challenge.left')}{hintsShown === 0 && !wasPassed ? `, ${t(game.settings.language, 'challenge.smallXpCost')}` : ''})
             </Button>
           )}
         </div>

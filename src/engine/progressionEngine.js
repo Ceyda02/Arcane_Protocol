@@ -16,18 +16,18 @@ export function levelProgress(xp) {
  * XP is awarded only the first time a challenge is passed. Replays are for review and never farm XP.
  * Score scales the reward; each hint costs 15% (capped at 45%).
  */
-export function computeXpAward(challenge, result, hintsUsed, record) {
+export function computeXpAward(challenge, result, hintsUsed, record, hintPenaltyMultiplier = 1) {
   if (!result.passed) return 0;
   if (record?.passed) return 0;
-  const hintFactor = 1 - Math.min(MAX_HINT_PENALTY, hintsUsed * HINT_PENALTY);
+  const hintFactor = 1 - Math.min(MAX_HINT_PENALTY, hintsUsed * HINT_PENALTY * hintPenaltyMultiplier);
   const scoreFactor = 0.5 + 0.5 * result.score; // a pass is always worth at least half
   return Math.max(1, Math.round(challenge.xp * scoreFactor * hintFactor));
 }
 
 /** Pure step: record an attempt and award XP. Returns { progress, award }. */
-export function applyChallengeResult(progress, challenge, result, hintsUsed) {
+export function applyChallengeResult(progress, challenge, result, hintsUsed, hintPenaltyMultiplier = 1) {
   const prev = progress.challengeRecords[challenge.id];
-  const award = computeXpAward(challenge, result, hintsUsed, prev);
+  const award = computeXpAward(challenge, result, hintsUsed, prev, hintPenaltyMultiplier);
   const record = {
     passed: Boolean(prev?.passed) || result.passed,
     bestScore: Math.max(prev?.bestScore ?? 0, result.score),
