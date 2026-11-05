@@ -17,14 +17,6 @@ npm run dev
 
 Terminalde gösterilen yerel adresi tarayıcıda açın (varsayılan: `http://localhost:5173`). Testler için `npm test`, üretim derlemesi için `npm run build` komutlarını kullanın. İlerleme yalnızca aynı tarayıcının yerel depolamasına kaydedilir. Oyun HTTPS üzerinden yayımlandığında Edge veya Chrome'daki **Yükle / Install** düğmesiyle Windows'a uygulama gibi eklenebilir. İlk açılıştan sonra oyun dosyaları çevrimdışı kullanım için önbelleğe alınır; kayıtlar yine o tarayıcı profilinde kalır.
 
-### GitHub Pages ile yayımlama
-
-`main` dalına gönderilen her değişiklik test edilip otomatik yayımlanır. İş akışı, Pages sitesini `actions/configure-pages` ile GitHub Actions kaynağına göre yapılandırır. Depo veya kuruluş izinleri sitenin iş akışı tarafından oluşturulmasını engelliyorsa GitHub deposunda **Settings → Pages → Build and deployment → Source → GitHub Actions** seçin. Dağıtım tamamlandığında oyun `https://ceyda02.github.io/Arcane_Protocol/` adresinde açılır. Windows'ta bu adresi Edge/Chrome ile açın ve tarayıcı menüsündeki **Install this site as an app / Bu siteyi uygulama olarak yükle** seçeneğini kullanın.
-
-### Steam sürümü
-
-Bu depo henüz Steam'e yüklenmeye hazır bir Windows kurulum paketi üretmiyor. Steam sürümü için ayrıca masaüstü paketleme ve temiz bir Windows test turu, Steamworks partner hesabı ve Steam Direct başvurusu/ücreti gerekir. Mevcut oyun da tamamlanmış ticari sürüm değil, oynanabilir bir dikey dilimdir; kapsam tablosundaki gelecek içerik ve yerelleştirme işleri tamamlanmadan “tam oyun” olarak sunulmamalıdır.
-
 ### Mevcut Türkçe desteği ve kapsam
 
 Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası, Büyü Kitabı arayüzü, ilk bölümün diyalogları/dersleri/sınamaları ve başlangıç saha çalışmalarını kapsar. Yaratık Kitabı arayüzü, yaratık adları ve saha çalışması metinleri Türkçedir; teknik kaynak adları özgün biçiminde kalabilir. Bununla birlikte zararlı yazılım Bestiary kayıtlarının tüm ayrıntıları, ileri karşılaşmalar ve sonraki hikâye bölümleri bütünüyle çevrilmiş değildir. Bölgeler ilerlemeyle açılır; Crownlands dışındaki açılmış her bölgeye bir başlangıç saha çalışması bağlanmıştır. Bunlar tam hikâye bölümü veya çok aşamalı karşılaşma değildir.
