@@ -433,7 +433,7 @@
 .guide-actions { display: flex; justify-content: flex-end; gap: .5rem; margin-top: .75rem; }
 .guide-target { outline: 4px solid var(--gold-bright) !important; outline-offset: 3px; box-shadow: 0 0 0 8px rgba(255,215,100,.2); }
 
-/* ---------- Hack Academy training games ---------- */
+/* ---------- Academy training games ---------- */
 .academy-difficulty { display: inline-block; padding: .35rem .65rem; border: 2px solid var(--gold); color: var(--gold-bright); font-family: var(--font-display); }
 .academy-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
 .academy-exercise h2 { margin-top: 0; }
@@ -453,8 +453,21 @@
 .cipher-scroll { padding: .8rem; border: 3px solid #9a7a43; background: #171326; color: var(--gold-bright); font: 700 1.4rem var(--font-display); letter-spacing: .12em; overflow-wrap: anywhere; }
 .cipher-form { display: flex; align-items: end; gap: .6rem; flex-wrap: wrap; }
 .cipher-form .field { flex: 1; min-width: 180px; }
+.cipher-picker { margin: .8rem 0; }
+.cipher-picker select { width: 100%; }
+.academy-exercise { border: 2px solid rgba(210,160,55,.52); background-image: linear-gradient(145deg, rgba(66,48,88,.45), rgba(16,14,34,.5)); }
+.academy-exercise > h2 { color: var(--gold-bright); }
 @media (max-width: 800px) { .academy-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 560px) {
+  .main { padding: 1rem .75rem calc(7rem + env(safe-area-inset-bottom)); }
+  .hud { padding-top: max(.6rem, env(safe-area-inset-top)); }
+  .hud-level { min-width: 0; flex-basis: 100%; }
+  .hud-nav { gap: 0; }
+  .nav-link { flex: 1; min-width: 0; padding-inline: .2rem; }
+  .title-screen { padding: 1.25rem .75rem calc(1.25rem + env(safe-area-inset-bottom)); }
+  .title-inner { width: min(100%, 34rem); }
+  .title-menu > .btn { width: min(100%, 20rem); }
+  .panel { padding: .9rem; }
   .guide-card { right: .5rem; bottom: 5.4rem; width: calc(100vw - 1rem); }
   .packet-row { grid-template-columns: auto minmax(0, 1fr); }
   .packet-time { grid-column: 2; grid-row: 1; }

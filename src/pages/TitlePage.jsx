@@ -26,7 +26,7 @@ export default function TitlePage() {
     <div className="title-screen" style={{ '--scene': `url(${asset('village')})` }}>
       <div className="title-sky" aria-hidden="true" />
       <div className="title-inner">
-        <h1 className="title-logo">The Arcane Protocol</h1>
+        <h1 className="title-logo">Eldoria: Veil of Runes</h1>
         <p className="title-tag">{t(language, 'app.tagline')}</p>
         <nav className="title-menu" aria-label={t(language, 'menu.main')}>
           <label className="language-picker">

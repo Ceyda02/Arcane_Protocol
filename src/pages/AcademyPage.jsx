@@ -16,6 +16,45 @@ const PACKETS = [
 const PACKET_COUNTS = { easy: 3, normal: 5, hard: 7 };
 const normalizeAnswer = (value) => value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toUpperCase().replace(/[^A-Z]/g, '');
 
+const CIPHERS = [
+  {
+    id: 'caesar',
+    titleKey: 'academy.cipherTitle',
+    introKey: 'academy.cipherIntro',
+    clueKey: 'academy.cipherClue',
+    encoded: 'RIIOLQH EDFNXS',
+    answers: ['OFFLINE BACKUP', 'ÇEVRİMDIŞI YEDEK'],
+    explanationKey: 'academy.cipherExplain',
+  },
+  {
+    id: 'rot13',
+    titleKey: 'academy.rot13Title',
+    introKey: 'academy.rot13Intro',
+    clueKey: 'academy.rot13Clue',
+    encoded: 'FRPHUH ERFRG',
+    answers: ['SECURE RESET', 'GÜVENLİ SIFIRLAMA'],
+    explanationKey: 'academy.rot13Explain',
+  },
+  {
+    id: 'atbash',
+    titleKey: 'academy.atbashTitle',
+    introKey: 'academy.atbashIntro',
+    clueKey: 'academy.atbashClue',
+    encoded: 'LUUORMV YZXPFK',
+    answers: ['OFFLINE BACKUP', 'ÇEVRİMDIŞI YEDEK'],
+    explanationKey: 'academy.atbashExplain',
+  },
+  {
+    id: 'vigenere',
+    titleKey: 'academy.vigenereTitle',
+    introKey: 'academy.vigenereIntro',
+    clueKey: 'academy.vigenereClue',
+    encoded: 'DASXET PPSF',
+    answers: ['SAFE ACCESS', 'GÜVENLİ ERİŞİM'],
+    explanationKey: 'academy.vigenereExplain',
+  },
+];
+
 export function decodeCaesar(text, shift) {
   const offset = ((shift % 26) + 26) % 26;
   return text.replace(/[A-Z]/gi, (character) => {
@@ -74,23 +113,36 @@ function PacketExercise({ language, difficulty, record, onSubmit }) {
 }
 
 function CipherExercise({ language, record, onSubmit }) {
+  const [cipherId, setCipherId] = useState(CIPHERS[0].id);
   const [answer, setAnswer] = useState('');
   const [result, setResult] = useState(null);
+  const cipher = CIPHERS.find((item) => item.id === cipherId);
   const check = (event) => {
     event.preventDefault();
-    const solution = decodeCaesar('RIIOLQH EDFNXS', 3);
-    const acceptedAnswers = [solution, language === 'tr' ? 'ÇEVRİMDIŞI YEDEK' : solution];
-    const passed = acceptedAnswers.some((candidate) => normalizeAnswer(answer) === normalizeAnswer(candidate));
+    const passed = cipher.answers.some((candidate) => normalizeAnswer(answer) === normalizeAnswer(candidate));
     setResult(passed);
     onSubmit(passed);
   };
 
   return (
     <Panel className="academy-exercise">
-      <h2>{t(language, 'academy.cipherTitle')}</h2>
-      <p>{t(language, 'academy.cipherIntro')}</p>
-      <p className="cipher-scroll" aria-label={t(language, 'academy.cipherLabel')}>RIIOLQH EDFNXS</p>
-      <p className="muted">{t(language, 'academy.cipherClue')}</p>
+      <h2>{t(language, cipher.titleKey)}</h2>
+      <p>{t(language, cipher.introKey)}</p>
+      <label className="field cipher-picker">
+        <span>{t(language, 'academy.cipherType')}</span>
+        <select
+          value={cipherId}
+          onChange={(event) => {
+            setCipherId(event.target.value);
+            setAnswer('');
+            setResult(null);
+          }}
+        >
+          {CIPHERS.map((item) => <option key={item.id} value={item.id}>{t(language, item.titleKey)}</option>)}
+        </select>
+      </label>
+      <p className="cipher-scroll" aria-label={t(language, 'academy.cipherLabel')}>{cipher.encoded}</p>
+      <p className="muted">{t(language, cipher.clueKey)}</p>
       <p className="muted">{t(language, 'academy.cipherLanguageNote')}</p>
       <form className="cipher-form" onSubmit={check}>
         <label className="field">
@@ -102,7 +154,7 @@ function CipherExercise({ language, record, onSubmit }) {
       {result !== null && (
         <div className={`feedback ${result ? 'feedback-good' : 'feedback-bad'}`} role="status">
           <strong>{t(language, result ? 'academy.cipherCorrect' : 'academy.cipherIncorrect')}</strong>
-          <p>{t(language, 'academy.cipherExplain')}</p>
+          <p>{t(language, cipher.explanationKey)}</p>
           {result
             ? <p>{t(language, 'academy.codexVirus')}</p>
             : <Button variant="ghost" onClick={() => setResult(null)}>{t(language, 'academy.tryAgain')}</Button>}

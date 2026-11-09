@@ -50,5 +50,14 @@ pre { margin: 0; }
 .skip-link:focus { left: 0; }
 .muted { opacity: .8; font-size: .95em; }
 .lead { font-size: 1.15em; max-width: 60ch; }
+.cursor-sparkles { position: fixed; inset: 0; z-index: 45; overflow: hidden; pointer-events: none; }
+.cursor-sparkle { position: absolute; width: 9px; height: 9px; color: var(--gold-bright); opacity: 0; transform: translate(-50%, -50%); animation: cursor-sparkle-rise .72s ease-out forwards; filter: drop-shadow(0 0 5px rgba(242, 199, 92, .9)); }
+.cursor-sparkle::before { content: '✦'; font: 700 10px/1 var(--font-display); }
+.cursor-sparkle-1 { color: #fff0bd; animation-duration: .62s; }
+.cursor-sparkle-1::before { content: '✧'; font-size: 8px; }
+.cursor-sparkle-2 { color: #b7caff; animation-duration: .8s; }
+.cursor-sparkle-2::before { content: '·'; font-size: 18px; }
+@keyframes cursor-sparkle-rise { 12% { opacity: .9; } to { opacity: 0; transform: translate(-50%, -190%) scale(.25) rotate(45deg); } }
+@media (pointer: coarse), (prefers-reduced-motion: reduce) { .cursor-sparkles { display: none; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 :root[data-motion='on'] *, :root[data-motion='on'] *::before, :root[data-motion='on'] *::after { animation: none !important; transition: none !important; }

@@ -1,9 +1,9 @@
 {
   "id": "./",
-  "name": "The Arcane Protocol",
-  "short_name": "Arcane Protocol",
+  "name": "Eldoria: Veil of Runes",
+  "short_name": "Eldoria",
   "description": "A pixel-art fantasy adventure that teaches cybersecurity.",
-  "lang": "en",
+  "lang": "tr",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

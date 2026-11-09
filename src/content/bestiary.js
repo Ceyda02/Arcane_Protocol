@@ -1,5 +1,5 @@
 /**
- * Realm Bestiary: the original creatures of Hexaria. (The Hollow King of the Malware Bestiary is the Rootkit.)
+ * Realm Bestiary: the original creatures of Eldoria. (The Hollow King of the Malware Bestiary is the Rootkit.)
  * `unlockedBy`: a quest id whose reward unlocks the entry; null = appears in a future chapter.
  * Entries with art: null use a clearly marked placeholder glyph. Replace the asset key to upgrade.
  */

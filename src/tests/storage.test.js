@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { loadGame, saveGame, clearSave, hasSave, SAVE_KEY } from '../storage/saveStorage.js';
+import { loadGame, loadGameAsync, saveGame, saveGameAsync, clearSave, clearSaveAsync, hasSave, SAVE_KEY } from '../storage/saveStorage.js';
 import { createInitialState, sanitizeState, migrateSave, SAVE_VERSION } from '../storage/saveSchema.js';
 import { completeChapter1, newStore } from './helpers.js';
 
@@ -39,6 +39,40 @@ describe('save and restore', () => {
     saveGame(newStore().game, store);
     expect(Object.keys(store.data)).toEqual([SAVE_KEY]);
     expect(store.data[SAVE_KEY]).not.toMatch(/password|apikey|token/i);
+  });
+});
+
+describe('desktop save bridge', () => {
+  it('round-trips the game through an asynchronous save file adapter', async () => {
+    let text = null;
+    const storage = {
+      readSave: async () => text,
+      writeSave: async (value) => { text = value; },
+      clearSave: async () => { text = null; },
+    };
+    const game = { ...completeChapter1(newStore()).game, developerMode: true };
+
+    expect((await loadGameAsync(storage)).status).toBe('new');
+    expect(await saveGameAsync(game, storage)).toEqual({ ok: true });
+    const restored = await loadGameAsync(storage);
+    expect(restored.status).toBe('loaded');
+    expect(restored.state.progress.xp).toBe(game.progress.xp);
+    expect(restored.state.progress.grimoire).toEqual(game.progress.grimoire);
+    expect(restored.state.player).toEqual(game.player);
+    expect(await clearSaveAsync(storage)).toBe(true);
+    expect((await loadGameAsync(storage)).status).toBe('new');
+  });
+
+  it('reports desktop save-file read and write failures', async () => {
+    const storage = {
+      readSave: async () => { throw new Error('read failed'); },
+      writeSave: async () => { throw new Error('write failed'); },
+      clearSave: async () => { throw new Error('clear failed'); },
+    };
+
+    expect((await loadGameAsync(storage)).status).toBe('unavailable');
+    expect(await saveGameAsync(createInitialState(), storage)).toEqual({ ok: false, error: 'unknown' });
+    expect(await clearSaveAsync(storage)).toBe(false);
   });
 });
 

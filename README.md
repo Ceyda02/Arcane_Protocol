@@ -1,10 +1,10 @@
-# The Arcane Protocol
+# Eldoria: Veil of Runes
 
 > *Every mystery leaves a trace. Every secret has a weakness.*
 
 ## Türkçe
 
-**The Arcane Protocol**, siber güvenlik kavramlarını öğreten piksel sanatlı bir fantastik RPG'dir. Uygulama tarayıcıda çalışır; hesap, arka uç sunucusu veya gerçek hedeflere ağ erişimi gerektirmez. Yeni oyunlarda Türkçe varsayılan dildir; dil tercihi ana menüden ve ayarlardan değiştirilebilir.
+**Eldoria: Veil of Runes**, siber güvenlik kavramlarını öğreten piksel sanatlı bir fantastik RPG'dir. Uygulama tarayıcıda çalışır; hesap, arka uç sunucusu veya gerçek hedeflere ağ erişimi gerektirmez. Yeni oyunlarda Türkçe varsayılan dildir; dil tercihi ana menüden ve ayarlardan değiştirilebilir.
 
 ### Hızlı başlangıç
 
@@ -23,9 +23,9 @@ Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası, B�
 
 Harita, kullanıcı tarafından sağlanan JPEG görselini `public/hexaria-world-map.jpg` yolundan ve Vite'ın dağıtım tabanına göre çözümlenen göreli URL ile yükler. Dosyanın önceki `.png` uzantısı içeriğiyle uyuşmadığından düzeltildi; bu, GitHub Pages alt dizinindeki görünürlük sorununu gidermek içindir. Görseldeki bölge adları İngilizcedir; bölge seçimi ve ilerleme işaretleri seçili arayüz dilinde çalışır.
 
-Yeni oyun, Hexaria sarayını ve yaklaşan tehdidi tanıtan, atlanabilir dört sahneli bir girişle başlar. İlk sahnede kullanıcı tarafından sağlanan karakter görseli, karakter altındaki başlıklar kaldırılmış kırpılmış kopyası ve altın çerçeve/parıltıyla gösterilir. Giriş metinleri Türkçe ve İngilizcedir. Girişin tamamlanma bilgisi kayıtta tutulur; eski karakter kayıtları giriş tamamlanmış kabul edilir. Sağlanan `public/audio/Loop_The_Bards_Tale.wav` ana oyun müziği; `public/audio/ui_*.wav` dosyaları arayüz sesleri olarak kullanılır. Müzik varsayılan olarak açıktır; sol üstteki düğmeden kapatılıp açılabilir. Tarayıcılar otomatik oynatmayı engellerse müzik ilk kullanıcı etkileşiminde başlar. Önceki sürümün sessiz varsayılanıyla kaydedilen eski kayıtlar yeni varsayılana geçirilirken oyun ilerlemesi ve ses düzeyleri korunur. Ayarlardaki genel sessize alma ve ayrı müzik/efekt düzeyleri durur.
+Yeni oyun, Eldoria sarayını ve yaklaşan tehdidi tanıtan, atlanabilir dört sahneli bir girişle başlar. İlk sahnede kullanıcı tarafından sağlanan karakter görseli, karakter altındaki başlıklar kaldırılmış kırpılmış kopyası ve altın çerçeve/parıltıyla gösterilir. Giriş metinleri Türkçe ve İngilizcedir. Girişin tamamlanma bilgisi kayıtta tutulur; eski karakter kayıtları giriş tamamlanmış kabul edilir. Sağlanan `public/audio/Loop_The_Bards_Tale.wav` ana oyun müziği; `public/audio/ui_*.wav` dosyaları arayüz sesleri olarak kullanılır. Müzik varsayılan olarak açıktır; sol üstteki düğmeden kapatılıp açılabilir. Tarayıcılar otomatik oynatmayı engellerse müzik ilk kullanıcı etkileşiminde başlar. Önceki sürümün sessiz varsayılanıyla kaydedilen eski kayıtlar yeni varsayılana geçirilirken oyun ilerlemesi ve ses düzeyleri korunur. Ayarlardaki genel sessize alma ve ayrı müzik/efekt düzeyleri durur.
 
-İlk defa haritaya gelen oyuncular için Runa’nın atlanabilir, tekrar açılabilir rehberi bulunur. Ayarlardaki Kolay/Normal/Zor seçimi, sınamalarda otomatik ücretsiz ipucunu ve ipucu XP maliyetini değiştirir. Siber Güvenlik Akademisi iki yerel, tamamen kurgusal etkinlik sunar: dokümantasyon IP’leri kullanan paket akışı incelemesi ve Sezar şifresiyle çevrimdışı yedek kavramını bulma. Etkinlikler gerçek ağ trafiğini yakalamaz veya engellemez. Keşfedilen zararlı yazılım yaratıklarının Yaratık Kitabı kayıtlarında ilk savunma/önlem noktası ayrıca vurgulanır.
+İlk defa haritaya gelen oyuncular için Runa’nın atlanabilir, tekrar açılabilir rehberi bulunur. Ayarlardaki Kolay/Normal/Zor seçimi, sınamalarda otomatik ücretsiz ipucunu ve ipucu XP maliyetini değiştirir. Eldoria Rün Akademisi; dokümantasyon IP’leri kullanan kurgusal paket akışı incelemesi ve Sezar, ROT13, Atbash, Vigenère şifreleriyle dört yerel rün bulmacası sunar. Etkinlikler gerçek ağ trafiğini yakalamaz veya engellemez. Keşfedilen zararlı yazılım yaratıklarının Yaratık Kitabı kayıtlarında ilk savunma/önlem noktası ayrıca vurgulanır.
 
 Yankıların Kroniği, geçerli bölüm için altı sekme sunar: görevler, ipuçları, çözülmemiş gizemler, öğrenilen dersler, karşılaşılan kişiler ve yolculuk. Görevler sınama ilerlemesini, bölgesini ve ödüllerini gösterir; okunma işaretleri ve sabitlenen hedef yerel kayıtta saklanır. Sabit hedef oyun ekranında gizlenebilir küçük bir takipçi olarak görünür. İpuçları ve kişiler yalnızca mevcut ilerlemenin ortaya çıkardığı bilgilere göre gösterilir; soruşturma sonucu saldırı kanıtı gibi sunulmaz. Nöbet Kulesi soruşturması, kanıtları ilgili/ilgisiz/çözümlenmemiş olarak sınıflandırmayı, seçilen kanıtları panoya eklemeyi, olayları klavyeyle sıralamayı ve kanıtların desteklediği ölçülü bir sonuç çıkarmayı içerir. Soruşturma taslağı bu cihazda kaydedilir; puan ve XP kanıt incelemesinin doğruluğuna göre verilir. Arcane Disciplines, değerlendirme sonucunu yalnızca başlangıç önerisi olarak sunan beş Türkçe/İngilizce dala ayrılır. Ustalık, kayıtlı sınama başarılarından türetilir; henüz sınaması olmayan konular açıkça gelecek içerik olarak belirtilir ve başka dallara geçmek mevcut ilerlemeyi kilitlemez.
 
@@ -52,7 +52,7 @@ The game runs in the browser with no account, backend, analytics, or paid runtim
 
 After GitHub Pages has been enabled and its first deployment succeeds, open `https://ceyda02.github.io/Arcane_Protocol/` in Microsoft Edge or Chrome. Choose **Install this site as an app** from the browser menu. The game can then be launched from the Windows Start menu and played offline after its first load. Do not clear the browser's site data if you want to keep that local save.
 
-This repository does not yet produce a Windows `.exe` or Steam depot. A Steam release would need a tested desktop package, Steamworks onboarding and Steam Direct submission; the current project is still a vertical slice, not a complete commercial release.
+The repository now has a Windows desktop build foundation and a save file that can be synced with Steam Auto-Cloud. This is not yet a store-ready release: the game is still a vertical slice, and a Steamworks partner account, app setup, store materials, and device testing are still required.
 
 ![Title screen](docs/screenshots/01-title.png)
 
@@ -64,14 +64,14 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 |---|---|
 | Title, new/continue game, character creation, settings | Complete |
 | First-visit guide and Easy / Normal / Hard learning assistance | Complete; guide can be replayed from Settings |
-| Hexaria Hack Academy | Two safe local exercises: synthetic packet-log triage and a Caesar-cipher backup puzzle |
+| Eldoria Academy of Runes | Safe local packet-log triage and four cipher puzzles: Caesar, ROT13, Atbash, and Vigenère |
 | Trial of Three Runes (14 questions, deterministic scoring, retake, choose another path) | Complete |
 | World map with data-driven unlocks (9 visible regions) | Crownlands chapter content plus one introductory field study in every other region when that region unlocks; later story content remains future work |
 | Turkish / English selector | Turkish default for new saves; UI and the introductory regional field studies are localized. Some Bestiary technical details, advanced encounters, and later narrative content remain English |
 | Field Journal | Tracks completed quests, passed-challenge findings, and the review queue |
 | Investigator’s Table | Classify and pin case evidence, order a keyboard-accessible timeline, correlate records, and choose a cautious conclusion. Drafts save locally; deterministic scoring grants partial XP |
 | Arcane Disciplines | Five selectable, localized branches show structured learning nodes and prerequisite states; mastery is derived from existing passed challenges. Some branches and later lessons still need playable challenges |
-| Image-backed world map | Uses the supplied Hexaria map with interactive region selection and progress states |
+| Image-backed world map | Uses the supplied legacy-named Eldoria map with interactive region selection and progress states |
 | Chapter 1: *The Bells of the Silent Watch* (5 challenges, dialogue, lessons) | Complete and playable |
 | Cyber Grimoire (search, filter, bookmarks, review later) | Complete |
 | Bestiary: Realm Beasts | 1 of 6 unlockable (the Shapeshifter). The rest are visible but sealed until future chapters |
@@ -81,7 +81,7 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 | Regional content beyond the Crownlands chapter | Every unlocked non-Crownlands region has an introductory study linked from the map and journal. Region-specific story quests and additional activities are not implemented |
 | Music and sound effects | User-supplied looping main OST plus five supplied UI WAV assets; music on by default with a top-left toggle and separate settings volumes |
 
-First-time players can take or replay Runa’s map guide. Easy / Normal / Hard settings change challenge hint support and the Academy packet exercise. The Hack Academy offers a synthetic packet-log investigation and a Caesar-cipher puzzle; both run locally with fictional data and no live network access. Discovered Malware Bestiary entries highlight a practical defensive weakness.
+First-time players can take or replay Runa’s map guide. Easy / Normal / Hard settings change challenge hint support and the Academy packet exercise. The Academy offers a synthetic packet-log investigation plus Caesar, ROT13, Atbash, and Vigenère puzzles; all run locally with fictional data and no live network access. Desktop players also get an optional-feeling cursor sparkle effect (disabled for touch and reduced-motion users), while mobile spacing and safe-area handling are tuned for smaller screens. Discovered Malware Bestiary entries highlight a practical defensive weakness.
 
 ![World map](docs/screenshots/03-world-map.png)
 
@@ -124,7 +124,7 @@ Locked entries appear as silhouettes with a teaser. They open when you meet the 
 
 ## Quick start
 
-Requires Node.js 22.22+ for the current test toolchain (Vite itself requires Node.js 20.19+).
+Requires Node.js 22.22.2+ for the current test and desktop toolchain.
 
 ```bash
 npm install
@@ -134,11 +134,23 @@ npm run build      # production build in dist/
 npm run preview
 ```
 
-Progress is saved to `localStorage` in the current browser only. Clearing browser data erases it. Settings has a confirmed reset.
+Browser/PWA progress is saved to `localStorage` in that browser only. Clearing browser data erases it. Settings has a confirmed reset. The desktop build uses a separate file save.
+
+### Steam desktop build (Windows)
+
+The Eldoria desktop build stores the sanitized game state in `%APPDATA%\The Arcane Protocol\save.json` to preserve existing player saves. To build the unpacked Windows x64 app, install dependencies with the supported Node.js version and run:
+
+```bash
+npm run desktop:build
+```
+
+The Steam upload files are created in `release/win-unpacked/`. In Steamworks, enable Steam Cloud and configure Auto-Cloud to sync `save.json` under the `WinAppDataRoaming` root in the `The Arcane Protocol` subdirectory. Steam then associates that file with the player's Steam account; the game does not need its own email/password or a separate database. Auto-Cloud must be configured for the final Steam App ID and verified with two Steam clients before release. Local desktop development is not signed into Steam and does not provide cross-device sync.
+
+The existing browser/PWA save remains in browser storage and is not automatically imported into the desktop save. The game content is also not yet complete enough to call this a finished commercial release; see [Known limitations](#known-limitations).
 
 ## Architecture
 
-Content, engine logic, state, and presentation are separate, so the content and rules can be reused by a future React Native app.
+Content, engine logic, state, and presentation are separate. The web/PWA and Electron clients share the game rules and versioned save schema.
 
 ```mermaid
 flowchart LR
@@ -162,9 +174,9 @@ flowchart LR
     S1[gameReducer]
     S2[GameContext]
     S3[saveSchema: validate, migrate]
-    S4[saveStorage: localStorage]
+    S4[saveStorage: browser or desktop file]
   end
-  subgraph UI["React (web only)"]
+  subgraph UI["React (browser and desktop)"]
     P[pages]
     CP[components: dialogue, challenges, map, bestiary]
   end
@@ -192,7 +204,7 @@ src/
 
 **Adding a creature** is a data change in `content/malware/creatures.js`. A field-study creature needs one challenge; its Grimoire page is generated from the entry.
 
-**Save schema** is versioned (`SAVE_VERSION = 1`). Loading migrates older versions, rejects newer ones without overwriting them, and sanitizes every field (types, ranges, lengths, known values). Corrupt, unavailable, or full storage degrades to a message, never a crash.
+**Save schema** is versioned (`SAVE_VERSION = 9`). Loading migrates older versions, rejects newer ones without overwriting them, and sanitizes every field (types, ranges, lengths, known values). Corrupt, unavailable, or full storage degrades to a message, never a crash.
 
 ## Educational design
 
@@ -235,7 +247,7 @@ The chapter and encounters are completed in tests through the real reducer and v
 - Reference links (MITRE ATT&CK, NIST, CISA) point to stable pages but **were not verified live** during development. Check them before release.
 - Tested with automated role-based queries and browser screenshots; **not tested with a screen reader**, and no automated color-contrast audit was run.
 - Character portraits are cropped from a scene lineup, so portraits include some background.
-- Progress lives in one browser's `localStorage`; there is no sync or backup export.
+- Browser/PWA progress lives in that browser's `localStorage`. Desktop progress is stored in the user's app-data save file; Steam account sync depends on the Steamworks Auto-Cloud configuration and has not yet been verified against a published App ID.
 
 ## Roadmap
 

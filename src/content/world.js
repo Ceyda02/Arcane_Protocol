@@ -39,7 +39,7 @@ export const REGIONS = [
     id: 'nightwatch_citadel',
     name: 'The Nightwatch Citadel',
     x: 83, y: 47,
-    lore: 'The kingdom’s watch-fortress, where every alarm bell in Hexaria is answered.',
+    lore: 'The kingdom’s watch-fortress, where every alarm bell in Eldoria is answered.',
     skills: ['logs_ir'],
     unlock: { quests: ['bells-of-the-silent-watch'] },
     quests: [],
