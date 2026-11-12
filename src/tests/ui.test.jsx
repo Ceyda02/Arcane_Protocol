@@ -42,7 +42,7 @@ describe('new player flow', () => {
     const user = userEvent.setup();
     seed(baseGame());
     renderApp('/academy');
-    expect(screen.getByRole('heading', { name: 'Eldoria Academy of Runes' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'RUNBOUND Academy of Runes' })).toBeInTheDocument();
     const packets = screen.getAllByRole('checkbox');
     await user.click(packets[1]);
     await user.click(packets[3]);
@@ -205,8 +205,8 @@ describe('new player flow', () => {
     // Choose another path, then enter the world
     await user.click(screen.getByRole('button', { name: /walk the red order/i }));
     expect(screen.getByRole('button', { name: /your current order/i })).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: /enter eldoria/i }));
-    expect(await screen.findByRole('heading', { name: /eldoria dünya haritası/i })).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /enter runbound/i }));
+    expect(await screen.findByRole('heading', { name: /runbound dünya haritası/i })).toBeInTheDocument();
   });
 
   it('"Start now" creates the default character immediately', async () => {
@@ -222,9 +222,9 @@ describe('new player flow', () => {
     renderApp('/assessment');
     await user.click(screen.getByRole('button', { name: /skip and choose a path myself/i }));
     expect(screen.getByRole('heading', { name: /choose your order/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /enter eldoria/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /enter runbound/i })).toBeDisabled();
     await user.click(screen.getByRole('button', { name: /walk the purple order/i }));
-    expect(screen.getByRole('button', { name: /enter eldoria/i })).toBeEnabled();
+    expect(screen.getByRole('button', { name: /enter runbound/i })).toBeEnabled();
   });
 
   it('shows the opening assessment in Turkish when Turkish is selected', async () => {
@@ -393,7 +393,7 @@ describe('localization and world map', () => {
     expect(screen.getByRole('heading', { name: 'Krallık Toprakları' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Unutulmuş Gözlemevi, kilitli/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Çürümüş Topraklar, kilitli/i })).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: /Eldoria’nın dağ krallıklarını/i })).toHaveAttribute('src', '/hexaria-world-map.jpg');
+    expect(screen.getByRole('img', { name: /RUNBOUND’un dağ krallıklarını/i })).toHaveAttribute('src', '/hexaria-world-map.jpg');
     expect(screen.getByRole('navigation', { name: /Ana gezinme/i })).toBeInTheDocument();
     const encounterTitle = screen.getByText('Yayılan Çürüme');
     const encounterBadge = screen.getAllByText('Yaratık karşılaşması').find((badge) => badge.parentElement === encounterTitle.parentElement);
@@ -546,7 +546,7 @@ describe('chapter 1 in the UI', () => {
 });
 
 describe('Malware Bestiary in the UI', () => {
-  it('shows the Bestiary interface and Eldoria creature details in Turkish', async () => {
+  it('shows the Bestiary interface and RUNBOUND creature details in Turkish', async () => {
     const user = userEvent.setup();
     const initial = createInitialState();
     seed(baseGame({
@@ -631,7 +631,7 @@ describe('Malware Bestiary in the UI', () => {
     const user = userEvent.setup();
     seed(baseGame());
     renderApp('/map');
-    expect(screen.getByRole('img', { name: /Pixel-art map of Eldoria/i })).toHaveAttribute('src', '/hexaria-world-map.jpg');
+    expect(screen.getByRole('img', { name: /Pixel-art map of RUNBOUND/i })).toHaveAttribute('src', '/hexaria-world-map.jpg');
     expect(screen.getByRole('button', { name: /the crownlands, available/i })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: /the rune gates, locked/i }));
     expect(screen.getByText(/to enter/i)).toBeInTheDocument();

@@ -11,7 +11,7 @@ const MAX_SAVE_BYTES = 2 * 1024 * 1024;
 let mainWindow;
 let saveQueue = Promise.resolve();
 
-app.setName('Eldoria: Veil of Runes');
+app.setName('RUNBOUND: The Arcane Protocol');
 app.setPath('userData', saveDirectory);
 
 function assertTrustedSender(event) {

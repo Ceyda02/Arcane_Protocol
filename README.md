@@ -1,10 +1,10 @@
-# Eldoria: Veil of Runes
+# RUNBOUND: Arcane Protocol
 
 > *Every mystery leaves a trace. Every secret has a weakness.*
 
 ## Türkçe
 
-**Eldoria: Veil of Runes**, siber güvenlik kavramlarını öğreten piksel sanatlı bir fantastik RPG'dir. Uygulama tarayıcıda çalışır; hesap, arka uç sunucusu veya gerçek hedeflere ağ erişimi gerektirmez. Yeni oyunlarda Türkçe varsayılan dildir; dil tercihi ana menüden ve ayarlardan değiştirilebilir.
+**RUNBOUND: Arcane Protocol**, siber güvenlik kavramlarını öğreten piksel sanatlı bir fantastik RPG'dir. Uygulama tarayıcıda çalışır; hesap, arka uç sunucusu veya gerçek hedeflere ağ erişimi gerektirmez. Yeni oyunlarda Türkçe varsayılan dildir; dil tercihi ana menüden ve ayarlardan değiştirilebilir.
 
 ### Hızlı başlangıç
 
@@ -23,9 +23,9 @@ Türkçe dil seçimi; ana menü, gezinme çubuğu, ayarlar, dünya haritası, B�
 
 Harita, kullanıcı tarafından sağlanan JPEG görselini `public/hexaria-world-map.jpg` yolundan ve Vite'ın dağıtım tabanına göre çözümlenen göreli URL ile yükler. Dosyanın önceki `.png` uzantısı içeriğiyle uyuşmadığından düzeltildi; bu, GitHub Pages alt dizinindeki görünürlük sorununu gidermek içindir. Görseldeki bölge adları İngilizcedir; bölge seçimi ve ilerleme işaretleri seçili arayüz dilinde çalışır.
 
-Yeni oyun, Eldoria sarayını ve yaklaşan tehdidi tanıtan, atlanabilir dört sahneli bir girişle başlar. İlk sahnede kullanıcı tarafından sağlanan karakter görseli, karakter altındaki başlıklar kaldırılmış kırpılmış kopyası ve altın çerçeve/parıltıyla gösterilir. Giriş metinleri Türkçe ve İngilizcedir. Girişin tamamlanma bilgisi kayıtta tutulur; eski karakter kayıtları giriş tamamlanmış kabul edilir. Sağlanan `public/audio/Loop_The_Bards_Tale.wav` ana oyun müziği; `public/audio/ui_*.wav` dosyaları arayüz sesleri olarak kullanılır. Müzik varsayılan olarak açıktır; sol üstteki düğmeden kapatılıp açılabilir. Tarayıcılar otomatik oynatmayı engellerse müzik ilk kullanıcı etkileşiminde başlar. Önceki sürümün sessiz varsayılanıyla kaydedilen eski kayıtlar yeni varsayılana geçirilirken oyun ilerlemesi ve ses düzeyleri korunur. Ayarlardaki genel sessize alma ve ayrı müzik/efekt düzeyleri durur.
+Yeni oyun, RUNBOUND sarayını ve yaklaşan tehdidi tanıtan, atlanabilir dört sahneli bir girişle başlar. İlk sahnede kullanıcı tarafından sağlanan karakter görseli, karakter altındaki başlıklar kaldırılmış kırpılmış kopyası ve altın çerçeve/parıltıyla gösterilir. Giriş metinleri Türkçe ve İngilizcedir. Girişin tamamlanma bilgisi kayıtta tutulur; eski karakter kayıtları giriş tamamlanmış kabul edilir. Sağlanan `public/audio/Loop_The_Bards_Tale.wav` ana oyun müziği; `public/audio/ui_*.wav` dosyaları arayüz sesleri olarak kullanılır. Müzik varsayılan olarak açıktır; sol üstteki düğmeden kapatılıp açılabilir. Tarayıcılar otomatik oynatmayı engellerse müzik ilk kullanıcı etkileşiminde başlar. Önceki sürümün sessiz varsayılanıyla kaydedilen eski kayıtlar yeni varsayılana geçirilirken oyun ilerlemesi ve ses düzeyleri korunur. Ayarlardaki genel sessize alma ve ayrı müzik/efekt düzeyleri durur.
 
-İlk defa haritaya gelen oyuncular için Runa’nın atlanabilir, tekrar açılabilir rehberi bulunur. Ayarlardaki Kolay/Normal/Zor seçimi, sınamalarda otomatik ücretsiz ipucunu ve ipucu XP maliyetini değiştirir. Eldoria Rün Akademisi; dokümantasyon IP’leri kullanan kurgusal paket akışı incelemesi ve Sezar, ROT13, Atbash, Vigenère şifreleriyle dört yerel rün bulmacası sunar. Etkinlikler gerçek ağ trafiğini yakalamaz veya engellemez. Keşfedilen zararlı yazılım yaratıklarının Yaratık Kitabı kayıtlarında ilk savunma/önlem noktası ayrıca vurgulanır.
+İlk defa haritaya gelen oyuncular için Runa’nın atlanabilir, tekrar açılabilir rehberi bulunur. Ayarlardaki Kolay/Normal/Zor seçimi, sınamalarda otomatik ücretsiz ipucunu ve ipucu XP maliyetini değiştirir. RUNBOUND Rün Akademisi; dokümantasyon IP’leri kullanan kurgusal paket akışı incelemesi ve Sezar, ROT13, Atbash, Vigenère şifreleriyle dört yerel rün bulmacası sunar. Etkinlikler gerçek ağ trafiğini yakalamaz veya engellemez. Keşfedilen zararlı yazılım yaratıklarının Yaratık Kitabı kayıtlarında ilk savunma/önlem noktası ayrıca vurgulanır.
 
 Yankıların Kroniği, geçerli bölüm için altı sekme sunar: görevler, ipuçları, çözülmemiş gizemler, öğrenilen dersler, karşılaşılan kişiler ve yolculuk. Görevler sınama ilerlemesini, bölgesini ve ödüllerini gösterir; okunma işaretleri ve sabitlenen hedef yerel kayıtta saklanır. Sabit hedef oyun ekranında gizlenebilir küçük bir takipçi olarak görünür. İpuçları ve kişiler yalnızca mevcut ilerlemenin ortaya çıkardığı bilgilere göre gösterilir; soruşturma sonucu saldırı kanıtı gibi sunulmaz. Nöbet Kulesi soruşturması, kanıtları ilgili/ilgisiz/çözümlenmemiş olarak sınıflandırmayı, seçilen kanıtları panoya eklemeyi, olayları klavyeyle sıralamayı ve kanıtların desteklediği ölçülü bir sonuç çıkarmayı içerir. Soruşturma taslağı bu cihazda kaydedilir; puan ve XP kanıt incelemesinin doğruluğuna göre verilir. Arcane Disciplines, değerlendirme sonucunu yalnızca başlangıç önerisi olarak sunan beş Türkçe/İngilizce dala ayrılır. Ustalık, kayıtlı sınama başarılarından türetilir; henüz sınaması olmayan konular açıkça gelecek içerik olarak belirtilir ve başka dallara geçmek mevcut ilerlemeyi kilitlemez.
 
@@ -64,14 +64,14 @@ This is a **vertical slice**, not the full game. Be sure of what you are getting
 |---|---|
 | Title, new/continue game, character creation, settings | Complete |
 | First-visit guide and Easy / Normal / Hard learning assistance | Complete; guide can be replayed from Settings |
-| Eldoria Academy of Runes | Safe local packet-log triage and four cipher puzzles: Caesar, ROT13, Atbash, and Vigenère |
+| RUNBOUND Academy of Runes | Safe local packet-log triage and four cipher puzzles: Caesar, ROT13, Atbash, and Vigenère |
 | Trial of Three Runes (14 questions, deterministic scoring, retake, choose another path) | Complete |
 | World map with data-driven unlocks (9 visible regions) | Crownlands chapter content plus one introductory field study in every other region when that region unlocks; later story content remains future work |
 | Turkish / English selector | Turkish default for new saves; UI and the introductory regional field studies are localized. Some Bestiary technical details, advanced encounters, and later narrative content remain English |
 | Field Journal | Tracks completed quests, passed-challenge findings, and the review queue |
 | Investigator’s Table | Classify and pin case evidence, order a keyboard-accessible timeline, correlate records, and choose a cautious conclusion. Drafts save locally; deterministic scoring grants partial XP |
 | Arcane Disciplines | Five selectable, localized branches show structured learning nodes and prerequisite states; mastery is derived from existing passed challenges. Some branches and later lessons still need playable challenges |
-| Image-backed world map | Uses the supplied legacy-named Eldoria map with interactive region selection and progress states |
+| Image-backed world map | Uses the supplied legacy-named RUNBOUND map with interactive region selection and progress states |
 | Chapter 1: *The Bells of the Silent Watch* (5 challenges, dialogue, lessons) | Complete and playable |
 | Cyber Grimoire (search, filter, bookmarks, review later) | Complete |
 | Bestiary: Realm Beasts | 1 of 6 unlockable (the Shapeshifter). The rest are visible but sealed until future chapters |
@@ -138,7 +138,7 @@ Browser/PWA progress is saved to `localStorage` in that browser only. Clearing b
 
 ### Steam desktop build (Windows)
 
-The Eldoria desktop build stores the sanitized game state in `%APPDATA%\The Arcane Protocol\save.json` to preserve existing player saves. To build the unpacked Windows x64 app, install dependencies with the supported Node.js version and run:
+The RUNBOUND desktop build stores the sanitized game state in `%APPDATA%\The Arcane Protocol\save.json` to preserve existing player saves. To build the unpacked Windows x64 app, install dependencies with the supported Node.js version and run:
 
 ```bash
 npm run desktop:build

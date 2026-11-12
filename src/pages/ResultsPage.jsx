@@ -72,7 +72,7 @@ export default function ResultsPage() {
       </div>
       <p className="muted">Every order shares the same foundations. You can switch orders or retake the trial at any time from your profile.</p>
       <div className="create-actions">
-        <Button disabled={!game.pathId} onClick={() => nav('/map')}>Enter Eldoria</Button>
+        <Button disabled={!game.pathId} onClick={() => nav('/map')}>Enter RUNBOUND</Button>
         <Button variant="ghost" onClick={retake}>{result ? 'Retake the Trial' : 'Take the Trial'}</Button>
       </div>
     </div>

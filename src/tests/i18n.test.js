@@ -69,8 +69,8 @@ describe('language preference', () => {
       expect(t('en', key), key).not.toBe(key);
       expect(t('tr', key), key).not.toBe(t('en', key));
     }
-    expect(t('tr', 'intro.portrait.body')).toContain('Eldoria’nın mumlarla aydınlanan salonunda kraliyet ailesi toplanır.');
-    expect(t('en', 'intro.portrait.body')).toContain('In the candlelit hall of Eldoria, the royal family gathers.');
+    expect(t('tr', 'intro.portrait.body')).toContain('RUNBOUND’un mumlarla aydınlanan salonunda kraliyet ailesi toplanır.');
+    expect(t('en', 'intro.portrait.body')).toContain('In the candlelit hall of RUNBOUND, the royal family gathers.');
   });
 
   it('localizes every introductory assessment question and option without changing scoring', () => {

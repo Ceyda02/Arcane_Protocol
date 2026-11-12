@@ -1,6 +1,6 @@
 {
-  "name": "eldoria-veil-of-runes",
-  "productName": "Eldoria: Veil of Runes",
+  "name": "runbound-veil-of-runes",
+  "productName": "RUNBOUND: Veil of Runes",
   "description": "A pixel-art fantasy RPG that teaches cybersecurity.",
   "private": true,
   "version": "0.1.0",
@@ -50,7 +50,7 @@
   },
   "build": {
     "appId": "com.thearcaneprotocol.game",
-    "productName": "Eldoria: Veil of Runes",
+    "productName": "RUNBOUND: Arcane Protocol",
     "asar": true,
     "directories": {
       "output": "release"
